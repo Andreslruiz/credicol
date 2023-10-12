@@ -62,3 +62,20 @@ def get_sales_today(user):
         return formatted_total
 
     return 0
+
+
+def get_credit_sales_today(user):
+    hoy = date.today()
+
+    sales_today = m.Venta.objects.filter(
+        usuario__company_profile=user.company_profile,
+        fecha_venta__date=hoy, es_fiado=True
+    )
+
+    if sales_today:
+        total_today = sales_today.aggregate(total=Sum('total_venta'))
+        total = total_today['total']
+        formatted_total = f'{total:,.0f}'
+        return formatted_total
+
+    return 0

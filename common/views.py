@@ -7,6 +7,7 @@ from django.views import generic
 from django.contrib.auth import get_user_model
 
 from ventas.services import get_sales_month, get_sales_year, get_sales_today
+from . import services as s
 
 User = get_user_model()
 
@@ -61,3 +62,8 @@ class InitialView(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateV
 def user_logout(request):
     logout(request)
     return redirect(reverse('login'))
+
+
+def send_daily_report(request):
+    s.send_daily_report(request.user)
+    return redirect(reverse('initial_view'))

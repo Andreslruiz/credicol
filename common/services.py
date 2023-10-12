@@ -1,4 +1,11 @@
+import pyautogui
+import webbrowser
+import time
+import datetime
+
+
 from twilio.rest import Client
+from ventas import services as vnt_s
 
 
 def send_daily_notification(total_venta):
@@ -13,3 +20,17 @@ def send_daily_notification(total_venta):
     )
 
     print(message.sid)
+
+
+def send_daily_report(user):
+    today = datetime.date.today()
+    today_format = today.strftime("%d/%m/%Y")
+    today_sales = vnt_s.get_sales_today(user)
+    credit_sales_today = vnt_s.get_credit_sales_today(user)
+    webbrowser.open('https://web.whatsapp.com/send?phone=+573213358263')
+    time.sleep(15)
+    pyautogui.typewrite(
+        f"""*TOTAL SALES TODAY {today_format}*: {today_sales}, *TOTAL CREDIT SALES:* {credit_sales_today}"""
+    )
+    pyautogui.press("enter")
+    time.sleep(2)

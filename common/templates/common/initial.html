@@ -11,7 +11,7 @@
                 {{ user.name }}
                 <div id="fecha-hora" style="margin-top:5px; font-family: 'cursiva', cursive; font-size: 15px; color: #333;"></div>
             </h1>
-            <a href="#" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
+            <a href="{% url 'common:send_daily_report' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
                     class="fas fa-download fa-sm text-white-50"></i> Enviar Reporte</a>
         </div>
 

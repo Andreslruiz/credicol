@@ -27,4 +27,5 @@ urlpatterns = [
     path('login/', LoginUsuario.as_view(), name='login'),
     path('logout/', user_logout, name='user_logout'),
     path('ventas/', include('ventas.urls')),
+    path('common/', include('common.urls')),
 ]
