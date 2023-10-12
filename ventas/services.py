@@ -26,6 +26,7 @@ def get_sales_month(user):
 
     return 0
 
+
 def get_sales_year(user):
     hoy = datetime.today()
     primer_dia_ano_actual = hoy.replace(day=1, month=1)
@@ -57,9 +58,7 @@ def get_sales_today(user):
     if sales_today:
         total_today = sales_today.aggregate(total=Sum('total_venta'))
         total = total_today['total']
-
         formatted_total = f'{total:,.0f}'
-
         return formatted_total
 
     return 0

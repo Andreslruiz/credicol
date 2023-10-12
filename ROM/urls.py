@@ -18,12 +18,13 @@ from common.views import LoginUsuario
 from django.contrib import admin
 from django.urls import path, include
 
-from common.views import InitialView
+from common.views import InitialView, user_logout
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', InitialView.as_view(), name='initial_view'),
+    path('dashboard/', InitialView.as_view(), name='initial_view'),
     path('', RedirectView.as_view(url='/login/')),
     path('login/', LoginUsuario.as_view(), name='login'),
+    path('logout/', user_logout, name='user_logout'),
     path('ventas/', include('ventas.urls')),
 ]

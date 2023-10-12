@@ -1,4 +1,6 @@
-from typing import Any
+from django.contrib.auth import logout
+from django.shortcuts import redirect
+from django.urls import reverse
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views import generic
@@ -15,7 +17,7 @@ class LoginUsuario(LoginView):
     """
     template_name = 'login.html'
     redirect_authenticated_user = True
-    success_url = '/admin/'
+    success_url = '/dashboard/'
 
     def form_invalid(self, form):
 
@@ -54,3 +56,8 @@ class InitialView(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateV
             'sales_today': get_sales_today(self.request.user)
         })
         return super().get_context_data(**kwargs)
+
+
+def user_logout(request):
+    logout(request)
+    return redirect(reverse('login'))
