@@ -49,7 +49,8 @@ INSTALLED_APPS = [
     'clientes',
     'simple_history',
     'transacciones',
-    'django_q'
+    'django_q',
+    'import_export'
 ]
 
 MIDDLEWARE = [
