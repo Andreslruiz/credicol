@@ -15,7 +15,8 @@ class CompanyProfile(models.Model):
     login_attemps = models.IntegerField(blank=True, default=0)
     date_password_updated = models.DateTimeField(default=timezone.now)
     user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, related_name='company_profile', on_delete=models.CASCADE
+        settings.AUTH_USER_MODEL, related_name='company_profile',
+        on_delete=models.CASCADE
     )
 
     history = HistoricalRecords()
