@@ -6,7 +6,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.views import generic
 from django.contrib.auth import get_user_model
 
-from ventas.services import get_sales_month, get_sales_year, get_sales_today
+from transacciones.services import get_sales_month, get_sales_year, get_sales_today
 from . import services as s
 
 User = get_user_model()

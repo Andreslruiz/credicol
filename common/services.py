@@ -5,7 +5,7 @@ import datetime
 
 
 from twilio.rest import Client
-from ventas import services as vnt_s
+from transacciones import services as vnt_s
 
 
 def send_daily_notification(total_venta):

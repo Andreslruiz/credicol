@@ -46,8 +46,9 @@ INSTALLED_APPS = [
     'crispy_bootstrap4',
     'common',
     'companies',
+    'clientes',
     'simple_history',
-    'ventas',
+    'transacciones',
     'django_q'
 ]
 

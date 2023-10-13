@@ -1,0 +1,12 @@
+{% load crispy_forms_tags static %}
+
+<div class="card-body">
+    {% csrf_token %}
+    <br>
+    <div class="row">
+        <div class="col-md-12">{{ form.total_transaccion|as_crispy_field }}</div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">{{ form.es_fiado|as_crispy_field }}</div>
+    </div>
+</div>
