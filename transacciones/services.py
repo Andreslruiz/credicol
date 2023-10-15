@@ -87,3 +87,10 @@ def get_credit_sales_today(user):
         return formatted_total
 
     return 0
+
+
+def get_current_user_deuda(cliente_profile):
+    total = m.Transaccion.objects.filter(cliente=cliente_profile).aggregate(Sum('total_transaccion'))
+    total = total['total_transaccion__sum'] or 0
+    formatted_total = f'{total:,.0f}'
+    return formatted_total

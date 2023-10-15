@@ -12,14 +12,14 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Facturación | Villahermosa</title>
+    <title>{{ request.user.company_profile.name }} | Facturación</title>
 
     <!-- Custom fonts for this template-->
     <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
     <!-- Custom styles for this template-->
     <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-
+    
     <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js" integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js" integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q" crossorigin="anonymous"></script>
     <link rel="icon" type="image/x-icon" href="{% static 'images/logo.png' %}" />
@@ -189,26 +189,6 @@
         };
 
         $('#js-modal').on('show.bs.modal', function (event) { loadModalContent(event, this) });
-    </script>
-
-    <script>
-        function actualizarFechaHora() {
-            const elementoFechaHora = document.getElementById("fecha-hora");
-            let ahora = new Date();
-            const dia = ahora.getDate();
-            const mes = ahora.getMonth() + 1;
-            const año = ahora.getFullYear();
-            var horas = ahora.getHours();
-            const minutos = ahora.getMinutes();
-            const segundos = ahora.getSeconds();
-            const periodo = horas >= 12 ? 'PM' : 'AM';
-            horas = horas % 12 || 12;
-        
-            const fechaHoraFormateada = `${dia}/${mes}/${año} ${horas}:${minutos}:${segundos} ${periodo}`;
-            elementoFechaHora.innerHTML = fechaHoraFormateada;
-            setTimeout(actualizarFechaHora, 1000);
-        }
-        actualizarFechaHora();
     </script>
 </body>
 </html>

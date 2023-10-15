@@ -1,0 +1,39 @@
+<div class="card">
+    <div class="card-header d-flex justify-content-between">
+        <h4 class="ml-3" style="color:#216BF5;">Información del Cliente: {{ cliente.nombre|title }} </h4>
+        <a href='#' class="btn btn-sm btn-primary">
+            <i class="fas fa-edit"></i>
+            Editar Usuario                        
+        </a>
+    </div>
+    <div class="card-body">
+        <div class="list-group list-group-flush">
+            <div class="list-group-item d-flex align-items-center card-text pb-0" style="font-size: medium;">
+                <p class="mr-2 text-blue font-weight-bold">Nombre:</p>
+                <p class="mr-4 text-capitalize text-dark ">{{ cliente.nombre }}</p>
+                <p class="mr-2 text-blue font-weight-bold">Apellido:</p>
+                <p class="mr-4 text-capitalize text-dark ">{{ cliente.apellido }}</p>
+                <p class="mr-2 text-blue font-weight-bold">Telefono:</p>
+                <p class="mr-4 text-dark ">{{ cliente.telefono }}</p>
+            </div>
+            <div class="list-group-item d-flex align-items-center card-text pb-0" style="font-size: medium;">
+                <p class="mr-2 text-blue font-weight-bold">Email:</p>
+                <p class="text-capitalize text-dark ">{{ cliente.email }}</p>
+            </div>
+            <div class="list-group-item d-flex align-items-center card-text pb-0" style="font-size: medium;">
+                <p class="mr-2 text-blue font-weight-bold font-weight-bold">Total Deuda:</p>
+                <p class="mr-4 text-capitalize text-dark ">${{ total_deuda }}</p>
+            </div>
+            <div class="list-group-item">
+                    <a href='#' class="btn btn-sm btn-success mt-5">
+                        <i class="mr-1 fas fa-dollar-sign"></i>
+                        Agregar Pago
+                    </a>
+                    <a href='#' class="btn btn-sm btn-warning mt-5">
+                        <i class="mr-1 fas fa-plus"></i>
+                        Agregar Deuda
+                    </a>
+            </div>
+        </div>
+    </div>
+</div>

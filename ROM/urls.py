@@ -28,4 +28,5 @@ urlpatterns = [
     path('logout/', user_logout, name='user_logout'),
     path('transacciones/', include('transacciones.urls')),
     path('common/', include('common.urls')),
+    path('clientes/', include('clientes.urls')),
 ]

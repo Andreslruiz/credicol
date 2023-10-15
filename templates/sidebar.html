@@ -104,6 +104,11 @@
 
     {% endswitch %}
     <li class="nav-item">
+        <a class="nav-link" href="{% url 'clientes:clientes_list' %}">
+            <i class="fas fa-fw fa-table"></i>
+            <span>Clientes</span></a>
+    </li>
+    <li class="nav-item">
         <a class="nav-link" href="#" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:direct_sales' %}"
         data-title="Registrar Venta" title="Registrar Venta" class="btn btn-primary btn-sm" data-action="Guardar">
             <i class="fas fa-fw fa-table"></i>
@@ -134,5 +139,30 @@
     </div>
 
     {% endswitch %}
+
+    <form id="delete-form" method="POST">
+        {% csrf_token %}
+    </form>
+    <div id="form-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="form-title"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="form-title"></h5>
+                    <button class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="form" method="POST">
+                        Cargando...
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="form-button" class="btn btn-primary" type="submit" form="form"></button>
+                </div>
+            </div>
+        </div>
+    </div>
 
 </ul>

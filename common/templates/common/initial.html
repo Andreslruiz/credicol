@@ -335,31 +335,6 @@
         {% endswitch %}
     </div>
 
-<form id="delete-form" method="POST">
-    {% csrf_token %}
-</form>
-<div id="form-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="form-title"
-    aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
-        <div class="modal-content">
-            <div class="modal-header">
-                <h5 class="modal-title" id="form-title"></h5>
-                <button class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-            <div class="modal-body">
-                <form id="form" method="POST">
-                    Cargando...
-                </form>
-            </div>
-            <div class="modal-footer">
-                <button id="form-button" class="btn btn-primary" type="submit" form="form"></button>
-            </div>
-        </div>
-    </div>
-</div>
-
 {% endblock content %}
 
 {% block js %}
@@ -491,6 +466,24 @@
             });
 
         }
+
+        function actualizarFechaHora() {
+            const elementoFechaHora = document.getElementById("fecha-hora");
+            let ahora = new Date();
+            const dia = ahora.getDate();
+            const mes = ahora.getMonth() + 1;
+            const año = ahora.getFullYear();
+            var horas = ahora.getHours();
+            const minutos = ahora.getMinutes();
+            const segundos = ahora.getSeconds();
+            const periodo = horas >= 12 ? 'PM' : 'AM';
+            horas = horas % 12 || 12;
+        
+            const fechaHoraFormateada = `${dia}/${mes}/${año} ${horas}:${minutos}:${segundos} ${periodo}`;
+            elementoFechaHora.innerHTML = fechaHoraFormateada;
+            setTimeout(actualizarFechaHora, 1000);
+        }
+        actualizarFechaHora();
 
         drawChart();
     </script>
