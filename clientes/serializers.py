@@ -17,7 +17,8 @@ class ClientesListSerializer(serializers.ModelSerializer):
             'nombres',
             'email',
             'telefono',
-            'deuda'
+            'deuda',
+            'activo'
         )
 
     def get_telefono(self, obj):

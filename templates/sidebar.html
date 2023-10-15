@@ -104,9 +104,15 @@
 
     {% endswitch %}
     <li class="nav-item">
+        <a class="nav-link" href="{% url 'initial_view' %}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Dashboard</span></a>
+    </li>
+
+    <li class="nav-item">
         <a class="nav-link" href="{% url 'clientes:clientes_list' %}">
-            <i class="fas fa-fw fa-table"></i>
-            <span>Clientes</span></a>
+            <i class="fas fa-fw fa-user"></i>
+            <span>Lista Clientes</span></a>
     </li>
     <li class="nav-item">
         <a class="nav-link" href="#" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:direct_sales' %}"
