@@ -1,7 +1,6 @@
 from rest_framework import serializers
 
 from .models import ClienteProfile
-from transacciones import services as tran_s
 
 
 class ClientesListSerializer(serializers.ModelSerializer):
@@ -33,5 +32,5 @@ class ClientesListSerializer(serializers.ModelSerializer):
         return nombres
 
     def get_deuda(self, obj):
-        deuda = tran_s.get_current_user_deuda(obj)
+        deuda = obj.deuda
         return deuda

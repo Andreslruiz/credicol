@@ -8,7 +8,7 @@ class Transaccion(models.Model):
         ('pago', 'Pago'),
     )
 
-    observaciones = models.CharField(max_length=500, blank=True)
+    observaciones = models.TextField(blank=True)
     fecha_transaccion = models.DateTimeField(auto_now_add=True)
     total_transaccion = models.DecimalField(max_digits=10, decimal_places=2)
     es_fiado = models.BooleanField(default=False)
@@ -16,7 +16,7 @@ class Transaccion(models.Model):
         max_length=5, choices=TIPO_CHOICES, blank=True, null=True
     )
 
-    usuario = models.ForeignKey(
+    creada_por = models.ForeignKey(
         User, on_delete=models.CASCADE, blank=True, null=True
     )
     cliente = models.ForeignKey(

@@ -10,4 +10,4 @@ class CompanyProfileAdmin(
     ImportExportMixin, ExportActionModelAdmin, admin.ModelAdmin
 ):
     resource_class = ClienteProfileResource
-    list_display = ['nombre', 'apellido', 'telefono']
+    list_display = ['nombre', 'apellido', 'telefono', 'credit_balance']

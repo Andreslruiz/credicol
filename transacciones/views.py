@@ -7,6 +7,7 @@ from django.contrib.auth.mixins import (
 
 from . import models as m
 from . import form as f
+from . import services as s
 
 
 class DirectSalesView(
@@ -29,3 +30,44 @@ class DirectSalesView(
         form.instance.tipo_transaccion = m.Transaccion.TIPO_CHOICES[0][0]
         form.save()
         return JsonResponse({'ok': True})
+
+
+class AddPaymentView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.FormView
+):
+    model = m.Transaccion
+    form_class = f.AddPaymentForm
+    template_name = 'transacciones/components/form_add_payment.html'
+    permission_required = 'integraciones.can_send_commands_mae'
+
+    def form_valid(self, form):
+        cliente = s.get_cliente(self.kwargs.get('cliente_id'))
+        total = form.instance.total_transaccion
+        deuda = cliente.credit_balance
+
+        if float(total) > float(deuda):
+            form.add_error(
+                None, f'El valor del pago es mayor a la deuda del usuario ${deuda}.'
+            )
+            return self.form_invalid(form)
+
+        s.add_new_payment(form, cliente, self.request.user)
+        deuda = cliente.deuda or '0'
+        return JsonResponse({'ok': True, 'transaction': 'Pago', 'saldo': deuda})
+
+
+class AddCreditView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.FormView
+):
+    model = m.Transaccion
+    form_class = f.AddCreditForm
+    template_name = 'transacciones/components/form_add_credit.html'
+    permission_required = 'integraciones.can_send_commands_mae'
+
+    def form_valid(self, form):
+        cliente = s.get_cliente(self.kwargs.get('cliente_id'))
+        s.add_new_credit(form, cliente, self.request.user)
+        deuda = cliente.deuda
+        return JsonResponse(
+            {'ok': True, 'transaction': 'Fiado', 'saldo': deuda}
+        )

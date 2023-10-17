@@ -1,0 +1,17 @@
+{% load crispy_forms_tags static %}
+
+
+  <div class="container">
+    {% include 'components/non_field_errors.html' with form=form %}
+    {% csrf_token %}
+    <div class="row">
+      <div class="col-md-12">
+        <i class="fas fa-dollar-sign"></i> Total Fiado:
+        {{ form.total_transaccion|as_crispy_field }}
+      </div>
+      <div class="col-md-12">
+        <i class="fas fa-edit"></i>Detalle:
+        {{ form.observaciones|as_crispy_field }}
+      </div>
+    </div>
+  </div>

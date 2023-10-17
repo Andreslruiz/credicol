@@ -3,9 +3,12 @@ from django.contrib.auth.mixins import (
     LoginRequiredMixin,
     PermissionRequiredMixin
 )
+from django.http.response import JsonResponse
 
 from . import models as m
 from transacciones.services import get_current_user_deuda
+from . import forms as f
+
 
 class ListUsersView(
     LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
@@ -27,5 +30,28 @@ class ClienteDetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.Det
         context = super().get_context_data(**kwargs)
         profile = self.get_object()
         context['cliente'] = profile
-        context['total_deuda'] = get_current_user_deuda(profile)
         return context
+
+
+class AddClienteView(LoginRequiredMixin, PermissionRequiredMixin, generic.FormView):
+    model = m.ClienteProfile
+    form_class = f.AddNewCliente
+    template_name = 'clientes/components/form_add_cliente.html'
+    permission_required = 'integraciones.can_send_commands_mae'
+
+    def form_valid(self, form):
+        nombres = f'{form.instance.nombre} {form.instance.apellido}'
+        form.save()
+        return JsonResponse({'ok': True, 'transaction': 'Usuario', 'saldo': '', 'user': nombres})
+
+
+class ClienteEditView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):
+    model = m.ClienteProfile
+    form_class = f.AddNewCliente
+    template_name = 'clientes/components/form_add_cliente.html'
+    permission_required = 'integraciones.can_send_commands_mae'
+
+    def form_valid(self, form):
+        nombres = f'{form.instance.nombre} {form.instance.apellido}'
+        form.save()
+        return JsonResponse({'ok': True, 'transaction': '', 'saldo': '', 'user': nombres})

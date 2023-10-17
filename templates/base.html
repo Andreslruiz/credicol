@@ -1,5 +1,4 @@
 {% load static waffle_tags crispy_forms_tags %}
-{% include "components/alert_messages.html" %}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -104,91 +103,11 @@
     <!-- Page level custom scripts -->
     <script src="{% static 'js/demo/chart-area-demo.js '%}"></script>
     <script src="{% static 'js/demo/chart-pie-demo.js '%}"></script>
-    {% block js %}{% endblock %}
-    <script>
+    {% block js %}
+        <script>    
+            
 
-        const loadForm = (e, modal) => {
-            const button = e.relatedTarget;
-            const form = modal.querySelector('form');
-            const modalTitle = modal.querySelector('#form-title');
-            const formButton = modal.querySelector('#form-button');
-            const { url, title, action } = button.dataset;
-            form.action = url;
-            modalTitle.innerHTML = title;
-            formButton.innerHTML = action;
-            fetch(url)
-                .then(res => {
-                    if (!res.ok) {
-                        throw Error(res.status);
-                    }
-    
-                    return res.text();
-                })
-                .then(data => {
-                    try {
-                        JSON.parse(data);
-                    } catch {
-                        form.innerHTML = data;
-                    }
-                })
-                .catch(error => form.innerHTML = 'No puedes realizar esta operación');
-        };
-    
-        const saveForm = (e) => {
-            e.preventDefault();
-            const button = e.target;
-            const form = e.target.form;
-            if (!form.reportValidity()) return;
-    
-            const action = button.innerHTML;
-            button.classList.add('disabled');
-            button.innerHTML = 'Guardando.....';
-            fetch(form.action, { method: 'POST', body: new FormData(form) })
-                .then(res => res.text())
-                .then(data => {
-                    try {
-                        const { ok } = JSON.parse(data);
-                        if (ok) {
-                            $('#form-modal').modal('toggle');
-                            window.location.reload()
-                        }
-                    } catch {
-                        form.innerHTML = data;
-                        button.classList.remove('disabled');
-                        button.innerHTML = action;
-                    }
-                });
-        };
-    
-        $('#form-modal').on('show.bs.modal', function (event) { loadForm(event, this) });
-        document.getElementById('form-button').addEventListener('click', saveForm);
-    
-        $('#form-modal').on('hidden.bs.modal', function (event) {
-            this.querySelector('form').innerHTML = 'Cargando...'
-        });
-
-        const loadModalContent = (e, modal) => {
-            const button = e.relatedTarget;
-            const modalContent = modal.querySelector('.modal-content');
-            const { url } = button.dataset;
-            fetch(url)
-                .then(res => {
-                    if (!res.ok) {
-                        throw Error(res.status);
-                    }
-                    return res.text();
-                })
-                .then(data => {
-                    try {
-                        JSON.parse(data);
-                    } catch {
-                        modalContent.innerHTML = data;
-                    }
-                })
-                .catch(error => modalContent.innerHTML = 'No puedes realizar esta operación');
-        };
-
-        $('#js-modal').on('show.bs.modal', function (event) { loadModalContent(event, this) });
-    </script>
+        </script>
+    {% endblock %}
 </body>
 </html>

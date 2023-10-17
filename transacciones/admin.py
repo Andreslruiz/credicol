@@ -12,5 +12,5 @@ class CompanyProfileAdmin(
     resource_class = TransaccionesResource
     list_display = (
         'tipo_transaccion', 'fecha_transaccion',
-        'total_transaccion', 'es_fiado', 'usuario'
+        'total_transaccion', 'es_fiado', 'creada_por'
     )
