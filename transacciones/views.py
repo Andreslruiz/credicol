@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import (
 from . import models as m
 from . import form as f
 from . import services as s
-
+from clientes.models import ClienteProfile
 
 class DirectSalesView(
     LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView
@@ -71,3 +71,17 @@ class AddCreditView(
         return JsonResponse(
             {'ok': True, 'transaction': 'Fiado', 'saldo': deuda}
         )
+
+
+class ListTransactionsView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
+):
+
+    template_name = 'transacciones/transacciones_list.html'
+    permission_required = 'organizaciones.pertenece_mesa_ayuda'
+
+    def get_context_data(self, **kwargs):
+        kwargs.update({
+            'cliente': s.get_cliente(self.kwargs.get('cliente_id'))
+        })
+        return super().get_context_data(**kwargs)

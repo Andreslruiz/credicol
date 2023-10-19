@@ -40,6 +40,8 @@ class AddClienteView(LoginRequiredMixin, PermissionRequiredMixin, generic.FormVi
     permission_required = 'integraciones.can_send_commands_mae'
 
     def form_valid(self, form):
+        company = self.request.user.company_profile
+        form.instance.company = company
         nombres = f'{form.instance.nombre} {form.instance.apellido}'
         form.save()
         return JsonResponse({'ok': True, 'transaction': 'Usuario', 'saldo': '', 'user': nombres})

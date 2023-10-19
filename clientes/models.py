@@ -11,6 +11,9 @@ class ClienteProfile(models.Model):
     fecha_registro = models.DateTimeField(auto_now_add=True)
     activo = models.BooleanField(default=True)
     credit_balance = models.FloatField(max_length=100, blank=True, null=True)
+    company = models.ForeignKey(
+        'companies.CompanyProfile', on_delete=models.CASCADE, blank=True, null=True
+    )
 
     def __str__(self):
         return f"{self.nombre} {self.apellido}"

@@ -105,6 +105,7 @@ def get_cliente(id):
 
 def add_new_payment(form, cliente, user):
     form.instance.cliente = cliente
+    form.instance.observaciones = m.Transaccion.TIPO_CHOICES[1][0]
     form.instance.tipo_transaccion = m.Transaccion.TIPO_CHOICES[1][0]
     form.instance.es_fiado = False
     form.instance.total_transaccion = form.instance.total_transaccion * -1
@@ -112,6 +113,7 @@ def add_new_payment(form, cliente, user):
     form.save()
 
     update_credit_balance(cliente, form.instance.total_transaccion)
+    notify_payment_sms(cliente, cliente.deuda)
 
 
 def add_new_credit(form, cliente, user):
@@ -123,6 +125,7 @@ def add_new_credit(form, cliente, user):
     form.save()
 
     update_credit_balance(cliente, form.instance.total_transaccion)
+    notify_credit_sms(cliente, cliente.deuda)
 
 
 def update_credit_balance(cliente, total):
@@ -130,44 +133,73 @@ def update_credit_balance(cliente, total):
     cliente.save()
 
 
-def send_wspp_message():
-    token = "EAAJqf41ZCOq8BOZBnBblyYr40ouXRSPhz9ZCljH656tfBpWjWItUyUwYVbWTVveZB7cEZBMGyhLXVZByLuhIUyxVgZBuTwMbAc3KuJ541aToLzJyONn2BlbL5uqGLwU8a1QcYMISfAt6Hd7c5sZCxSDGrriejUsSe1oxL3KQH4rUYO2RLOn2nFVVOUMsRNLoPCg0V8t1s7rPM5ZCxSdCmJBMBgx8li8AldjxlNAZDZD"
-    url = "https://graph.facebook.com/v17.0/142793695585950/messages"
+def notify_payment_sms(cliente, deuda):
+    tel = ''.join(filter(str.isdigit, cliente.telefono))
+    name = str(cliente).title().replace('App', '')
+
+    body = f"""
+¡Hola {name}!
+
+¡Pago Realizado! ✅ Queremos informarte amablemente que el valor restante de tus compras fiadas es de:
+
+RESTANTE POR PAGAR:
+${deuda}
+
+Un gusto atenderte.
+
+Saludos cordiales, Agropecuaria Donde Juancho 🐷🌱
+
+Sistema de facturación, registro DIAN Colombia REG2023736
+    """
+
+    url = "http://api.messaging-service.com/sms/1/text/single"
+
+    payload = {
+        "from": "Agropecuaria Donde Juancho",
+        "to": ["573213358263"],
+        "text": body
+    }
     headers = {
-        "Authorization": f"Bearer {token}",
-        "Content-Type": "application/json"
+        "accept": "application/json",
+        "content-type": "application/json",
+        "authorization": "Basic QVBJQ29sb21iaWFyZWQ6MTAwJUNvbG9tYmlhcmVk"
     }
 
-    data = {
-        "messaging_product": "whatsapp",
-        "to": "573213358263",
-        "type": "template",
-        "template": {
-            "name": "hello_world",
-            "language": {
-                "code": "en_US"
-            },
-            # "components": [
-            #     {
-            #         "type": "body",
-            #         "parameters": [
-            #             {
-            #                 "type": "text",
-            #                 "text": "Tu valor para {{1}}"
-            #             }
-            #         ]
-            #     },
-            #     {
-            #         "type": "body",
-            #         "parameters": [
-            #             {
-            #                 "type": "text",
-            #                 "text": "Tu valor para {{2}}"
-            #             }
-            #         ]
-            #     }
-            # ]
-        }
+    if len(tel) == 10:
+        requests.post(url, json=payload, headers=headers)
+
+
+def notify_credit_sms(cliente, deuda):
+    tel = ''.join(filter(str.isdigit, cliente.telefono))
+    name = str(cliente).title().replace('App', '')
+
+    body = f"""
+¡Hola {name}!
+
+Compra Fiada Realizada! ✅ Queremos informarte amablemente que el valor restante de tus compras fiadas es de:
+
+RESTANTE POR PAGAR:
+${deuda}
+
+Un gusto atenderte.
+
+Saludos cordiales, Agropecuaria Donde Juancho 🐷🌱
+
+Sistema de facturación, registro DIAN Colombia REG2023736
+    """
+
+    url = "http://api.messaging-service.com/sms/1/text/single"
+
+    payload = {
+        "from": "Agropecuaria Donde Juancho",
+        "to": ["573213358263"],
+        "text": body
+    }
+    headers = {
+        "accept": "application/json",
+        "content-type": "application/json",
+        "authorization": "Basic QVBJQ29sb21iaWFyZWQ6MTAwJUNvbG9tYmlhcmVk"
     }
 
-    requests.post(url, json=data, headers=headers)
+    if len(tel) == 10:
+        requests.post(url, json=payload, headers=headers)
