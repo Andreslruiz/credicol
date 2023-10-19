@@ -103,7 +103,7 @@
             },
 
             ajax: {
-                url : '{% url "clientes:listar_clientes_api" request.user.pk %}',
+                url : '{% url "clientes:listar_clientes_api" request.user.company_profile.id %}',
             },
             columns: [
                 { data: 'id',

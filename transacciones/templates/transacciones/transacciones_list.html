@@ -29,6 +29,10 @@
                     <i class="mr-1 fas fa-dollar-sign"></i>
                     Agregar Fiado
                 </a>
+                <a data-title="Editar Usuario" data-action="Actualizar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'clientes:edit_cliente' cliente.id %}" class="btn btn-sm btn-primary">
+                    <i class="fas fa-edit"></i>
+                    Editar Usuario                        
+                </a>
             </div>
         </div>
 
@@ -105,6 +109,7 @@
             processing: true,
             serverSide: true,
             lengthChange: false,
+            searching: false,
             infoCallback: function( settings, start, end, max, total, pre, page ) {
                 num = end-start;
                 if (total == 0) return "Sin resultados";

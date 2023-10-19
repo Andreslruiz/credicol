@@ -17,6 +17,6 @@ class ListarTransaccionesAPIView(generics.ListAPIView):
         id = self.kwargs.get('cliente_id')
         queryset = Transaccion.objects.all()
         if id:
-            queryset = queryset.filter(cliente=id).order_by('-fecha_transaccion')
+            queryset = queryset.filter(cliente=id).order_by('-id')
 
         return queryset

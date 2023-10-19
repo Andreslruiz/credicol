@@ -1,10 +1,6 @@
 <div class="card">
     <div class="card-header d-flex justify-content-between">
         <h4 style="color:#216BF5;"><i class="fas fa-user" style="font-size: 90%;"></i>&nbsp;Información del Cliente: {{ cliente.nombre|title }} {{ cliente.apellido|title }} </h4>
-        <a data-title="Editar Usuario" data-action="Actualizar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'clientes:edit_cliente' cliente.id %}" class="btn btn-sm btn-primary">
-            <i class="fas fa-edit"></i>
-            Editar Usuario                        
-        </a>
     </div>
     <div class="card-body">
         <div class="list-group list-group-flush">
@@ -39,7 +35,7 @@
                 </a>
                 <a class="btn btn-sm btn-primary mt-5" href="{% url 'transacciones:transacciones_list' cliente.id %}">
                     <i class="mr-1 fas fa-eye"></i>
-                    Ver Transacciones
+                    Ver Detalle
                 </a>
             </div>
         </div>

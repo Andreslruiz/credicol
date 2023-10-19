@@ -1,11 +1,10 @@
-import requests
-
 from datetime import date
 from datetime import datetime, timedelta
 from django.db.models import Sum
 
 from . import models as m
 from clientes.models import ClienteProfile
+from common.services import send_mms
 
 
 def get_sales_month(user):
@@ -129,7 +128,8 @@ def add_new_credit(form, cliente, user):
 
 
 def update_credit_balance(cliente, total):
-    cliente.credit_balance = float(cliente.credit_balance) + float(total)
+    last_balance = float(cliente.credit_balance) if cliente.credit_balance else 0
+    cliente.credit_balance = last_balance + float(total)
     cliente.save()
 
 
@@ -152,21 +152,7 @@ Saludos cordiales, Agropecuaria Donde Juancho 🐷🌱
 Sistema de facturación, registro DIAN Colombia REG2023736
     """
 
-    url = "http://api.messaging-service.com/sms/1/text/single"
-
-    payload = {
-        "from": "Agropecuaria Donde Juancho",
-        "to": ["573213358263"],
-        "text": body
-    }
-    headers = {
-        "accept": "application/json",
-        "content-type": "application/json",
-        "authorization": "Basic QVBJQ29sb21iaWFyZWQ6MTAwJUNvbG9tYmlhcmVk"
-    }
-
-    if len(tel) == 10:
-        requests.post(url, json=payload, headers=headers)
+    send_mms(tel, body)
 
 
 def notify_credit_sms(cliente, deuda):
@@ -188,18 +174,4 @@ Saludos cordiales, Agropecuaria Donde Juancho 🐷🌱
 Sistema de facturación, registro DIAN Colombia REG2023736
     """
 
-    url = "http://api.messaging-service.com/sms/1/text/single"
-
-    payload = {
-        "from": "Agropecuaria Donde Juancho",
-        "to": ["573213358263"],
-        "text": body
-    }
-    headers = {
-        "accept": "application/json",
-        "content-type": "application/json",
-        "authorization": "Basic QVBJQ29sb21iaWFyZWQ6MTAwJUNvbG9tYmlhcmVk"
-    }
-
-    if len(tel) == 10:
-        requests.post(url, json=payload, headers=headers)
+    send_mms(tel, body)
