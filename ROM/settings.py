@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'common',
     'companies',
     'clientes',
+    'productos',
     'simple_history',
     'transacciones',
     'django_q',

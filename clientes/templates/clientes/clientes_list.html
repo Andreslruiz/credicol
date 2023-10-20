@@ -6,7 +6,10 @@
 <div class="container-fluid">
     <div class="card card-header-actions mb-6">
         <div class="card-header d-flex justify-content-between">
-            <span>Listado de Clientes</span>
+            <div style="display: flex; align-items: center;">
+                <i class="fas fa-user" style="font-size: 23px; color: #2A72FB; margin-right: 10px;"></i>
+                <span style="font-size: 24px; color: #2A72FB;">Listado de Clientes</span>
+            </div>
             <a class="btn btn-sm btn-primary" data-title="Crear Cliente" data-action="Guardar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'clientes:add_new_cliente' %}">
                 <i class="fas fa-user"></i> Crear Cliente
             </a>           
@@ -214,12 +217,14 @@
                     const { transaction } = JSON.parse(data);
                     const { saldo } = JSON.parse(data);
                     const { user } = JSON.parse(data);
+                    const { successurl } = JSON.parse(data);
+
                     if (ok) {
                         $('#form-modal').modal('toggle');
                         if (saldo){
                             successMessage(transaction, saldo);
                         }else if(transaction){
-                            successUserMessage(user);
+                            successUserMessage(user, successurl);
                         }else{
                             successUserupdateMessage(user);
                         }
@@ -279,8 +284,8 @@
             }
         });
     }
-
-    function successUserMessage(user){
+    
+    function successUserMessage(user, succesurl){
         swal({
             title: `Usuario registrado exitosamente`,
             html: `Se ha registrado en el sistema el usuario:<strong> ${user}</strong>.`,
@@ -295,7 +300,7 @@
             if (result.dismiss == 'overlay') {}
 
             else if (result.dismiss !== 'cancel') {
-                window.location.reload();
+                window.location.href = succesurl;
             }
         });
     }

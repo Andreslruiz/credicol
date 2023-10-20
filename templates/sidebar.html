@@ -101,18 +101,30 @@
             <span>Vender</span></a>
     </li>
 
-    {% endswitch %}
     <li class="nav-item">
         <a class="nav-link" href="{% url 'initial_view' %}">
-            <i class="fas fa-fw fa-tachometer-alt"></i>
-            <span>Dashboard</span></a>
+        <i class="fas fa-fw fa-tachometer-alt"></i>
+        <span>Dashboard</span></a>
     </li>
+
+    {% endswitch %}
 
     <li class="nav-item">
         <a class="nav-link" href="{% url 'clientes:clientes_list' %}">
             <i class="fas fa-fw fa-user"></i>
-            <span>Lista Clientes</span></a>
+            <span>Clientes</span></a>
     </li>
+
+
+    {% switch 'see-all' %}
+
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'productos:productos_list' %}">
+            <i class="fas fa-fw fa-shopping-cart"></i>
+            <span>Productos</span>
+        </a>
+    </li>
+
     <li class="nav-item">
         <a class="nav-link" href="#" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:direct_sales' %}"
         data-title="Registrar Venta" title="Registrar Venta" class="btn btn-primary btn-sm" data-action="Guardar">
@@ -120,7 +132,6 @@
             <span>Venta Rapida</span></a>
     </li>
 
-    {% switch 'see-all' %}
     <!-- Nav Item - Tables -->
     <li class="nav-item">
         <a class="nav-link" href="tables.html">

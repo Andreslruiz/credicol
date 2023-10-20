@@ -12,7 +12,8 @@ class ClienteProfile(models.Model):
     activo = models.BooleanField(default=True)
     credit_balance = models.FloatField(max_length=100, blank=True, null=True)
     company = models.ForeignKey(
-        'companies.CompanyProfile', on_delete=models.CASCADE, blank=True, null=True
+        'companies.CompanyProfile', on_delete=models.CASCADE,
+        blank=True, null=True
     )
 
     def __str__(self):
@@ -22,7 +23,7 @@ class ClienteProfile(models.Model):
     def deuda(self):
         if self.credit_balance:
             locale.setlocale(locale.LC_ALL, 'es_CO.utf8')
-            deuda = locale.format("%d", self.credit_balance, grouping=True)
+            deuda = locale._format("%d", self.credit_balance, grouping=True)
             return deuda
 
         return '0'

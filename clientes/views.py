@@ -6,7 +6,6 @@ from django.contrib.auth.mixins import (
 from django.http.response import JsonResponse
 
 from . import models as m
-from transacciones.services import get_current_user_deuda
 from . import forms as f
 
 
@@ -40,11 +39,24 @@ class AddClienteView(LoginRequiredMixin, PermissionRequiredMixin, generic.FormVi
     permission_required = 'integraciones.can_send_commands_mae'
 
     def form_valid(self, form):
+        from django.urls import reverse
         company = self.request.user.company_profile
         form.instance.company = company
         nombres = f'{form.instance.nombre} {form.instance.apellido}'
         form.save()
-        return JsonResponse({'ok': True, 'transaction': 'Usuario', 'saldo': '', 'user': nombres})
+        cliente_id = form.instance.id
+
+        success_url = reverse(
+            'transacciones:transacciones_list', args=[cliente_id]
+        )
+
+        print(success_url)
+        return JsonResponse(
+            {
+                'ok': True, 'transaction': 'Usuario', 'saldo': '',
+                'user': nombres, 'successurl': success_url
+            }
+        )
 
 
 class ClienteEditView(LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView):

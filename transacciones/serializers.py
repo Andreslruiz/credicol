@@ -27,15 +27,17 @@ class TransaccionesListSerializer(serializers.ModelSerializer):
     def get_total_transaccion(self, obj):
         total = abs(obj.total_transaccion)
         locale.setlocale(locale.LC_ALL, 'es_CO.utf8')
-        total = locale.format("%d", total, grouping=True)
+        total = locale._format("%d", total, grouping=True)
         return f'${total}'
 
     def get_creada_por(self, obj):
-        nombres = f'{obj.creada_por} {obj.creada_por}'
+        nombres = f'{obj.creada_por.first_name} {obj.creada_por.last_name}'
         return nombres
 
     def get_observaciones(self, obj):
         return obj.observaciones.title()
 
     def get_fecha_transaccion(self, obj):
-        return obj.fecha_transaccion.strftime('%A, %d de %B de %Y, %H:%M:%S').title()
+        return obj.fecha_transaccion.strftime(
+            '%A, %d de %B de %Y, %H:%M:%S'
+        ).title()
