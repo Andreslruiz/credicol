@@ -6,7 +6,9 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.views import generic
 from django.contrib.auth import get_user_model
 
-from transacciones.services import get_sales_month, get_sales_year, get_sales_today
+from transacciones.services import (
+    get_sales_month, get_sales_year, get_sales_today, get_last_year_sales
+)
 from . import services as s
 
 User = get_user_model()
@@ -54,7 +56,8 @@ class InitialView(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateV
             'user': self.request.user.company_profile,
             'sales_last_month': get_sales_month(self.request.user),
             'sales_last_year': get_sales_year(self.request.user),
-            'sales_today': get_sales_today(self.request.user)
+            'sales_today': get_sales_today(self.request.user),
+            'sales_last_year': get_last_year_sales(self.request.user)
         })
         return super().get_context_data(**kwargs)
 

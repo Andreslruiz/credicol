@@ -6,6 +6,4 @@
 .sqlite3
 
 .env
-venv/
-lvenv/
-settings.json
+env/

@@ -1,3 +1,4 @@
+from django.urls import reverse
 from django.views import generic
 from django.contrib.auth.mixins import (
     LoginRequiredMixin,
@@ -39,18 +40,22 @@ class AddClienteView(LoginRequiredMixin, PermissionRequiredMixin, generic.FormVi
     permission_required = 'integraciones.can_send_commands_mae'
 
     def form_valid(self, form):
-        from django.urls import reverse
         company = self.request.user.company_profile
         form.instance.company = company
         nombres = f'{form.instance.nombre} {form.instance.apellido}'
         form.save()
         cliente_id = form.instance.id
 
+        if not form.instance.telefono or len(form.instance.telefono) != 10:
+            form.add_error(
+                None, 'Numero de telefono invalido.'
+            )
+            return self.form_invalid(form)
+
         success_url = reverse(
             'transacciones:transacciones_list', args=[cliente_id]
         )
 
-        print(success_url)
         return JsonResponse(
             {
                 'ok': True, 'transaction': 'Usuario', 'saldo': '',
@@ -67,5 +72,12 @@ class ClienteEditView(LoginRequiredMixin, PermissionRequiredMixin, generic.Updat
 
     def form_valid(self, form):
         nombres = f'{form.instance.nombre} {form.instance.apellido}'
+
+        if not form.instance.telefono or len(form.instance.telefono) != 10:
+            form.add_error(
+                None, 'Numero de telefono invalido.'
+            )
+            return self.form_invalid(form)
+
         form.save()
         return JsonResponse({'ok': True, 'transaction': '', 'saldo': '', 'user': nombres})

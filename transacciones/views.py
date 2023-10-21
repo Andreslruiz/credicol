@@ -45,6 +45,12 @@ class AddPaymentView(
         total = form.instance.total_transaccion
         deuda = cliente.credit_balance
 
+        if not cliente.telefono or len(cliente.telefono) != 10:
+            form.add_error(
+                None, 'Numero de telefono invalido, actualice la información del cliente.'
+            )
+            return self.form_invalid(form)
+
         if float(total) > float(deuda):
             form.add_error(
                 None, f'El valor del pago es mayor a la deuda del usuario ${deuda}.'
@@ -68,6 +74,13 @@ class AddCreditView(
         cliente = s.get_cliente(self.kwargs.get('cliente_id'))
         s.add_new_credit(form, cliente, self.request.user)
         deuda = cliente.deuda
+
+        if not cliente.telefono or len(cliente.telefono) != 10:
+            form.add_error(
+                None, 'Numero de telefono invalido, actualice la información del cliente.'
+            )
+            return self.form_invalid(form)
+
         return JsonResponse(
             {'ok': True, 'transaction': 'Fiado', 'saldo': deuda}
         )
