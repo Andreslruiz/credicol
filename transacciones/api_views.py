@@ -11,7 +11,7 @@ class ListarTransaccionesAPIView(generics.ListAPIView):
     serializer_class = se.TransaccionesListSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DataTableSearchFilter]
-    search_fields = ['id', 'id']
+    search_fields = ['id']
 
     def get_queryset(self):
         id = self.kwargs.get('cliente_id')
@@ -19,4 +19,17 @@ class ListarTransaccionesAPIView(generics.ListAPIView):
         if id:
             queryset = queryset.filter(cliente=id).order_by('-id')
 
+        return queryset
+
+
+class ListarAllTransaccionesAPIView(generics.ListAPIView):
+
+    pagination_class = DataTablePagination
+    serializer_class = se.TransaccionesListSerializer
+    permission_classes = [permissions.IsAuthenticated]
+    filter_backends = [DataTableSearchFilter]
+    search_fields = ['id']
+
+    def get_queryset(self):
+        queryset = Transaccion.objects.all().order_by('-id')
         return queryset

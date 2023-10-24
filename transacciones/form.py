@@ -11,13 +11,11 @@ class CrearVentaForm(forms.ModelForm):
             'tipo_transaccion',
             'creada_por',
             'total_transaccion',
-            'es_fiado',
         ]
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['total_transaccion'].label = 'Total Venta'
-        self.fields['es_fiado'].label = 'Es Fiado'
 
 
 class AddPaymentForm(forms.ModelForm):
@@ -35,7 +33,7 @@ class AddPaymentForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['total_transaccion'].label = ''
 
-        if self.instance.total_transaccion <= 0:
+        if self.instance.total_transaccion and self.instance.total_transaccion <= 0:
             self.initial['total_transaccion'] = abs(
                 self.instance.total_transaccion
             )

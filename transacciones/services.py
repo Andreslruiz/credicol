@@ -145,12 +145,12 @@ def add_new_payment(form, cliente, user):
     form.save()
 
     update_credit_balance(cliente, form.instance.total_transaccion)
-    notify_payment_sms(cliente, cliente.deuda)
-    send_payment_notify(
-        cliente.telefono,
-        f'{cliente.nombre} {cliente.apellido}',
-        cliente.deuda
-    )
+    # notify_payment_sms(cliente, cliente.deuda)
+    # send_payment_notify(
+    #     cliente.telefono,
+    #     f'{cliente.nombre} {cliente.apellido}',
+    #     cliente.deuda
+    # )
 
 
 def add_new_credit(form, cliente, user):
@@ -162,7 +162,7 @@ def add_new_credit(form, cliente, user):
     form.save()
 
     update_credit_balance(cliente, form.instance.total_transaccion)
-    notify_credit_sms(cliente, cliente.deuda)
+    # notify_credit_sms(cliente, cliente.deuda)
 
 
 def update_credit_balance(cliente, total):

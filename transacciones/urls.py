@@ -33,4 +33,14 @@ urlpatterns = [
         api_views.ListarTransaccionesAPIView.as_view(),
         name='listar_transacciones_api'
     ),
+    path(
+        '',
+        views.ListAllTransactionsView.as_view(),
+        name='full_transacciones_list'
+    ),
+    path(
+        'api/transacciones/',
+        api_views.ListarAllTransaccionesAPIView.as_view(),
+        name='listar_all_transacciones_api'
+    ),
 ]

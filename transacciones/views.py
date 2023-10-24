@@ -25,11 +25,23 @@ class DirectSalesView(
         return super().get_context_data(**kwargs)
 
     def form_valid(self, form):
-        # com_s.send_daily_notification(form.instance.total_venta)
-        form.instance.usuario = self.request.user
+
+        if form.instance.total_transaccion <= 0:
+            form.add_error(
+                None, 'El total debe de ser un numero entero y positivo.'
+            )
+            return self.form_invalid(form)
+
+        form.instance.creada_por = self.request.user
         form.instance.tipo_transaccion = m.Transaccion.TIPO_CHOICES[0][0]
+        form.instance.observaciones = 'Venta Rapida'
         form.save()
-        return JsonResponse({'ok': True})
+
+        total = f'{form.instance.total_transaccion:,.0f}'
+
+        return JsonResponse(
+            {'ok': True, 'transaction': 'Venta Registrada', 'value': total}
+        )
 
 
 class AddPaymentView(
@@ -59,7 +71,7 @@ class AddPaymentView(
 
         s.add_new_payment(form, cliente, self.request.user)
         deuda = cliente.deuda or '0'
-        return JsonResponse({'ok': True, 'transaction': 'Pago', 'saldo': deuda})
+        return JsonResponse({'ok': True, 'transaction': 'Pago Registrado', 'saldo': deuda})
 
 
 class AddCreditView(
@@ -83,7 +95,7 @@ class AddCreditView(
         deuda = cliente.deuda
 
         return JsonResponse(
-            {'ok': True, 'transaction': 'Fiado', 'saldo': deuda}
+            {'ok': True, 'transaction': 'Fiado Registrado', 'saldo': deuda}
         )
 
 
@@ -109,7 +121,7 @@ class EditCreditView(
         deuda = cliente.deuda
 
         return JsonResponse(
-            {'ok': True, 'transaction': 'Fiado', 'saldo': deuda}
+            {'ok': True, 'transaction': 'Fiado Actualizado', 'saldo': deuda}
         )
 
 
@@ -135,7 +147,7 @@ class EditPaymentView(
         deuda = cliente.deuda
 
         return JsonResponse(
-            {'ok': True, 'transaction': 'Fiado', 'saldo': deuda}
+            {'ok': True, 'transaction': 'Pago Actualizado', 'saldo': deuda}
         )
 
 
@@ -149,5 +161,19 @@ class ListTransactionsView(
     def get_context_data(self, **kwargs):
         kwargs.update({
             'cliente': s.get_cliente(self.kwargs.get('cliente_id'))
+        })
+        return super().get_context_data(**kwargs)
+
+
+class ListAllTransactionsView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
+):
+
+    template_name = 'transacciones/all_transacciones_list.html'
+    permission_required = 'organizaciones.pertenece_mesa_ayuda'
+
+    def get_context_data(self, **kwargs):
+        kwargs.update({
+            # 'cliente': s.get_cliente(self.kwargs.get('cliente_id'))
         })
         return super().get_context_data(**kwargs)
