@@ -3,6 +3,7 @@
 
 {% block content %}
 {% include "components/alert_messages.html" %}
+<title>Transacciones | {{ cliente.nombre|title }} {{ cliente.apellido|title }}</title>
 <div class="container-fluid">
     <div class="card card-header-actions mb-6">
         <div class="card-header d-flex justify-content-between">
@@ -46,7 +47,7 @@
                             <th>Fecha Transacción</th>
                             <th>Registrada Por</th>
                             <th>Observaciones</th>
-                            <th>Estado</th>
+                            <th>Tipo</th>
                         </tr>
                     </thead>
                     <tbody data-toggle="tooltip" data-selector=".has-tooltip"></tbody>
@@ -131,8 +132,8 @@
                 url : '{% url "transacciones:listar_transacciones_api" cliente.id %}',
             },
             columns: [
-                { data: 'id' },
-                { data: 'total_transaccion' },
+                {data: 'id' },
+                {data: 'total_transaccion' },
                 {data: 'fecha_transaccion'},
                 {data: 'creada_por'},
                 {data: 'observaciones'},
@@ -140,6 +141,31 @@
                     data: 'es_fiado',
                     render: function(data, type, row, meta) {
                         const tipo = row.tipo_transaccion;
+                        const rowId = row.id;
+                        const editCredit = "{% url 'transacciones:edit_credit' 0 cliente.id %}".replace('0', rowId);
+                        const editPayment = "{% url 'transacciones:edit_payment' 0 cliente.id %}".replace('0', rowId);
+
+                        if (meta.row == 0 && data == true && tipo == 'venta') return`
+                            <span class="text-warning">
+                                <i class="fas fa-minus"></i> Fiado
+                            </span>
+                            <a href="javascript:void(0);" title="Editar Transacción" data-toggle="modal" data-target="#form-modal" data-url=${editCredit}
+                            data-title="Editar Fiado" data-action="Guardar">
+                                <span class="text-warning">
+                                    <i class="fas fa-pencil-alt fa-lg"></i>
+                                </span>
+                            </a>
+                        `;
+                        if (meta.row == 0 && tipo == 'pago') return`
+                            <span class="text-success">
+                                <i class="fas fa-check-circle"></i> Pago
+                            </span>
+                            <a href="javascript:void(0);" title="Editar Transacción" data-toggle="modal" data-target="#form-modal" data-url=${editPayment}
+                            data-title="Editar Pago" data-action="Guardar">                                <span class="text-success">
+                                    <i class="fas fa-pencil-alt fa-lg"></i>
+                                </span>
+                            </a>
+                        `;
                         if (data == true && tipo == 'venta') return`
                             <span class="text-warning">
                                 <i class="fas fa-minus"></i> Fiado
@@ -151,7 +177,7 @@
                         </span>
                         `;
                     }
-                }
+                },                          
             ],
         });
 

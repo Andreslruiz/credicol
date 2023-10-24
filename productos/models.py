@@ -31,10 +31,5 @@ class Producto(models.Model):
     stock = models.IntegerField(blank=True, default=0)
     fecha_creacion = models.DateTimeField(auto_now_add=True)
 
-    unidad_presentacion = models.CharField(
-        max_length=100, choices=UNIDAD_CHOICES, blank=True
-    )
-    cantidad = models.IntegerField(blank=True, default=0)
-
     def __str__(self):
         return self.nombre

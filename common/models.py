@@ -22,11 +22,12 @@ class ColombiaCities(models.Model):
 class PendingMsgView(models.Model):
     text = models.TextField(blank=True)
     error_code = models.CharField(max_length=300, blank=True)
-    creado_por = models.ForeignKey(
-        User, on_delete=models.CASCADE, blank=True, null=True
+    cliente = models.ForeignKey(
+        'clientes.ClienteProfile', on_delete=models.CASCADE,
+        blank=True, null=True
     )
     to = models.IntegerField(blank=True, null=True)
     fecha_creación = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return f'{self.cliente} - {self.text}'
+        return self.text

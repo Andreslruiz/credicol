@@ -1,33 +1,12 @@
+import calendar
+
 from datetime import date
 from datetime import datetime, timedelta
 from django.db.models import Sum
 
 from . import models as m
 from clientes.models import ClienteProfile
-from common.services import send_mms
-
-
-def get_last_year_sales(user):
-    hoy = datetime.today()
-    primer_dia_ano_actual = hoy.replace(day=1, month=1)
-
-    sales_this_year = m.Transaccion.objects.filter(
-        creada_por__company_profile=user.company_profile,
-        fecha_transaccion__gte=primer_dia_ano_actual,
-        fecha_transaccion__lte=hoy,
-        tipo_transaccion=m.Transaccion.TIPO_CHOICES[0][0]
-    )
-
-    if sales_this_year:
-        total_this_year = sales_this_year.aggregate(
-            total=Sum('total_transaccion')
-        )
-        total = int(total_this_year['total'])
-        formatted_total = f'{total:,.0f}'
-
-        return formatted_total
-
-    return 0
+from common.services import send_mms, send_payment_notify
 
 
 def get_sales_month(user):
@@ -75,6 +54,35 @@ def get_sales_year(user):
         return formatted_total
 
     return 0
+
+
+def get_all_year_sales(user):
+    hoy = datetime.today()
+
+    ventas_mensuales = []
+
+    for mes in range(1, 13):
+        primer_dia_mes = hoy.replace(day=1, month=mes)
+        _, ultimo_dia_mes = calendar.monthrange(hoy.year, mes)
+        ultimo_dia_mes = hoy.replace(day=ultimo_dia_mes, month=mes)
+
+        ventas_mes = m.Transaccion.objects.filter(
+            creada_por__company_profile=user.company_profile,
+            fecha_transaccion__gte=primer_dia_mes,
+            fecha_transaccion__lt=ultimo_dia_mes,
+            tipo_transaccion=m.Transaccion.TIPO_CHOICES[0][0]
+        )
+
+        if ventas_mes:
+            total_this_year = ventas_mes.aggregate(
+                total=Sum('total_transaccion')
+            )
+            total = int(total_this_year['total'])
+            ventas_mensuales.append(total)
+        else:
+            ventas_mensuales.append(0)
+
+    return ventas_mensuales
 
 
 def get_sales_today(user):
@@ -138,6 +146,11 @@ def add_new_payment(form, cliente, user):
 
     update_credit_balance(cliente, form.instance.total_transaccion)
     notify_payment_sms(cliente, cliente.deuda)
+    send_payment_notify(
+        cliente.telefono,
+        f'{cliente.nombre} {cliente.apellido}',
+        cliente.deuda
+    )
 
 
 def add_new_credit(form, cliente, user):
@@ -167,16 +180,12 @@ def notify_payment_sms(cliente, deuda):
     body = f"""
 ¡Hola {name}!
 
-¡Pago Realizado! ✅ Queremos informarte amablemente que el valor restante de tus compras fiadas es de:
+¡Pago Realizado!
 
 RESTANTE POR PAGAR:
 ${deuda}
 
-Un gusto atenderte.
-
-Saludos cordiales, Agropecuaria Donde Juancho 🐷🌱
-
-Sistema de facturación, registro DIAN Colombia REG2023736
+Agropecuaria Donde Juancho
     """
 
     send_mms(tel, body)
@@ -189,16 +198,47 @@ def notify_credit_sms(cliente, deuda):
     body = f"""
 ¡Hola {name}!
 
-Compra Fiada Realizada! ✅ Queremos informarte amablemente que el valor restante de tus compras fiadas es de:
+¡Credito Registrado!
 
-RESTANTE POR PAGAR:
+DEUDA TOTAL:
 ${deuda}
 
-Un gusto atenderte.
-
-Saludos cordiales, Agropecuaria Donde Juancho 🐷🌱
-
-Sistema de facturación, registro DIAN Colombia REG2023736
+Agropecuaria Donde Juancho
     """
 
     send_mms(tel, body)
+
+
+def update_last_credit(cliente_profile, new_total, form):
+
+    last = m.Transaccion.objects.filter(
+        cliente=cliente_profile
+    ).last()
+
+    prev_balance = (
+        int(cliente_profile.credit_balance) - int(last.total_transaccion)
+    )
+
+    last.observaciones = form.instance.observaciones
+    last.total_transaccion = new_total
+    last.save()
+
+    cliente_profile.credit_balance = prev_balance + new_total
+    cliente_profile.save()
+
+
+def update_last_payment(cliente_profile, new_total, form):
+
+    last = m.Transaccion.objects.filter(
+        cliente=cliente_profile
+    ).last()
+
+    prev_balance = (
+        int(cliente_profile.credit_balance) + (int(last.total_transaccion)*-1)
+    )
+
+    last.total_transaccion = new_total*-1
+    last.save()
+
+    cliente_profile.credit_balance = prev_balance - new_total
+    cliente_profile.save()

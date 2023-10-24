@@ -6,8 +6,10 @@ from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMix
 from django.views import generic
 from django.contrib.auth import get_user_model
 
+
 from transacciones.services import (
-    get_sales_month, get_sales_year, get_sales_today, get_last_year_sales
+    get_sales_month, get_sales_year, get_sales_today,
+    get_all_year_sales
 )
 from . import services as s
 
@@ -46,7 +48,9 @@ class LoginUsuario(LoginView):
         return self.success_url
 
 
-class InitialView(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView):
+class InitialView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
+):
 
     template_name = 'common/initial.html'
     permission_required = 'common.can_see_initial_view'
@@ -57,7 +61,7 @@ class InitialView(LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateV
             'sales_last_month': get_sales_month(self.request.user),
             'sales_last_year': get_sales_year(self.request.user),
             'sales_today': get_sales_today(self.request.user),
-            'sales_last_year': get_last_year_sales(self.request.user)
+            'sales_all_year': get_all_year_sales(self.request.user)
         })
         return super().get_context_data(**kwargs)
 

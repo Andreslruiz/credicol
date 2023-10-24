@@ -3,6 +3,7 @@
 
 {% block content %}
 {% include "components/alert_messages.html" %}
+<title>Clientes | {{ request.user.company_profile.name }}</title>
 <div class="container-fluid">
     <div class="card card-header-actions mb-6">
         <div class="card-header d-flex justify-content-between">

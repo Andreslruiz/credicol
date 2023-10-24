@@ -11,6 +11,6 @@ urlpatterns = [
         name='listar_productos_api'
     ),
     # path('cliente/<int:id>', views.ClienteDetailView.as_view(), name='profile'),
-    # path('add-new', views.AddClienteView.as_view(), name='add_new_producto'),
+    path('add-new', views.AddProductoView.as_view(), name='add_new_producto'),
     # path('editar-cliente/<int:pk>', views.ClienteEditView.as_view(), name='edit_cliente'),
 ]

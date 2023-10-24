@@ -35,6 +35,11 @@ class AddPaymentForm(forms.ModelForm):
         super().__init__(*args, **kwargs)
         self.fields['total_transaccion'].label = ''
 
+        if self.instance.total_transaccion <= 0:
+            self.initial['total_transaccion'] = abs(
+                self.instance.total_transaccion
+            )
+
 
 class AddCreditForm(forms.ModelForm):
 

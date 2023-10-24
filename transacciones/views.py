@@ -8,7 +8,7 @@ from django.contrib.auth.mixins import (
 from . import models as m
 from . import form as f
 from . import services as s
-from clientes.models import ClienteProfile
+
 
 class DirectSalesView(
     LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView
@@ -72,14 +72,67 @@ class AddCreditView(
 
     def form_valid(self, form):
         cliente = s.get_cliente(self.kwargs.get('cliente_id'))
-        s.add_new_credit(form, cliente, self.request.user)
-        deuda = cliente.deuda
 
         if not cliente.telefono or len(cliente.telefono) != 10:
             form.add_error(
                 None, 'Numero de telefono invalido, actualice la información del cliente.'
             )
             return self.form_invalid(form)
+
+        s.add_new_credit(form, cliente, self.request.user)
+        deuda = cliente.deuda
+
+        return JsonResponse(
+            {'ok': True, 'transaction': 'Fiado', 'saldo': deuda}
+        )
+
+
+class EditCreditView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView
+):
+    model = m.Transaccion
+    form_class = f.AddCreditForm
+    template_name = 'transacciones/components/form_add_credit.html'
+    permission_required = 'integraciones.can_send_commands_mae'
+
+    def form_valid(self, form):
+        cliente = s.get_cliente(self.kwargs.get('cliente_id'))
+        new_total = form.instance.total_transaccion
+
+        if not cliente.telefono or len(cliente.telefono) != 10:
+            form.add_error(
+                None, 'Numero de telefono invalido, actualice la información del cliente.'
+            )
+            return self.form_invalid(form)
+
+        s.update_last_credit(cliente, new_total, form)
+        deuda = cliente.deuda
+
+        return JsonResponse(
+            {'ok': True, 'transaction': 'Fiado', 'saldo': deuda}
+        )
+
+
+class EditPaymentView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView
+):
+    model = m.Transaccion
+    form_class = f.AddPaymentForm
+    template_name = 'transacciones/components/form_add_payment.html'
+    permission_required = 'integraciones.can_send_commands_mae'
+
+    def form_valid(self, form):
+        cliente = s.get_cliente(self.kwargs.get('cliente_id'))
+        new_total = form.instance.total_transaccion
+
+        if not cliente.telefono or len(cliente.telefono) != 10:
+            form.add_error(
+                None, 'Numero de telefono invalido, actualice la información del cliente.'
+            )
+            return self.form_invalid(form)
+
+        s.update_last_payment(cliente, new_total, form)
+        deuda = cliente.deuda
 
         return JsonResponse(
             {'ok': True, 'transaction': 'Fiado', 'saldo': deuda}
