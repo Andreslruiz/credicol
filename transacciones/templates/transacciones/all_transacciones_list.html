@@ -128,19 +128,30 @@
                     render: function(data, type, row, meta) {
                         const tipo = row.tipo_transaccion;
                         const rowId = row.id;
-                        const editCredit = "{% url 'transacciones:edit_credit' 0 0 %}".replace('0', rowId);
-                        const editPayment = "{% url 'transacciones:edit_payment' 0 0 %}".replace('0', rowId);
-
+                        const editTransaction = "{% url 'transacciones:edit_transaction' 0 %}".replace('0', rowId);
+                
                         if (data == true && tipo == 'venta') return`
                             <span class="text-warning">
                                 <i class="fas fa-minus"></i> Fiado
-                            </span>  
+                            </span>
                         `;
                         if (tipo == 'pago') return`
                         <span class="text-success">
                             <i class="fas fa-minus"></i> Pago
                         </span>
                         `;
+
+                        if (meta.row == 0 && data == false && tipo == 'venta') return`
+                            <span class="text-info">
+                                <i class="fas fa-minus"></i> Venta
+                            </span> 
+                            <a href="javascript:void(0);" title="Editar Transacción" data-toggle="modal" data-target="#form-modal" data-url=${editTransaction}
+                            data-title="Editar Venta" data-action="Guardar"> <span class="text-info">
+                                    <i class="fas fa-pencil-alt fa-lg"></i>
+                                </span>
+                            </a>
+                        `;
+
                         return`
                             <span class="text-info">
                                 <i class="fas fa-minus"></i> Venta

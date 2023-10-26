@@ -24,6 +24,10 @@ urlpatterns = [
         name='edit_payment'
     ),
     path(
+        'edit-transaction/<int:pk>/', views.EditTransactionView.as_view(),
+        name='edit_transaction'
+    ),
+    path(
         'detalle/<int:cliente_id>',
         views.ListTransactionsView.as_view(),
         name='transacciones_list'

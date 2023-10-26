@@ -1,3 +1,5 @@
+import locale
+
 from django.views import generic
 from django.http.response import JsonResponse
 from django.contrib.auth.mixins import (
@@ -148,6 +150,27 @@ class EditPaymentView(
 
         return JsonResponse(
             {'ok': True, 'transaction': 'Pago Actualizado', 'saldo': deuda}
+        )
+
+
+class EditTransactionView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView
+):
+    model = m.Transaccion
+    form_class = f.EditTransactionForm
+    template_name = 'transacciones/components/form_edit_transaction.html'
+    permission_required = 'integraciones.can_send_commands_mae'
+
+    def form_valid(self, form):
+        new_total = form.instance.total_transaccion
+
+        s.update_last_transaction(new_total, form, self.kwargs.get('pk'))
+
+        locale.setlocale(locale.LC_ALL, 'es_CO.utf8')
+        total = locale._format("%d", new_total, grouping=True)
+
+        return JsonResponse(
+                {'ok': True, 'transaction': 'Transacción Actualizada', 'value': total}
         )
 
 

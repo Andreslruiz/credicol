@@ -6,7 +6,7 @@ from django.db.models import Sum
 
 from . import models as m
 from clientes.models import ClienteProfile
-from common.services import send_mms, send_payment_notify
+from common.services import send_mms, send_payment_notify, send_credit_notify
 
 
 def get_sales_month(user):
@@ -146,11 +146,11 @@ def add_new_payment(form, cliente, user):
 
     update_credit_balance(cliente, form.instance.total_transaccion)
     # notify_payment_sms(cliente, cliente.deuda)
-    # send_payment_notify(
-    #     cliente.telefono,
-    #     f'{cliente.nombre} {cliente.apellido}',
-    #     cliente.deuda
-    # )
+    send_payment_notify(
+        cliente.telefono,
+        f'{cliente.nombre} {cliente.apellido}',
+        cliente.deuda
+    )
 
 
 def add_new_credit(form, cliente, user):
@@ -163,6 +163,11 @@ def add_new_credit(form, cliente, user):
 
     update_credit_balance(cliente, form.instance.total_transaccion)
     # notify_credit_sms(cliente, cliente.deuda)
+    send_credit_notify(
+        cliente.telefono,
+        f'{cliente.nombre} {cliente.apellido}',
+        cliente.deuda
+    )
 
 
 def update_credit_balance(cliente, total):
@@ -242,3 +247,10 @@ def update_last_payment(cliente_profile, new_total, form):
 
     cliente_profile.credit_balance = prev_balance - new_total
     cliente_profile.save()
+
+
+def update_last_transaction(new_total, form, id):
+
+    last = m.Transaccion.objects.filter(id=id).last()
+    last.total_transaccion = new_total
+    last.save()

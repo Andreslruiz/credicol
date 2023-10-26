@@ -124,11 +124,10 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 TIME_ZONE = 'America/Bogota'
-LANGUAGE_CODE = 'es-CO'  # Español de Colombia
-USE_TZ = True  # Utilizar zona horaria
-USE_I18N = True  # Activar internacionalización (idiomas)
-USE_L10N = True  # Activar localización (formatos de fechas y números)
-
+LANGUAGE_CODE = 'es-CO'
+USE_TZ = True
+USE_I18N = True
+USE_L10N = True
 
 
 # Static files (CSS, JavaScript, Images)
