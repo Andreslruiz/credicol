@@ -1,3 +1,5 @@
+from unidecode import unidecode
+
 from rest_framework import serializers
 
 from .models import ClienteProfile
@@ -29,6 +31,7 @@ class ClientesListSerializer(serializers.ModelSerializer):
 
     def get_nombres(self, obj):
         nombres = f'{obj.nombre.title()} {obj.apellido.title()}'
+        nombres = unidecode(nombres)
         return nombres
 
     def get_deuda(self, obj):
