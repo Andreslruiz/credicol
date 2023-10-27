@@ -75,7 +75,7 @@ class AddPaymentView(
 
         s.add_new_payment(form, cliente, self.request.user)
         deuda = cliente.deuda or '0'
-        return JsonResponse({'ok': True, 'transaction': 'Pago Registrado', 'saldo': deuda})
+        return JsonResponse({'ok': True, 'transaction': 'Pago', 'saldo': deuda})
 
 
 class AddCreditView(
