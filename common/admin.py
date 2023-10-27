@@ -14,4 +14,4 @@ class ColombiaCitiesAdmin(admin.ModelAdmin):
 
 @admin.register(PendingMsgView)
 class PendingMsgViewAdmin(admin.ModelAdmin):
-    list_display = ['cliente', 'text', 'error_code']
+    list_display = ['url', 'type', 'error_code']

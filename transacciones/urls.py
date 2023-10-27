@@ -28,6 +28,10 @@ urlpatterns = [
         name='edit_transaction'
     ),
     path(
+        'delete-transaction/<int:pk>/', views.delete_transaction,
+        name='delete_transaction'
+    ),
+    path(
         'detalle/<int:cliente_id>',
         views.ListTransactionsView.as_view(),
         name='transacciones_list'

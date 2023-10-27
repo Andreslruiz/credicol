@@ -1,5 +1,7 @@
 import locale
 
+from django.shortcuts import redirect
+from django.contrib import messages
 from django.views import generic
 from django.http.response import JsonResponse
 from django.contrib.auth.mixins import (
@@ -161,6 +163,12 @@ class EditTransactionView(
     template_name = 'transacciones/components/form_edit_transaction.html'
     permission_required = 'integraciones.can_send_commands_mae'
 
+    def get_context_data(self, **kwargs):
+        kwargs.update({
+            'actual_transaction': self.object.id
+        })
+        return super().get_context_data(**kwargs)
+
     def form_valid(self, form):
         new_total = form.instance.total_transaccion
 
@@ -172,6 +180,13 @@ class EditTransactionView(
         return JsonResponse(
                 {'ok': True, 'transaction': 'Transacción Actualizada', 'value': total}
         )
+
+
+def delete_transaction(request, pk):
+    s.delete_last_transaction(pk)
+    return JsonResponse(
+        {'ok': True}
+    )
 
 
 class ListTransactionsView(

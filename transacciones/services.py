@@ -145,7 +145,7 @@ def add_new_payment(form, cliente, user):
     form.save()
 
     update_credit_balance(cliente, form.instance.total_transaccion)
-    # notify_payment_sms(cliente, cliente.deuda)
+    notify_payment_sms(cliente, cliente.deuda)
     send_payment_notify(
         cliente.telefono,
         f'{cliente.nombre} {cliente.apellido}',
@@ -254,3 +254,8 @@ def update_last_transaction(new_total, form, id):
     last = m.Transaccion.objects.filter(id=id).last()
     last.total_transaccion = new_total
     last.save()
+
+
+def delete_last_transaction(id):
+    last = m.Transaccion.objects.filter(id=id).last()
+    last.delete()

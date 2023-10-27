@@ -27,9 +27,9 @@ Agropecuaria Donde Juancho
 
 
 def send_mms(to, body):
-
+    to = f'57{to}'
     data = {
-        'to': ['573213358263'],
+        'to': [to],
         'text': body,
         'from': 'Agrop'
     }
@@ -45,19 +45,29 @@ def send_mms(to, body):
         )
     }
 
+    data = json.dumps(data)
+
     try:
-        response = requests.post(url, data=json.dumps(data), headers=headers)
-        if response.status_code not in [200, 202]:
-            add_pending_msg(to, body, response.text)
-
+        requests.post(url, data=data, headers=headers)
     except Exception as e:
-        add_pending_msg(to, body, e)
+        add_pending_msg(url, data, headers, e)
 
 
-def add_pending_msg(to, message, error_code):
+def add_pending_msg(url, data, headers, error):
     new_msg = m.PendingMsgView.objects.create(
-        text=message, error_code=error_code,
-        to=to
+        url=url, data=data,
+        headers=headers, type=m.PendingMsgView.MSG,
+        error_code=error
+    )
+
+    new_msg.save()
+
+
+def add_pending_wspp_msg(url, data, headers, error):
+    new_msg = m.PendingMsgView.objects.create(
+        url=url, data=data,
+        headers=headers, type=m.PendingMsgView.WS,
+        error_code=error
     )
 
     new_msg.save()
@@ -103,8 +113,10 @@ def send_payment_notify(to, username, balance):
         }
     }
 
-    response = requests.post(url, headers=headers, json=data)
-    print(response.status_code)
+    try:
+        requests.post(url, headers=headers, json=data)
+    except Exception:
+        add_pending_wspp_msg(url, data, headers)
 
 
 def send_credit_notify(to, username, balance):
@@ -147,5 +159,7 @@ def send_credit_notify(to, username, balance):
         }
     }
 
-    response = requests.post(url, headers=headers, json=data)
-    print(response.status_code)
+    try:
+        requests.post(url, headers=headers, json=data)
+    except Exception as e:
+        add_pending_wspp_msg(url, data, headers, e)

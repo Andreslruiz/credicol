@@ -289,5 +289,37 @@
         });
     }
 
+    function deleteMessage(id){
+        const url = "{% url 'transacciones:delete_transaction' 0 %}".replace('0', id)
+        fetch(url)
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            }
+        })
+        .then(data => {
+        swal({
+            title: "Venta eliminada",
+            html: "Se ha eliminado la venta correctamente.",
+            type: "success",
+            showCancelButton: false,
+            showConfirmButton: true,
+            confirmButtonColor: "#69DE6F",
+            confirmButtonText: "Aceptar",
+            cancelButtonText: "Cancelar",
+            allowOutsideClick: false,
+        }).then(result => {
+            if (result.dismiss == "overlay") {
+            } else if (result.dismiss !== "cancel") {
+            window.location.reload();
+            }
+        });
+        })
+        .catch(error => {
+        console.error("Error en la solicitud Fetch: " + error);
+        });
+
+    }
+
 </script>
 {%endblock%}

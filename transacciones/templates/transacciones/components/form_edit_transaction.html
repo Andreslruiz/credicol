@@ -9,5 +9,12 @@
         <i class="fas fa-dollar-sign"></i> Total Pago:
         {{ form.total_transaccion|as_crispy_field }}
       </div>
+      <div class="col-md-12">
+        <a href="javascript:void(0);" onclick="deleteMessage({{actual_transaction}})" title="Eliminar esta Transacción">
+          <span class="text-danger">
+            <i class="fas fa-trash-alt"> Eliminar Venta</i>
+          </span>
+        </a>
+      </div>
     </div>
   </div>

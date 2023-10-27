@@ -1,5 +1,4 @@
 from django.db import models
-from django.contrib.auth.models import User
 
 
 class ColombiaDepartments(models.Model):
@@ -20,14 +19,21 @@ class ColombiaCities(models.Model):
 
 
 class PendingMsgView(models.Model):
-    text = models.TextField(blank=True)
-    error_code = models.CharField(max_length=300, blank=True)
-    cliente = models.ForeignKey(
-        'clientes.ClienteProfile', on_delete=models.CASCADE,
-        blank=True, null=True
-    )
-    to = models.IntegerField(blank=True, null=True)
+
+    WS = 'WS'
+    MSG = 'MSG'
+
+    TYPE_OPTIONS = [
+        (WS, 'Whatsapp'),
+        (MSG, 'MSG'),
+    ]
+
+    url = models.JSONField(max_length=500, blank=True)
+    headers = models.JSONField(max_length=500, blank=True)
+    data = models.JSONField(max_length=500, blank=True)
+    type = models.CharField(choices=TYPE_OPTIONS, max_length=10)
+    error_code = models.CharField(max_length=200, blank=True)
     fecha_creación = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
-        return self.text
+        return f'{self.url} - {self.type}'
