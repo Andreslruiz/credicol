@@ -27,12 +27,13 @@ class AddProductoView(
     permission_required = 'integraciones.can_send_commands_mae'
 
     def form_valid(self, form):
+        product = form.instance.nombre
         compania = self.request.user.company_profile
         form.instance.compania = compania
         form.save()
 
         return JsonResponse(
             {
-                'ok': True
+                'ok': True, 'product': product
             }
         )

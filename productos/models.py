@@ -18,7 +18,7 @@ class Producto(models.Model):
         ('centimetro', 'CM'),
     ]
 
-    nombre = models.CharField(max_length=100)
+    nombre = models.CharField(max_length=100, unique=True)
     descripcion = models.TextField()
     precio = models.IntegerField(default=0)
     compania = models.ForeignKey(

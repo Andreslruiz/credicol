@@ -196,20 +196,11 @@
             .then(data => {
                 try {
                     const { ok } = JSON.parse(data);
-                    const { transaction } = JSON.parse(data);
-                    const { saldo } = JSON.parse(data);
-                    const { user } = JSON.parse(data);
-                    const { successurl } = JSON.parse(data);
+                    const { product } = JSON.parse(data);
 
                     if (ok) {
                         $('#form-modal').modal('toggle');
-                        if (saldo){
-                            successMessage(transaction, saldo);
-                        }else if(transaction){
-                            successUserMessage(user, successurl);
-                        }else{
-                            successUserupdateMessage(user);
-                        }
+                        successProductMessage(product);
                     }
                 } catch {
                     form.innerHTML = data;
@@ -246,51 +237,11 @@
             })
             .catch(error => modalContent.innerHTML = 'No puedes realizar esta operación');
     };
-
-    function successMessage(transaction, saldo){
-        swal({
-            title: `${transaction} registrado exitosamente`,
-            html: `Nuevo saldo: <strong>$${saldo}</strong>.`,
-            type: 'success',
-            showCancelButton: false,
-            showConfirmButton: true,
-            confirmButtonColor: '#69DE6F',
-            confirmButtonText: 'Aceptar',
-            cancelButtonText: 'Cancelar',
-            allowOutsideClick: false,
-        }).then((result) => {
-            if (result.dismiss == 'overlay') {}
-
-            else if (result.dismiss !== 'cancel') {
-                window.location.reload();
-            }
-        });
-    }
     
-    function successUserMessage(user, succesurl){
+    function successProductMessage(product){
         swal({
-            title: `Usuario registrado exitosamente`,
-            html: `Se ha registrado en el sistema el usuario:<strong> ${user}</strong>.`,
-            type: 'success',
-            showCancelButton: false,
-            showConfirmButton: true,
-            confirmButtonColor: '#69DE6F',
-            confirmButtonText: 'Aceptar',
-            cancelButtonText: 'Cancelar',
-            allowOutsideClick: false,
-        }).then((result) => {
-            if (result.dismiss == 'overlay') {}
-
-            else if (result.dismiss !== 'cancel') {
-                window.location.href = succesurl;
-            }
-        });
-    }
-
-    function successUserupdateMessage(user){
-        swal({
-            title: `Usuario actualizado exitosamente`,
-            html: `Se ha actualizado el usuario:<strong> ${user}</strong>.`,
+            title: `Producto Registrado exitosamente`,
+            html: `Se ha registrado el producto:<strong> ${product}</strong>.`,
             type: 'success',
             showCancelButton: false,
             showConfirmButton: true,
@@ -306,5 +257,6 @@
             }
         });
     }
+
 </script>
 {%endblock%}
