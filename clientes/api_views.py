@@ -11,11 +11,11 @@ class ListarClientesAPIView(generics.ListAPIView):
     serializer_class = se.ClientesListSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DataTableSearchFilter]
-    search_fields = ['nombre', 'email']
+    search_fields = ['nombre', 'apellido']
 
     def get_queryset(self):
-        id = self.kwargs.get('company_id')
         queryset = ClienteProfile.objects.all()
+        id = self.kwargs.get('company_id')
         if id:
             queryset = queryset.filter(company=1)
 
