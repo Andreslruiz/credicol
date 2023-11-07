@@ -50,5 +50,5 @@ urlpatterns = [
         'api/transacciones/',
         api_views.ListarAllTransaccionesAPIView.as_view(),
         name='listar_all_transacciones_api'
-    ),
+    )
 ]

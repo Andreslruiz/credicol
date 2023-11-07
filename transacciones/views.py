@@ -1,5 +1,8 @@
 import locale
+from datetime import datetime
 
+from django.template import loader
+from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.contrib import messages
 from django.views import generic
@@ -197,8 +200,11 @@ class ListTransactionsView(
     permission_required = 'organizaciones.pertenece_mesa_ayuda'
 
     def get_context_data(self, **kwargs):
+        fecha_actual = datetime.now()
+        fecha_formateada = fecha_actual.strftime('%Y-%m-%d %H:%M')
         kwargs.update({
-            'cliente': s.get_cliente(self.kwargs.get('cliente_id'))
+            'cliente': s.get_cliente(self.kwargs.get('cliente_id')),
+            'fecha_actual': fecha_formateada
         })
         return super().get_context_data(**kwargs)
 

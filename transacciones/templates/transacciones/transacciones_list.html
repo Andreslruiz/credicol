@@ -1,5 +1,27 @@
 {% extends 'base.html' %}
-{% load crispy_forms_tags static %}
+{% load waffle_tags crispy_forms_tags static %}
+
+{% block css %}
+    <style>
+
+        @media print {
+            .elemento-para-imprimir {
+                display: block;
+            }
+            .ticket-header {
+                text-align: center;
+            }
+            .ticket-details {
+                margin-top: 10px;
+                padding: 10mm;
+            }
+            .item {
+                margin-top: 5px;
+                padding: 10mm;
+            }
+        }
+    </style>
+{% endblock css %}
 
 {% block content %}
 {% include "components/alert_messages.html" %}
@@ -86,6 +108,33 @@
         </div>
     </div>
 </div>
+
+<div id="ticketPrint" class="elemento-para-imprimir" style="display:none;">
+    <div class="ticket-header" style="text-align: center;">
+        <img src="{% static 'img/company_logo.png' %}" style="max-width: 100%;">
+        <h4 style="font-size: 14px;margin-bottom: 5px;">{{ cliente.company.name|title }}</h4>
+        <h3 style="font-size: 16px;margin-bottom: 5px;">Estado de Cuenta</h3>
+        <h4 style="font-size: 13px;margin-bottom: 5px;  ">{{ cliente.nombre|title }} {{ cliente.apellido|title }}</h4>
+        <hr>
+    </div>
+    <div class="ticket-details" style="font-size:12px;margin-left:12px;">
+        <div class="item">
+            <strong>Operacion:</strong> Registro Creditos
+        </div>
+        <div class="item" "style="margin-bottom: 15px;>
+            <strong>Fecha:</strong> {{ fecha_actual }}
+        </div>
+        <div class="item">
+            <strong>Saldo Anterior:</strong> ${{ cliente.deuda }}
+        </div>
+        <div class="item" id="nuevoSaldoPrint">
+            <strong>Nuevo Saldo:  ${{ cliente.deuda }}</strong>
+        </div>
+        <hr>
+        <h4 style="font-size: 10px;margin-bottom: 5px;text-align: center;">Gracias por confiar en nosotros, trabajamos con calidad, economia y servicio.</h4>
+    </div>
+</div>
+
 {% endblock %}
 
 {% block js %}
@@ -308,7 +357,7 @@
             if (result.dismiss == 'overlay') {}
 
             else if (result.dismiss !== 'cancel') {
-                window.location.reload();
+                imprimirDiv(saldo);
             }
         });
     }
@@ -351,6 +400,22 @@
                 window.location.reload();
             }
         });
+    }
+
+    function imprimirDiv(nuevoSaldo) {
+        var nuevoSaldoPrint = document.getElementById('nuevoSaldoPrint');
+        nuevoSaldoPrint.innerHTML = `<strong>Nuevo Saldo Pendiente:</strong> ${nuevoSaldo}`;
+        var contenido = document.getElementById('ticketPrint').innerHTML;
+        var ventanaImpresion = window.open('', '', 'width=600');
+        ventanaImpresion.document.write('<html><head><title>Imprimir Ticket - {{ cliente.company.name }}</title></head><body>');
+        ventanaImpresion.document.write(contenido);
+        ventanaImpresion.document.write('</body></html>');
+        ventanaImpresion.document.close();
+        ventanaImpresion.print();
+        ventanaImpresion.onafterprint = function () {
+            ventanaImpresion.close();
+            window.location.reload();
+        };
     }
 </script>
 {%endblock%}
