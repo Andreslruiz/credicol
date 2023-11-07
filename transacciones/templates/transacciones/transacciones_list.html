@@ -114,7 +114,7 @@
         <img src="{% static 'img/company_logo.png' %}" style="max-width: 100%;">
         <h4 style="font-size: 14px;margin-bottom: 5px;">{{ cliente.company.name|title }}</h4>
         <h3 style="font-size: 16px;margin-bottom: 5px;">Estado de Cuenta</h3>
-        <h4 style="font-size: 13px;margin-bottom: 5px;  ">{{ cliente.nombre|title }} {{ cliente.apellido|title }}</h4>
+        <h4 style="font-size: 16px;margin-bottom: 5px;  ">{{ cliente.nombre|title }} {{ cliente.apellido|title }}</h4>
         <hr>
     </div>
     <div class="ticket-details" style="font-size:12px;margin-left:12px;">
@@ -404,7 +404,7 @@
 
     function imprimirDiv(nuevoSaldo) {
         var nuevoSaldoPrint = document.getElementById('nuevoSaldoPrint');
-        nuevoSaldoPrint.innerHTML = `<strong>Nuevo Saldo Pendiente:</strong> ${nuevoSaldo}`;
+        nuevoSaldoPrint.innerHTML = `<strong>Nuevo Saldo Pendiente:</strong> $${nuevoSaldo}`;
         var contenido = document.getElementById('ticketPrint').innerHTML;
         var ventanaImpresion = window.open('', '', 'width=600');
         ventanaImpresion.document.write('<html><head><title>Imprimir Ticket - {{ cliente.company.name }}</title></head><body>');
