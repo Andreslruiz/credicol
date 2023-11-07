@@ -411,11 +411,15 @@
         ventanaImpresion.document.write(contenido);
         ventanaImpresion.document.write('</body></html>');
         ventanaImpresion.document.close();
-        ventanaImpresion.print();
-        ventanaImpresion.onafterprint = function () {
-            ventanaImpresion.close();
-            window.location.reload();
-        };
+
+        setTimeout(function() {
+                ventanaImpresion.print();
+        }, 2000);
+
+        ventanaImpresion.onafterprint = function() {
+                    ventanaImpresion.close();
+                    window.location.reload();
+            };
     }
 </script>
 {%endblock%}
