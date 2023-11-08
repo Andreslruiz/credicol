@@ -259,3 +259,15 @@ def update_last_transaction(new_total, form, id):
 def delete_last_transaction(id):
     last = m.Transaccion.objects.filter(id=id).last()
     last.delete()
+
+
+def total_credit_amount(company):
+    clientes = ClienteProfile.objects.filter(company=company)
+
+    if clientes:
+        total_today = clientes.aggregate(total=Sum('credit_balance'))
+        total = total_today['total']
+        formatted_total = f'{total:,.0f}'
+        return formatted_total
+
+    return 0

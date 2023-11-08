@@ -9,7 +9,7 @@ from django.contrib.auth import get_user_model
 
 from transacciones.services import (
     get_sales_month, get_sales_year, get_sales_today,
-    get_all_year_sales
+    get_all_year_sales, total_credit_amount
 )
 from . import services as s
 
@@ -61,7 +61,10 @@ class InitialView(
             'sales_last_month': get_sales_month(self.request.user),
             'sales_last_year': get_sales_year(self.request.user),
             'sales_today': get_sales_today(self.request.user),
-            'sales_all_year': get_all_year_sales(self.request.user)
+            'sales_all_year': get_all_year_sales(self.request.user),
+            'total_credit_amount': total_credit_amount(
+                self.request.user.company_profile
+            )
         })
         return super().get_context_data(**kwargs)
 

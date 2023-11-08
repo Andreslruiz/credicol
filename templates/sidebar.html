@@ -101,13 +101,14 @@
             <span>Vender</span></a>
     </li>
 
+
+    {% endswitch %}
+
     <li class="nav-item">
         <a class="nav-link" href="{% url 'initial_view' %}">
         <i class="fas fa-fw fa-tachometer-alt"></i>
         <span>Dashboard</span></a>
     </li>
-
-    {% endswitch %}
 
     <li class="nav-item">
         <a class="nav-link" href="{% url 'clientes:clientes_list' %}">
