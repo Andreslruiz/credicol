@@ -17,6 +17,8 @@ from django.views.generic import RedirectView
 from common.views import LoginUsuario
 from django.contrib import admin
 from django.urls import path, include
+from django.conf import settings
+from django.conf.urls.static import static
 
 from common.views import InitialView, user_logout
 
@@ -30,4 +32,6 @@ urlpatterns = [
     path('common/', include('common.urls')),
     path('clientes/', include('clientes.urls')),
     path('productos/', include('productos.urls')),
-]
+] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
+
+# urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

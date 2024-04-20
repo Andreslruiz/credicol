@@ -27,7 +27,7 @@ SECRET_KEY = 'django-insecure-c5(v+#q#f=91@@#s*n+6gz9!fs)&ia_w)m2olssigq6)z)r#2l
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
@@ -63,6 +63,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.middleware.WhiteNoiseMiddleware'
 ]
 
 ROOT_URLCONF = 'ROM.urls'
@@ -152,3 +153,6 @@ Q_CLUSTER = {
     'recycle': 100,
     'retry': 3000,
 }
+
+
+STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
