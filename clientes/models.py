@@ -19,6 +19,17 @@ class ClienteProfile(models.Model):
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
 
+    class Meta:
+        verbose_name = 'Perfil de Clientes'
+        verbose_name_plural = 'Perfiles de Clientes'
+        permissions = [
+            ('can_see_initial_view', 'Puede ver vista inicial'),
+            ('can_see_clientes', 'Puede ver lista clientes'),
+            ('can_create_cliente', 'Puede crear cliente'),
+            ('can_ver_cliente', 'Puede ver detalle cliente'),
+            ('can_edit_cliente', 'Puede editar cliente')
+        ]
+
     @property
     def deuda(self):
         if self.credit_balance:

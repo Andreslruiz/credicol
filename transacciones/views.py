@@ -57,7 +57,7 @@ class AddPaymentView(
     model = m.Transaccion
     form_class = f.AddPaymentForm
     template_name = 'transacciones/components/form_add_payment.html'
-    permission_required = 'integraciones.can_send_commands_mae'
+    permission_required = 'transacciones.can_add_transaccion'
 
     def form_valid(self, form):
         cliente = s.get_cliente(self.kwargs.get('cliente_id'))
@@ -87,7 +87,7 @@ class AddCreditView(
     model = m.Transaccion
     form_class = f.AddCreditForm
     template_name = 'transacciones/components/form_add_credit.html'
-    permission_required = 'integraciones.can_send_commands_mae'
+    permission_required = 'transacciones.can_add_transaccion'
 
     def form_valid(self, form):
         cliente = s.get_cliente(self.kwargs.get('cliente_id'))
@@ -112,7 +112,7 @@ class EditCreditView(
     model = m.Transaccion
     form_class = f.AddCreditForm
     template_name = 'transacciones/components/form_add_credit.html'
-    permission_required = 'integraciones.can_send_commands_mae'
+    permission_required = 'transacciones.can_edit_transaccion'
 
     def form_valid(self, form):
         cliente = s.get_cliente(self.kwargs.get('cliente_id'))
@@ -138,7 +138,7 @@ class EditPaymentView(
     model = m.Transaccion
     form_class = f.AddPaymentForm
     template_name = 'transacciones/components/form_add_payment.html'
-    permission_required = 'integraciones.can_send_commands_mae'
+    permission_required = 'transacciones.can_edit_transaccion'
 
     def form_valid(self, form):
         cliente = s.get_cliente(self.kwargs.get('cliente_id'))
@@ -164,7 +164,7 @@ class EditTransactionView(
     model = m.Transaccion
     form_class = f.EditTransactionForm
     template_name = 'transacciones/components/form_edit_transaction.html'
-    permission_required = 'integraciones.can_send_commands_mae'
+    permission_required = 'transacciones.can_edit_transaccion'
 
     def get_context_data(self, **kwargs):
         kwargs.update({
@@ -197,7 +197,7 @@ class ListTransactionsView(
 ):
 
     template_name = 'transacciones/transacciones_list.html'
-    permission_required = 'organizaciones.pertenece_mesa_ayuda'
+    permission_required = 'transacciones.can_see_cliente_transacciones'
 
     def get_context_data(self, **kwargs):
         fecha_actual = datetime.now()

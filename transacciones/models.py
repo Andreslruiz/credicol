@@ -26,3 +26,15 @@ class Transaccion(models.Model):
 
     def __str__(self):
         return f"{self.tipo_transaccion}: {self.total_transaccion}"
+
+    class Meta:
+        verbose_name = 'Transaccion'
+        verbose_name_plural = 'Transacciones'
+        permissions = [
+            (
+                'can_see_cliente_transacciones',
+                'Puede ver transacciones del cliente'
+            ),
+            ('can_add_transaccion', 'Puede añadir transaccion'),
+            ('can_edit_transaccion', 'Puede editar transaccion'),
+        ]

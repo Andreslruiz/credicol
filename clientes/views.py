@@ -15,13 +15,13 @@ class ListUsersView(
 ):
 
     template_name = 'clientes/clientes_list.html'
-    permission_required = 'organizaciones.pertenece_mesa_ayuda'
+    permission_required = 'clientes.can_see_clientes'
 
 
 class ClienteDetailView(LoginRequiredMixin, PermissionRequiredMixin, generic.DetailView):
 
     template_name = 'clientes/detail_cliente.html'
-    permission_required = 'organizaciones.pertenece_mesa_ayuda'
+    permission_required = 'clientes.can_ver_cliente'
     slug_field = 'id'
     slug_url_kwarg = 'id'
     queryset = m.ClienteProfile.objects.all()
@@ -37,7 +37,7 @@ class AddClienteView(LoginRequiredMixin, PermissionRequiredMixin, generic.FormVi
     model = m.ClienteProfile
     form_class = f.AddNewCliente
     template_name = 'clientes/components/form_add_cliente.html'
-    permission_required = 'integraciones.can_send_commands_mae'
+    permission_required = 'clientes.can_create_cliente'
 
     def form_valid(self, form):
         company = self.request.user.company_profile
@@ -68,7 +68,7 @@ class ClienteEditView(LoginRequiredMixin, PermissionRequiredMixin, generic.Updat
     model = m.ClienteProfile
     form_class = f.AddNewCliente
     template_name = 'clientes/components/form_add_cliente.html'
-    permission_required = 'integraciones.can_send_commands_mae'
+    permission_required = 'clientes.can_edit_cliente'
 
     def form_valid(self, form):
         nombres = f'{form.instance.nombre} {form.instance.apellido}'

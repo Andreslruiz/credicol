@@ -17,6 +17,6 @@ class ListarClientesAPIView(generics.ListAPIView):
         queryset = ClienteProfile.objects.all()
         id = self.kwargs.get('company_id')
         if id:
-            queryset = queryset.filter(company=1)
+            queryset = queryset.filter(company=id)
 
         return queryset

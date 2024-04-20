@@ -53,7 +53,7 @@ class InitialView(
 ):
 
     template_name = 'common/initial.html'
-    permission_required = 'common.can_see_initial_view'
+    permission_required = 'clientes.can_see_initial_view'
 
     def get_context_data(self, **kwargs):
         kwargs.update({
