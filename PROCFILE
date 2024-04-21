@@ -1,1 +1,1 @@
-web: gunicorn COBRADOR.ROM.wsgi --log-file -
+web gunicorn ROM.wsgi --log-file -
