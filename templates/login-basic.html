@@ -1,5 +1,6 @@
 {% load static waffle_tags crispy_forms_tags %}
 
+{% block css %}{% endblock css %}
 <!DOCTYPE html>
 <html lang="en">
     <head>
@@ -9,8 +10,9 @@
         <meta name="description" content="" />
         <meta name="author" content="" />
         <title>Cobrador APP</title>
+        <link rel="icon" type="image/x-icon" href="{% static 'img/credicol_logo.png' %}" />
         <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
-        <link rel="icon" type="image/x-icon" href="{% static 'images/logo.png' %}" />
+
 
         <script data-search-pseudo-elements defer src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.13.0/js/all.min.js" integrity="sha384-ujbKXb9V3HdK7jcWL6kHL1c+2Lj4MR4Gkjl7UtwpSHg/ClpViddK9TI7yU53frPN" crossorigin="anonymous"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/feather-icons/4.27.0/feather.min.js" integrity="sha384-RM9gJn3huzSFZMRMHyI5T22Zk4OmaYT5EBr0SzXiMQWJjDpEqQrQTP1tyn0d54Cd" crossorigin="anonymous"></script>
