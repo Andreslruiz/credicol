@@ -80,4 +80,6 @@ class ClienteEditView(LoginRequiredMixin, PermissionRequiredMixin, generic.Updat
             return self.form_invalid(form)
 
         form.save()
-        return JsonResponse({'ok': True, 'transaction': '', 'saldo': '', 'user': nombres})
+        return JsonResponse(
+            {'ok': True, 'transaction': '', 'saldo': '', 'user': nombres}
+        )
