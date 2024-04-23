@@ -18,6 +18,7 @@ class CompanyProfile(models.Model):
         settings.AUTH_USER_MODEL, related_name='company_profile',
         on_delete=models.CASCADE
     )
+    fin_fecha_membresia = models.DateTimeField(blank=True, null=True)
 
     history = HistoricalRecords()
 

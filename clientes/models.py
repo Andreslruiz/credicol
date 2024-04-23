@@ -1,4 +1,5 @@
-import locale
+# import locale
+from datetime import timedelta
 
 from django.db import models
 
@@ -38,3 +39,25 @@ class ClienteProfile(models.Model):
             return self.credit_balance
 
         return '0'
+
+
+class MembresiaEmpresas(models.Model):
+    empresa = models.ForeignKey(
+        'companies.CompanyProfile', on_delete=models.CASCADE,
+        blank=True, null=True
+    )
+
+    registrada_el = models.DateTimeField(null=True, blank=True)
+    valor_pagado = models.PositiveIntegerField(null=True, blank=True)
+    dias_pagados = models.PositiveIntegerField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if self.registrada_el and self.dias_pagados:
+            self.empresa.fin_fecha_membresia = (
+                self.registrada_el + timedelta(days=self.dias_pagados)
+            )
+            self.empresa.save()
+        super().save(*args, **kwargs)
+
+    def __str__(self):
+        return f"{self.empresa} {self.empresa.fin_fecha_membresia}"

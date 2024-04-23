@@ -48,7 +48,7 @@
             <footer class="sticky-footer bg-white">
                 <div class="container my-auto">
                     <div class="copyright text-center my-auto">
-                        <span>Copyright &copy; AndresDev 2023</span>
+                        <span>Copyright &copy; CredicolApp 2024</span>
                     </div>
                 </div>
             </footer>
@@ -101,11 +101,102 @@
     <!-- Page level custom scripts -->
     <script src="{% static 'js/demo/chart-area-demo.js'%}"></script>
     <script src="{% static 'js/demo/chart-pie-demo.js'%}"></script>
-    {% block js %}
-        <script>    
-            
+    <script src="https://unpkg.com/sweetalert2@7.8.2/dist/sweetalert2.all.js"
+        integrity="sha384-TXx4nFk9yfqhYyuOr5TSNDLkwYpxvszQRKWzlWSQopwFpZsUPq/z1wQtH61CW6ex" 
+        crossorigin="anonymous">
+    </script>
+    <script>
+        {% comment %} verificarMembresia() {% endcomment %}
 
-        </script>
+        function verificarMembresia() {
+            var fechaActual = new Date();
+            var fechaMembresia = parsearFecha("{{ request.user.company_profile.fin_fecha_membresia }}");
+            var diferenciaTiempo = fechaMembresia - fechaActual;
+            var diasRestantes = Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24));
+
+            if (diasRestantes <= 3 && diasRestantes >= 0) {
+                swal({
+                    title: '¡Membresía a punto de caducar!',
+                    html: `
+                    <p>Quedan ${diasRestantes} días para que su membresía caduque con CrediCol.</p>
+                    <div>
+                        <br> 
+                        <h5>Opciones de Pago:</h5>
+                        <hr>
+                        <table>
+                            <tr>
+                                <td>Recarga Nequi al numero 3213358263</td>
+                                <td><img style="width:150px;" src="{% static 'img/nequi.jpg' %}" alt="Nequi"></td>
+                            </tr>
+                            <tr>
+                                <td>Consignación o transferencia Bancolombia a la cuenta de ahorros 446-000-16382</td>
+                                <td><img style="width:150px;" src="{% static 'img/bancolombia.png' %}" alt="Bancolombia"></td>
+                            </tr>
+                        </table>
+                        <hr>
+                        <table>
+                            <tr>
+                                <td>Numero Whatsapp para envio de comprobantes, recuerde adjuntar a la foto el nombre de su empresa</td>
+                                <td><img style="width:150px;" src="{% static 'img/whatsapp.jpg' %}" alt="Bancolombia"></td>
+                            </tr>
+                        </table>
+                    </div>
+                `,
+                    type: 'info',
+                    showCancelButton: true,
+                    showConfirmButton: true,
+                    confirmButtonColor: '#4B3FD1',
+                    cancelButtonColor: '#7466FF',
+                    confirmButtonText: 'Aceptar',
+                    cancelButtonText: 'Ver Planes',
+                    allowOutsideClick: false,
+                    width: '600px'
+                }).then((result) => {
+                    if (result.dismiss == 'cancel') {
+                        showPlanes()
+                    }
+        
+                    else if (result.dismiss !== 'cancel') {
+                        window.location.href = succesurl;
+                    }
+                });
+            } else if (diasRestantes <= 0) {
+                Swal({
+                    icon: 'error',
+                    title: '¡Membresía caducada!',
+                    text: 'Su membresía ha caducado. Por favor, renuévela.',
+                    confirmButtonText: 'Aceptar'
+                });
+            }
+        }
+
+        function parsearFecha(fechaString) {
+            var partesFecha = fechaString.split(" ");
+            var dia = parseInt(partesFecha[0]);
+            var mes = partesFecha[2];
+            var año = parseInt(partesFecha[4]);
+    
+            var horaMinuto = partesFecha[7].split(":");
+            var hora = parseInt(horaMinuto[0]);
+            var minuto = parseInt(horaMinuto[1]);
+        
+            var meses = {
+                "Enero": 0, "Febrero": 1, "Marzo": 2, "Abril": 3, "Mayo": 4, "Junio": 5,
+                "Julio": 6, "Agosto": 7, "Septiembre": 8, "Octubre": 9, "Noviembre": 10, "Diciembre": 11
+            };
+            var mesNumero = meses[mes];
+            var final_date = new Date(año, mesNumero, dia, hora, minuto);
+        
+            return new Date(año, mesNumero, dia, hora, minuto);
+        }
+
+        function showPlanes(){
+            alert("muestr planes")
+        }
+        
+
+    </script>
+    {% block js %}
     {% endblock %}
 </body>
 </html>
