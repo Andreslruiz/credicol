@@ -26,8 +26,8 @@ class TransaccionesListSerializer(serializers.ModelSerializer):
 
     def get_total_transaccion(self, obj):
         total = abs(obj.total_transaccion)
-        locale.setlocale(locale.LC_ALL, 'es_CO.utf8')
-        total = locale._format("%d", total, grouping=True)
+        # locale.setlocale(locale.LC_ALL, 'es_CO.utf8')
+        # total = locale._format("%d", total, grouping=True)
         return f'${total}'
 
     def get_creada_por(self, obj):

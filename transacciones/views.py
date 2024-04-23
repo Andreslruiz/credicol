@@ -177,11 +177,11 @@ class EditTransactionView(
 
         s.update_last_transaction(new_total, form, self.kwargs.get('pk'))
 
-        locale.setlocale(locale.LC_ALL, 'es_CO.utf8')
-        total = locale._format("%d", new_total, grouping=True)
+        # locale.setlocale(locale.LC_ALL, 'es_CO.utf8')
+        # total = locale._format("%d", new_total, grouping=True)
 
         return JsonResponse(
-                {'ok': True, 'transaction': 'Transacción Actualizada', 'value': total}
+                {'ok': True, 'transaction': 'Transacción Actualizada', 'value': new_total}
         )
 
 
