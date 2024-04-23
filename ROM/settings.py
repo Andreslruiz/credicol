@@ -144,7 +144,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 
 Q_CLUSTER = {
-    'name': 'cobrador',
+    'name': 'credicol',
     'catch_up': False,
     'orm': 'default',
     'max_attempts': 1,
