@@ -357,7 +357,8 @@
             if (result.dismiss == 'overlay') {}
 
             else if (result.dismiss !== 'cancel') {
-                imprimirDiv(saldo);
+                {% comment %} imprimirDiv(saldo); {% endcomment %}
+                console.log('Guardado')
             }
         });
     }
