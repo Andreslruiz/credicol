@@ -3,7 +3,7 @@ import requests
 import json
 import base64
 
-
+from django.utils import timezone
 from transacciones import services as vnt_s
 from . import models as m
 
@@ -76,7 +76,10 @@ def add_pending_wspp_msg(url, data, headers, error):
     new_msg.save()
 
 
-def send_payment_notify(to, username, balance):
+def send_payment_notify(user, to, username, balance):
+    company = user.company_profile
+    if company.fin_fecha_membresia < timezone.now():
+        return True
     url = "https://graph.facebook.com/v17.0/142793695585950/messages"
 
     headers = {
@@ -122,7 +125,11 @@ def send_payment_notify(to, username, balance):
         add_pending_wspp_msg(url, data, headers)
 
 
-def send_credit_notify(to, username, balance):
+def send_credit_notify(user, to, username, balance):
+    company = user.company_profile
+    if company.fin_fecha_membresia < timezone.now():
+        return True
+
     url = "https://graph.facebook.com/v17.0/142793695585950/messages"
 
     headers = {

@@ -106,15 +106,67 @@
         crossorigin="anonymous">
     </script>
     <script>
-        {% comment %} verificarMembresia() {% endcomment %}
+        verificarMembresia()
 
         function verificarMembresia() {
             var fechaActual = new Date();
             var fechaMembresia = parsearFecha("{{ request.user.company_profile.fin_fecha_membresia }}");
             var diferenciaTiempo = fechaMembresia - fechaActual;
             var diasRestantes = Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24));
+            var fechaActualMembresia = obtenerFechaActual();
+            var membresiaRecordada = localStorage.getItem("membresia");
+            var membresiaCaducada = localStorage.getItem("membresia-caducada");
 
-            if (diasRestantes <= 3 && diasRestantes >= 0) {
+            if (diasRestantes<1 && !membresiaCaducada) {
+                swal({
+                    title: '¡Membresía Caducada!',
+                    html: `
+                    <p>Tu membresia de CrediCol a caducado, comunicate con un administrador.</p>
+                    <div>
+                        <br> 
+                        <h5>Opciones de Pago:</h5>
+                        <hr>
+                        <table>
+                            <tr>
+                                <td>Recarga Nequi al numero 3213358263</td>
+                                <td><img style="width:150px;" src="{% static 'img/nequi.jpg' %}" alt="Nequi"></td>
+                            </tr>
+                            <tr>
+                                <td>Consignación o transferencia Bancolombia a la cuenta de ahorros 446-000-16382</td>
+                                <td><img style="width:150px;" src="{% static 'img/bancolombia.png' %}" alt="Bancolombia"></td>
+                            </tr>
+                        </table>
+                        <hr>
+                        <table>
+                            <tr>
+                                <td>Numero Whatsapp para envio de comprobantes, recuerde adjuntar a la foto el nombre de su empresa</td>
+                                <td><img style="width:150px;" src="{% static 'img/whatsapp.jpg' %}" alt="Bancolombia"></td>
+                            </tr>
+                        </table>
+                    </div>
+                `,
+                    type: 'warning',
+                    showCancelButton: false,
+                    showConfirmButton: true,
+                    confirmButtonColor: '#4B3FD1',
+                    cancelButtonColor: '#7466FF',
+                    confirmButtonText: 'Continuar Asi',
+                    cancelButtonText: 'Ver Planes',
+                    allowOutsideClick: false,
+                    width: '600px'
+                }).then((result) => {
+                    if (result.dismiss == 'cancel') {
+                        showPlanes()
+                    }
+        
+                    else if (result.dismiss !== 'cancel') {
+                        localStorage.setItem("membresia-caducada", fechaActualMembresia);
+                        alert("Recuerda, se deshabilitara el envio de mensaje y recordatorios automaticos a tus clientes y demas funciones especiales.")
+                    }
+                });
+            }
+
+            if (diasRestantes <= 3 && diasRestantes >= 0 && fechaActualMembresia !== membresiaRecordada) {
                 swal({
                     title: '¡Membresía a punto de caducar!',
                     html: `
@@ -143,7 +195,7 @@
                     </div>
                 `,
                     type: 'info',
-                    showCancelButton: true,
+                    showCancelButton: false,
                     showConfirmButton: true,
                     confirmButtonColor: '#4B3FD1',
                     cancelButtonColor: '#7466FF',
@@ -157,17 +209,18 @@
                     }
         
                     else if (result.dismiss !== 'cancel') {
-                        window.location.href = succesurl;
+                        localStorage.setItem("membresia", fechaActualMembresia);
                     }
                 });
-            } else if (diasRestantes <= 0) {
-                Swal({
-                    icon: 'error',
-                    title: '¡Membresía caducada!',
-                    text: 'Su membresía ha caducado. Por favor, renuévela.',
-                    confirmButtonText: 'Aceptar'
-                });
             }
+        }
+
+        function obtenerFechaActual() {
+            var fecha = new Date();
+            var dia = fecha.getDate();
+            var mes = fecha.getMonth() + 1;
+            var año = fecha.getFullYear();
+            return año + "-" + mes + "-" + dia;
         }
 
         function parsearFecha(fechaString) {
@@ -191,7 +244,7 @@
         }
 
         function showPlanes(){
-            alert("muestr planes")
+            alert("Consulta Administrador.")
         }
         
 
