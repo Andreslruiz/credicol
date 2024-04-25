@@ -34,9 +34,9 @@ class ClienteProfile(models.Model):
     @property
     def deuda(self):
         if self.credit_balance:
-            # locale.setlocale(locale.LC_ALL, 'es_CO.utf8')
-            # deuda = locale._format("%d", self.credit_balance, grouping=True)
-            return self.credit_balance
+            deuda = self.credit_balance
+            deuda_formateada = "{:,.0f}".format(int(deuda))
+            return "{}".format(deuda_formateada)
 
         return '0'
 

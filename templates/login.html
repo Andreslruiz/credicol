@@ -24,7 +24,8 @@
     
         .card:hover::before {
             opacity: 1;
-        }
+        }   
+
     </style>
 
 {% endblock css %}
@@ -41,7 +42,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <meta name="description" content="">
     <meta name="author" content="">
-    <link rel="icon" type="image/x-icon" href="{% static 'images/logo.png' %}" />
+    <link rel="icon" type="image/x-icon" href="{% static 'img/credicol_logo.png' %}" />
 
     <title>CrediCol | Iniciar Sesion</title>
 
@@ -65,11 +66,14 @@
                     <div class="card-body p-0"  style="z-index:999;">
                         <!-- Nested Row within Card Body -->
                         <div class="row">
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image"></div>
+                            {% comment %} <div class="col-lg-6 d-none d-lg-block bg-login-image-2"></div> <!--Aca va la vieja imagen dog--> {% endcomment %}
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image-2 fade-in" style="border-right: 2px solid #ccc; background-image: url('{% static 'img/logo_2.jpg' %}'); background-position: center; background-size: cover;">
+                                <!-- Contenido opcional dentro del div -->
+                            </div>
                             <div class="col-lg-6">
                                 <div class="p-5">
                                     <div class="text-center">
-                                        <h1 class="h4 text-gray-900 mb-4"><strong>Bienvenido a CrediCol</strong></h1>
+                                        <h1 class="h4 text-gray-900 mb-4"><strong>Inicia sesión</strong></h1>
                                     </div>
                                     <form method="post">
                                         {% csrf_token %}
@@ -107,7 +111,7 @@
                                             <div class="text-center">
                                                 <a class="small" href="#">¿Olvidaste tu contraseña?</a>
                                                 <br>
-                                                <a href="{% static 'mw_manual_uso.pdf' %}" target="_blank" data-toggle="tooltip" data-placement="top" title="haz clic para ver el instructivo">Tengo problemas para acceder</a> 
+                                                <a class="small" href="{% static 'mw_manual_uso.pdf' %}" target="_blank" data-toggle="tooltip" data-placement="top" title="haz clic para ver el instructivo">Tengo problemas para acceder</a> 
                                             </div>
                                         </div>
                                     </form>
