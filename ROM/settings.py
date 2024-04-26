@@ -32,6 +32,10 @@ ALLOWED_HOSTS = ['*']
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 SITE_URL = ENV.str('SITE_URL', default='http://localhost:8000')
+CORS_ALLOWED_ORIGINS = [
+    'https://credicol.com.co',
+]
+
 # Application definition
 
 INSTALLED_APPS = [
