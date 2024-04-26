@@ -32,9 +32,7 @@ ALLOWED_HOSTS = ['*']
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 SITE_URL = ENV.str('SITE_URL', default='http://localhost:8000')
-CORS_ALLOWED_ORIGINS = [
-    'https://credicol.com.co',
-]
+
 
 # Application definition
 
@@ -56,15 +54,13 @@ INSTALLED_APPS = [
     'transacciones',
     'django_q',
     'import_export',
-    'rest_framework',
-    'corsheaders'
+    'rest_framework'
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
-    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',

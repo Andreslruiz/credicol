@@ -1,3 +1,3 @@
 from .settings import *
-ALLOWED_HOSTS = ["credicol.com.co", "www.credicol.com.co"]
+ALLOWED_HOSTS = ["*"]
 DEBUG = True
