@@ -28,6 +28,7 @@ SECRET_KEY = 'django-insecure-c5(v+#q#f=91@@#s*n+6gz9!fs)&ia_w)m2olssigq6)z)r#2l
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+CSRF_COOKIE_SECURE = True
 
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
