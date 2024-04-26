@@ -28,6 +28,11 @@ SECRET_KEY = 'django-insecure-c5(v+#q#f=91@@#s*n+6gz9!fs)&ia_w)m2olssigq6)z)r#2l
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
+
+# Configuración para asegurar que las cookies de sesión solo se envíen a través de conexiones seguras
+SESSION_COOKIE_SECURE = True
+
+# Configuración para asegurar que las cookies CSRF solo se envíen a través de conexiones seguras
 CSRF_COOKIE_SECURE = True
 
 
