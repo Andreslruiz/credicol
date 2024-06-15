@@ -110,6 +110,10 @@
 
         function verificarMembresia() {
             var fechaActual = new Date();
+            var mes = fechaActual.getMonth() + 1;
+            var dia = fechaActual.getDate();
+            var fechaActualFormateada = mes + "/" + dia;
+
             var fechaMembresia = parsearFecha("{{ request.user.company_profile.fin_fecha_membresia }}");
             var diferenciaTiempo = fechaMembresia - fechaActual;
             var diasRestantes = Math.ceil(diferenciaTiempo / (1000 * 60 * 60 * 24));
@@ -117,7 +121,7 @@
             var membresiaRecordada = localStorage.getItem("membresia");
             var membresiaCaducada = localStorage.getItem("membresia-caducada");
 
-            if (diasRestantes<1 && !membresiaCaducada) {
+            if (diasRestantes<1 && membresiaCaducada != fechaActualFormateada) {
                 swal({
                     title: '¡Membresía Caducada!',
                     html: `
@@ -160,12 +164,12 @@
                     }
         
                     else if (result.dismiss !== 'cancel') {
-                        localStorage.setItem("membresia-caducada", fechaActualMembresia);
+                        localStorage.setItem("membresia-caducada", fechaActualFormateada);
                         alert("Recuerda, se deshabilitara el envio de mensaje y recordatorios automaticos a tus clientes y demas funciones especiales.")
                     }
                 });
             }
-
+            
             if (diasRestantes <= 3 && diasRestantes >= 0 && fechaActualMembresia !== membresiaRecordada) {
                 swal({
                     title: '¡Membresía a punto de caducar!',
@@ -173,6 +177,7 @@
                     <p>Quedan ${diasRestantes} días para que su membresía caduque con CrediCol.</p>
                     <div>
                         <br> 
+                        <h5><strong>Total a pagar 22.000</strong></h5>
                         <h5>Opciones de Pago:</h5>
                         <hr>
                         <table>

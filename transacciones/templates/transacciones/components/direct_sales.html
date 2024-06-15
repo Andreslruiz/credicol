@@ -1,87 +1,12 @@
-{% extends 'base.html' %}
 {% load crispy_forms_tags static %}
 
 {% block content %}
 {% include "components/alert_messages.html" %}
-<title>Transacciones | {{ request.user.company_profile.name }}</title>
 <div class="card-body">
     {% include 'components/non_field_errors.html' with form=form %}
     {% csrf_token %}
-    <br>
     <div class="row">
         <div class="col-md-12">{{ form.total_transaccion|as_crispy_field }}</div>
     </div>
 </div>
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Factura de Productos</title>
-    <style>
-        /* Agrega tu CSS personalizado aquí para hacerlo más moderno y bonito */
-    </style>
-</head>
-<body>
-    <h1>Factura de Productos</h1>
-
-    <form>
-        <label for="producto">Buscar Producto:</label>
-        <input type="text" id="producto" placeholder="Nombre del producto">
-        <button type="button" id="buscar">Buscar</button>
-    </form>
-
-    <h2>Resultados de la Búsqueda:</h2>
-    <ul id="lista-productos">
-        <!-- Aquí se mostrarán los resultados de la búsqueda -->
-    </ul>
-
-    <h2>Factura:</h2>
-    <ul id="factura">
-        <!-- Aquí se mostrarán los productos agregados a la factura -->
-    </ul>
-</body>
 {% endblock %}
-
-{% block js %}
-
-<script>
-    // JavaScript para manejar la búsqueda y la factura
-    const listaProductos = [
-        { id: 1, nombre: 'Producto 1', precio: 10.00 },
-        { id: 2, nombre: 'Producto 2', precio: 15.00 },
-        { id: 3, nombre: 'Producto 3', precio: 20.00 },
-        // Agrega más productos aquí
-    ];
-
-    const productoInput = document.getElementById('producto');
-    const buscarButton = document.getElementById('buscar');
-    const listaProductosElement = document.getElementById('lista-productos');
-    const facturaElement = document.getElementById('factura');
-
-    buscarButton.addEventListener('click', () => {
-        const busqueda = productoInput.value.toLowerCase();
-        const resultados = listaProductos.filter(producto => producto.nombre.toLowerCase().includes(busqueda));
-        mostrarResultados(resultados);
-    });
-
-    function mostrarResultados(resultados) {
-        listaProductosElement.innerHTML = '';
-        resultados.forEach(producto => {
-            const li = document.createElement('li');
-            li.textContent = `${producto.nombre} - $${producto.precio.toFixed(2)}`;
-            const agregarButton = document.createElement('button');
-            agregarButton.textContent = 'Agregar a la Factura';
-            agregarButton.addEventListener('click', () => agregarProductoAFactura(producto));
-            li.appendChild(agregarButton);
-            listaProductosElement.appendChild(li);
-        });
-    }
-
-    function agregarProductoAFactura(producto) {
-        const li = document.createElement('li');
-        li.textContent = `${producto.nombre} - $${producto.precio.toFixed(2)}`;
-        facturaElement.appendChild(li);
-    }
-</script>
-
-{% endblock script %}

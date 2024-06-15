@@ -11,11 +11,13 @@ class TransaccionesListSerializer(serializers.ModelSerializer):
     creada_por = serializers.SerializerMethodField()
     fecha_transaccion = serializers.SerializerMethodField()
     observaciones = serializers.SerializerMethodField()
+    cliente = serializers.SerializerMethodField()
 
     class Meta:
         model = Transaccion
         fields = (
             'id',
+            'cliente',
             'total_transaccion',
             'fecha_transaccion',
             'creada_por',
@@ -30,8 +32,13 @@ class TransaccionesListSerializer(serializers.ModelSerializer):
         return "${}".format(total_formateado)
 
     def get_creada_por(self, obj):
-        nombres = f'{obj.creada_por.first_name} {obj.creada_por.last_name}'
+        nombres = f'{obj.creada_por.first_name.title()} {obj.creada_por.last_name.title()}'
         return nombres
+
+    def get_cliente(self, obj):
+        if obj.cliente:
+            return f'{obj.cliente.nombre.title()} {obj.cliente.apellido.title()}'
+        return '-'
 
     def get_observaciones(self, obj):
         return obj.observaciones.title()

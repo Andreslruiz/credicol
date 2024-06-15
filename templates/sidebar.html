@@ -37,21 +37,21 @@
     <hr class="sidebar-divider my-0">
 
     <!-- Nav Item - Dashboard -->
-    <li class="nav-item active">
+    {% comment %} <li class="nav-item active">
         <a class="nav-link" href="index.html">
             <i class="fas fa-fw fa-tachometer-alt"></i>
             <span>Dashboard</span></a>
-    </li>
+    </li> {% endcomment %}
 
     <!-- Divider -->
-    <hr class="sidebar-divider">
+    {% comment %} <hr class="sidebar-divider"> {% endcomment %}
 
     <!-- Heading -->
-    <div class="sidebar-heading">
+    {% comment %} <div class="sidebar-heading">
         Interface
-    </div>
+    </div> {% endcomment %}
 
-    <!-- Nav Item - Pages Collapse Menu -->
+    {% comment %} <!-- Nav Item - Pages Collapse Menu -->
     <li class="nav-item">
         <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseTwo"
             aria-expanded="true" aria-controls="collapseTwo">
@@ -84,7 +84,7 @@
                 <a class="collapse-item" href="utilities-other.html">Other</a>
             </div>
         </div>
-    </li>
+    </li> {% endcomment %}
 
     <!-- Divider -->
     <hr class="sidebar-divider">
@@ -138,9 +138,6 @@
             <span>Clientes</span></a>
     </li>
 
-
-    {% switch 'see-all' %}
-
     <li class="nav-item">
         <a class="nav-link" href="{% url 'productos:productos_list' %}">
             <i class="fas fa-fw fa-shopping-cart"></i>
@@ -161,12 +158,15 @@
             <span>Venta Rapida</span></a>
     </li>
 
+
+    {% switch 'see-all' %}
+
     <!-- Nav Item - Tables -->
-    <li class="nav-item">
+    {% comment %} <li class="nav-item">
         <a class="nav-link" href="tables.html">
             <i class="fas fa-fw fa-table"></i>
             <span>Tables</span></a>z
-    </li>
+    </li> {% endcomment %}
 
     <!-- Divider -->
     <hr class="sidebar-divider d-none d-md-block">
@@ -177,11 +177,11 @@
     </div>
 
     <!-- Sidebar Message -->
-    <div class="sidebar-card d-none d-lg-flex">
+    {% comment %} <div class="sidebar-card d-none d-lg-flex">
         <img class="sidebar-card-illustration mb-2" src="{% static 'img/undraw_rocket.svg' %}" alt="...">
         <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
         <a class="btn btn-success btn-sm" href="{% static 'https://startbootstrap.com/theme/sb-admin-pro' %}">Upgrade to Pro!</a>
-    </div>
+    </div> {% endcomment %}
 
     {% endswitch %}
 

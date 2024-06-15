@@ -64,7 +64,6 @@
                 <table class="table table-striped table-bordered table-hover" id="clientesTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>ID</th>
                             <th>Total</th>
                             <th>Fecha Transacción</th>
                             <th>Registrada Por</th>
@@ -181,7 +180,6 @@
                 url : '{% url "transacciones:listar_transacciones_api" cliente.id %}',
             },
             columns: [
-                {data: 'id' },
                 {data: 'total_transaccion' },
                 {data: 'fecha_transaccion'},
                 {data: 'creada_por'},
