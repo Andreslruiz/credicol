@@ -1,3 +1,4 @@
+from django.utils import timezone
 import locale
 
 from rest_framework import serializers
@@ -44,9 +45,11 @@ class TransaccionesListSerializer(serializers.ModelSerializer):
         return obj.observaciones.title()
 
     def get_fecha_transaccion(self, obj):
+        fecha_local = timezone.localtime(obj.fecha_transaccion)
+
         locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
-        fecha_formateada = obj.fecha_transaccion.strftime(
-            '%d de %B de %Y, %H:%M:%S'
-        ).title()
+        fecha_formateada = fecha_local.strftime('%d de %B de %Y, %H:%M:%S')
+
         locale.setlocale(locale.LC_TIME, '')
+
         return fecha_formateada

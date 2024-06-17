@@ -72,6 +72,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'common.middleware.TimezoneMiddleware',
 ]
 
 ROOT_URLCONF = 'ROM.urls'
@@ -101,15 +102,15 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    #'default': ENV.db(),
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'credicol',
-        'USER': 'postgres',
-        'PASSWORD': '25335286525Andr',
-        'HOST': 'localhost',
-        'PORT': '5432'
-    }
+    'default': ENV.db(),
+    # 'default': {
+    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
+    #     'NAME': 'credicol',
+    #     'USER': 'postgres',
+    #     'PASSWORD': '25335286525Andr',
+    #     'HOST': 'localhost',
+    #     'PORT': '5432'
+    # }
 }
 
 
@@ -137,10 +138,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 
 TIME_ZONE = 'America/Bogota'
-LANGUAGE_CODE = 'es-CO'
 USE_TZ = True
-USE_I18N = True
-USE_L10N = True
 
 
 # Static files (CSS, JavaScript, Images)

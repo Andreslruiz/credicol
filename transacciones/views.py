@@ -1,5 +1,6 @@
 import locale
 from datetime import datetime
+from django.utils import timezone
 
 from django.template import loader
 from django.http import HttpResponse
@@ -42,8 +43,9 @@ class DirectSalesView(
         form.instance.creada_por = self.request.user
         form.instance.tipo_transaccion = m.Transaccion.TIPO_CHOICES[0][0]
         form.instance.observaciones = 'Venta Rapida'
+        form.instance.fecha_transaccion = timezone.now()
         form.save()
-
+        print("acaaaaaaaaaaaaaaaaaaa")
         total = f'{form.instance.total_transaccion:,.0f}'
 
         return JsonResponse(

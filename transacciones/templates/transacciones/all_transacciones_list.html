@@ -1,6 +1,23 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags static %}
 
+{% block css %}
+<style>
+
+    .elemento-ocultable {
+        display: block;
+    }
+    
+    @media only screen and (max-width: 768px) {
+        .elemento-ocultable {
+            display: none;
+        }
+    }
+
+</style>
+
+{% endblock css %}
+
 {% block content %}
 {% include "components/alert_messages.html" %}
 <title>Transacciones | {{ request.user.company_profile.name }}</title>
@@ -14,7 +31,7 @@
                 </div>
             </div>
             
-            <div>
+            <div class="elemento-ocultable">
                 <a href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:direct_sales' %}"
                 data-title="Registrar Venta" title="Registrar Venta" class="btn btn-primary btn-sm" data-action="Guardar">
                     <i class="fas fa-shopping-cart"></i>
@@ -40,7 +57,7 @@
                         <tr>
                             <th>Cliente</th>
                             <th>Total</th>
-                            <th>Fecha Transacción</th>
+                            <th>Fecha</th>
                             <th>Registrada Por</th>
                             <th>Observaciones</th>
                             <th>Tipo</th>
@@ -106,6 +123,7 @@ integrity="sha384-9CMzFL3va/6KyW0gzQBtAa1e7q2PlrLY8f/InPPaxJrruBv86zU8N1hjkFyDZC
 crossorigin="anonymous"></script>
 <script>
     $(document).ready(function (){
+
         const table = $('#transaccionesTable').DataTable({
             rowId: 'id',
             ordering: false,
@@ -182,6 +200,13 @@ crossorigin="anonymous"></script>
                     }
                 },                          
             ],
+            "columnDefs": [
+                { 
+                    "targets": [3, 4],
+                    "visible": false,
+                    "searchable": false
+                }
+            ]
         });
 
         $('#transaccionesTable').on('click', '.detail', function(){
