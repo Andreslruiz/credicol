@@ -23,7 +23,7 @@
 <title>Transacciones | {{ request.user.company_profile.name }}</title>
 <div class="container-fluid">
     <div class="card card-header-actions mb-6">
-        <div class="card-header d-flex justify-content-between">
+        <div class="card-header d-flex justify-content-between ">
             <div>
                 <div style="display: flex; align-items: center;">
                     <i class="fas fa-exchange-alt" style="font-size: 24px; color: #2263DF; margin-right: 10px;"></i>
@@ -40,7 +40,7 @@
             </div>
         </div>
 
-        <div class="card-body">
+        <div class="card-body" id="tableResponsive">
             <div class="row">
                 <div class="form-group col-md-3">
                     <label for="litepickerRangePlugin">Fecha a visualizar</label>
@@ -199,15 +199,20 @@ crossorigin="anonymous"></script>
                         `;
                     }
                 },                          
-            ],
-            "columnDefs": [
-                { 
-                    "targets": [3, 4],
-                    "visible": false,
-                    "searchable": false
-                }
             ]
         });
+
+        ocultarColumnasEnMovil(table)
+
+        function ocultarColumnasEnMovil(table) {
+            const divTable = document.getElementById('tableResponsive')
+
+            if (window.matchMedia("(max-width: 768px)").matches) {
+                divTable.classList.add('p-0');
+                table.columns([3, 4]).visible(false);
+                table.columns([3, 4]).searchable(false);
+            }
+        }
 
         $('#transaccionesTable').on('click', '.detail', function(){
             const { url } = this.dataset;
