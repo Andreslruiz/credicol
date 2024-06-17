@@ -103,14 +103,6 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
 
 DATABASES = {
     'default': ENV.db(),
-    # 'default': {
-    #     'ENGINE': 'django.db.backends.postgresql_psycopg2',
-    #     'NAME': 'credicol',
-    #     'USER': 'postgres',
-    #     'PASSWORD': '25335286525Andr',
-    #     'HOST': 'localhost',
-    #     'PORT': '5432'
-    # }
 }
 
 
