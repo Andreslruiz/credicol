@@ -1,6 +1,14 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags static %}
 
+{% block css %}
+    <style>
+        .text-red {
+            color: red;
+        }
+    </style>
+{% endblock css %}
+
 {% block content %}
 {% include "components/alert_messages.html" %}
 <title>Clientes | {{ request.user.company_profile.name }}</title>
@@ -9,20 +17,32 @@
         <div class="card-header d-flex justify-content-between">
             <div style="display: flex; align-items: center;">
                 <i class="fas fa-user" style="font-size: 23px; color: #2A72FB; margin-right: 10px;"></i>
-                <span style="font-size: 24px; color: #2A72FB;">Listado de Clientes</span>
+                <span style="font-size: 24px; color: #2A72FB;">Clientes</span>
             </div>
-            <a class="btn btn-sm btn-primary" data-title="Crear Cliente" data-action="Guardar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'clientes:add_new_cliente' %}">
+            <a class="btn btn-sm btn-primary elemento-ocultable" data-title="Crear Cliente" data-action="Guardar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'clientes:add_new_cliente' %}">
                 <i class="fas fa-user"></i> Crear Cliente
             </a>           
         </div>
 
-        <div class="card-body">
+        <div class="card-body" id="tableResponsive">
+            <div class="row">
+                <div class="form-group col-md-3">
+                    <label for="selectFilter">Estado Credito</label>
+                    <select class="form-control" id="selectFilter" name="filter">
+                        <option value="en_mora">Todos</option>
+                        <option value="al_dia">Al día</option>
+                        <option value="en_mora">En mora</option>
+                    </select>
+                </div>
+            </div>
+
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover" id="clientesTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th></th>
-                            <th>Nombre Cliente</th>
+                            <th>Nombre</th>
+                            <th>Nombre</th>
                             <th>Telefono</th>
                             <th>Email</th>
                             <th>Deuda</th>
@@ -122,16 +142,33 @@
                         `;
                     },
                 },
-                { data: 'nombres' },
+                {data: 'nombres'},
+                { data: 'nombres',
+                    render: function (data, type, row, meta) {
+                        const url = "{% url 'transacciones:transacciones_list' 0 %}".replace(0, row.id);
+                        return `
+                            <a href="${url}" title="Ver usuario">  
+                                ${data}
+                            </a>
+                        `;
+                    },
+                },
                 {data: 'telefono'},
                 {data: 'email'},
                 { 
                     data: 'deuda',
                     render: function(data, type, row, meta) {
                         const deuda = data;
-                        return`
-                            $${deuda}
-                        `
+                        const dias_mora = row.dias_mora;
+
+                        if (dias_mora > 15) {
+                            return `
+                                $${deuda}  <h7 class="text-danger">(Mora ${dias_mora} Dias)</h7>
+                            `;
+                        } else {
+                            return `$${deuda}`;
+                        }
+                        
                     }
                 },
                 { 
@@ -151,6 +188,19 @@
                 }
             ],
         });
+
+        ocultarColumnasEnMovil(table)
+
+        function ocultarColumnasEnMovil(table) {
+            const divTable = document.getElementById('tableResponsive')
+
+            if (window.matchMedia("(max-width: 768px)").matches) {
+                divTable.classList.add('p-0');
+                table.columns([0, 1, 4, 6]).visible(false);
+            }else{
+                table.columns([2]).visible(false);
+            }
+        }
 
         $('#clientesTable').on('click', '.detail', function(){
             const { url } = this.dataset;
