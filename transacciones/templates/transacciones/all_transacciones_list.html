@@ -82,9 +82,13 @@
                 <span>Ventas Contado:</span>
                 <span id="ventas-contado" class="ventas-contado">$0.00</span>
             </div>
+            <div class="ventas-item">
+                <span>Abonos Deudas:</span>
+                <span id="pagos-fiados" class="pagos-fiados">$0.00</span>
+            </div>
             <hr>
             <div class="ventas-item">
-                <span>Ventas Totales:</span>
+                <span>Total Caja:</span>
                 <span id="ventas-totales" class="ventas-totales">$0.00</span>
             </div>
         </div>
@@ -465,24 +469,37 @@ crossorigin="anonymous"></script>
         let total = 0;
         let totalCredito = 0;
         let totalContado = 0;
+        let totalPagos = 0;
 
         table.rows().every(function(rowIdx, tableLoop, rowLoop) {
             var data = this.data();
-            var monto = parseFloat(data.total_transaccion.replace('$', '')) || 0;
+            var monto = parseFloat(data.total_transaccion.replace('$', '').replace(',', ''));
             var fiado = data.es_fiado;
 
-            total += monto;
+            if (!fiado) {
+                total += monto;
+            }
+            
+            if (data.tipo_transaccion == 'pago'){
+                totalPagos += monto;
+            }
+
             if (fiado) {
                 totalCredito += monto;
-            } else{
+            } else if (data.tipo_transaccion != 'pago'){
                 totalContado += monto;
             }
         });
 
-        $('#ventas-totales').text('$' + total.toFixed(3));
-        $('#ventas-credito').text('$' + totalCredito.toFixed(3));
-        $('#ventas-contado').text('$' + totalContado.toFixed(3));
+        $('#ventas-totales').text('$' + formatearNumeroConPuntos(total.toFixed(0)));
+        $('#ventas-credito').text('$' + formatearNumeroConPuntos(totalCredito.toFixed(0)));
+        $('#ventas-contado').text('$' + formatearNumeroConPuntos(totalContado.toFixed(0)));
+        $('#pagos-fiados').text('$' + formatearNumeroConPuntos(totalPagos.toFixed(0)));
     }
 
+    function formatearNumeroConPuntos(numero) {
+        return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");
+    }
+    
 </script>
 {%endblock%}
