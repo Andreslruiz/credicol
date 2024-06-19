@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from rest_framework import permissions, generics, filters
-from common.api_views import DataTablePagination, DataTableSearchFilter
+from common.api_views import DataTablePagination, DataTableSearchFilter, DataTableLongPagination
 from django.db.models import Q
 
 from . import serializers as se
@@ -51,7 +51,7 @@ class AllTransactionsFilter(filters.BaseFilterBackend):
 
 class ListarAllTransaccionesAPIView(generics.ListAPIView):
 
-    pagination_class = DataTablePagination
+    pagination_class = DataTableLongPagination
     serializer_class = se.TransaccionesListSerializer
     permission_classes = [permissions.IsAuthenticated]
     filter_backends = [DataTableSearchFilter, AllTransactionsFilter]

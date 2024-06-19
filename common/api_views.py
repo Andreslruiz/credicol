@@ -3,6 +3,19 @@ from rest_framework import pagination, response, filters
 
 class DataTablePagination(pagination.LimitOffsetPagination):
 
+    default_limit = 20
+    offset_query_param = 'start'
+
+    def get_paginated_response(self, data):
+        return response.Response({
+            'data': data,
+            'recordsTotal': self.count,
+            'recordsFiltered': self.count,
+        })
+
+
+class DataTableLongPagination(pagination.LimitOffsetPagination):
+
     default_limit = 1000
     offset_query_param = 'start'
 
