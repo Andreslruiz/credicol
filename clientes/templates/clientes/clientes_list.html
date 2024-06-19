@@ -6,6 +6,10 @@
         .text-red {
             color: red;
         }
+        .card-full-width {
+            margin-left: -5%;
+            margin-right: -5%;
+        }
     </style>
 {% endblock css %}
 
@@ -13,7 +17,7 @@
 {% include "components/alert_messages.html" %}
 <title>Clientes | {{ request.user.company_profile.name }}</title>
 <div class="container-fluid">
-    <div class="card card-header-actions mb-6">
+    <div class="card card-header-actions mb-6 card-full-width">
         <div class="card-header d-flex justify-content-between">
             <div style="display: flex; align-items: center;">
                 <i class="fas fa-user" style="font-size: 23px; color: #2A72FB; margin-right: 10px;"></i>

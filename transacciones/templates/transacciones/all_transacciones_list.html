@@ -13,6 +13,11 @@
             display: none;
         }
 
+        .card-full-width {
+            margin-left: -5%;
+            margin-right: -5%;
+        }
+
     }
 
     .ventas-container {
@@ -54,8 +59,8 @@
 {% block content %}
 {% include "components/alert_messages.html" %}
 <title>Transacciones | {{ request.user.company_profile.name }}</title>
-<div class="container-fluid">
-    <div class="card card-header-actions mb-6">
+<div class="container-fluid border">
+    <div class="card card-header-actions mb-6 card-full-width">
         <div class="card-header d-flex justify-content-between ">
             <div>
                 <div style="display: flex; align-items: center;">
