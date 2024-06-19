@@ -29,7 +29,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 CSRF_TRUSTED_ORIGINS = [
-    '*'
+    'https://credicol.com.co',
+    'http://credicol.com.co',
+    'https://www.credicol.com.co',
+    'http://www.credicol.com.co',
 ]
 
 # Configuración para asegurar que las cookies de sesión solo se envíen a través de conexiones seguras
