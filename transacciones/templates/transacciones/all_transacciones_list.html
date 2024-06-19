@@ -8,18 +8,6 @@
         display: block;
     }
     
-    @media only screen and (max-width: 768px) {
-        .elemento-ocultable {
-            display: none;
-        }
-
-        .card-full-width {
-            margin-left: -5%;
-            margin-right: -5%;
-        }
-
-    }
-
     .ventas-container {
         max-width: 415px;
         padding: 20px;
@@ -34,8 +22,26 @@
         }
     }
 
+    @media only screen and (max-width: 768px) {
+        .elemento-ocultable {
+            display: none;
+        }
+
+        .card-full-width {
+            margin-left: -4%;
+            margin-right: -5%;
+        }
+
+        .ventas-container {
+            max-width: 800px;
+        }
+
+    }
+
+   
+
     .ventas-item {
-        display: flex;
+        display: block;
         justify-content: space-between;
         margin-bottom: 10px;
     }
