@@ -3,7 +3,7 @@ from rest_framework import pagination, response, filters
 
 class DataTablePagination(pagination.LimitOffsetPagination):
 
-    default_limit = 20
+    default_limit = 1000
     offset_query_param = 'start'
 
     def get_paginated_response(self, data):
