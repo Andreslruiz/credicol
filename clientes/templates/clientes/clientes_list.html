@@ -6,9 +6,14 @@
         .text-red {
             color: red;
         }
-        .card-full-width {
-            margin-left: -5%;
-            margin-right: -5%;
+
+        @media only screen and (max-width: 768px) {
+
+            .card-full-width {
+                margin-left: -5%;
+                margin-right: -5%;
+            }
+    
         }
     </style>
 {% endblock css %}
