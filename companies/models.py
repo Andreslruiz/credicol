@@ -19,6 +19,7 @@ class CompanyProfile(models.Model):
         on_delete=models.CASCADE
     )
     fin_fecha_membresia = models.DateTimeField(blank=True, null=True)
+    envio_mensajes = models.BooleanField(default=False)
 
     history = HistoricalRecords()
 

@@ -37,35 +37,67 @@
                 <div style="font-size: 16px; color: black;font-size: 20px;">
                     <i class="fas fa-dollar-sign" style="margin-right: 5px;"></i> Deuda: {{ cliente.deuda }}
                 </div>
+                {% if cliente.dias_mora %}
+                    <div style="font-size: 16px; color: red;font-size: 20px;">
+                        <i class="fas fa-dollar-sign" style="margin-right: 5px;"></i> Mora: {{ cliente.dias_mora }} Dias
+                    </div>
+                {% endif %}
             </div>
             
             <div>
+                <br>
                 {% if cliente.credit_balance  %}
-                <a class="btn btn-sm btn-success" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:add_payment' cliente.id %}"
+                <a class="btn btn-sm btn-success elemento-ocultable" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:add_payment' cliente.id %}"
                         data-title="Agregar Pago" data-action="Guardar">
                         <i class="mr-1 fas fa-dollar-sign"></i>
                         Agregar Pago
                     </a>
                 {% endif %}
-                <a class="btn btn-sm btn-warning" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:add_credit' cliente.id %}"
+                <a class="btn btn-sm btn-warning elemento-ocultable" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:add_credit' cliente.id %}"
                     data-title="Agregar Fiado" data-action="Guardar">
                     <i class="mr-1 fas fa-dollar-sign"></i>
                     Agregar Fiado
                 </a>
-                <a data-title="Editar Usuario" data-action="Actualizar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'clientes:edit_cliente' cliente.id %}" class="btn btn-sm btn-primary">
+                <a class="btn btn-sm btn-primary elemento-ocultable" data-title="Editar Usuario" data-action="Actualizar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'clientes:edit_cliente' cliente.id %}">
                     <i class="fas fa-edit"></i>
                     Editar Usuario                        
                 </a>
             </div>
         </div>
 
-        <div class="card-body">
+        <div class="row" id="actionButtons" style="display:none;">
+            <div class="col-md-3 mb-2">
+                {% if cliente.credit_balance  %}
+                <a class="btn btn-sm btn-success btn-block" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:add_payment' cliente.id %}"
+                    data-title="Agregar Pago" data-action="Guardar">
+                    <i class="mr-1 fas fa-dollar-sign"></i>
+                    Agregar Pago
+                </a>
+                {% endif %}
+            </div>
+            <div class="col-md-3 mb-2">
+                <a class="btn btn-sm btn-warning btn-block" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:add_credit' cliente.id %}"
+                    data-title="Agregar Fiado" data-action="Guardar">
+                    <i class="mr-1 fas fa-dollar-sign"></i>
+                    Agregar Fiado
+                </a>
+            </div>
+            <div class="col-md-3 mb-2">
+                <a class="btn btn-sm btn-primary btn-block" data-title="Editar Usuario" data-action="Actualizar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'clientes:edit_cliente' cliente.id %}">
+                    <i class="fas fa-edit"></i>
+                    Editar Usuario
+                </a>
+            </div>
+        </div>
+        
+
+        <div class="card-body" id="tableResponsive">
             <div class="table-responsive">
                 <table class="table table-striped table-bordered table-hover" id="clientesTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
                             <th>Total</th>
-                            <th>Fecha Transacción</th>
+                            <th>Fecha</th>
                             <th>Registrada Por</th>
                             <th>Observaciones</th>
                             <th>Tipo</th>
@@ -227,6 +259,19 @@
                 },                          
             ],
         });
+
+        ocultarColumnasEnMovil(table)
+
+        function ocultarColumnasEnMovil(table) {
+            const divTable = document.getElementById('tableResponsive')
+            const actBtn = document.getElementById('actionButtons')
+
+            if (window.matchMedia("(max-width: 768px)").matches) {
+                divTable.classList.add('p-0');
+                actBtn.style.display = 'block';
+                table.columns([2, 3]).visible(false);
+            }
+        }
 
         $('#clientesTable').on('click', '.detail', function(){
             const { url } = this.dataset;

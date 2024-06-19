@@ -78,7 +78,7 @@ def add_pending_wspp_msg(url, data, headers, error):
 
 def send_payment_notify(user, to, username, balance):
     company = user.company_profile
-    if company.fin_fecha_membresia < timezone.now():
+    if company.fin_fecha_membresia < timezone.now() or not company.envio_mensajes:
         return True
     url = "https://graph.facebook.com/v17.0/142793695585950/messages"
 
@@ -127,7 +127,7 @@ def send_payment_notify(user, to, username, balance):
 
 def send_credit_notify(user, to, username, balance):
     company = user.company_profile
-    if company.fin_fecha_membresia < timezone.now():
+    if company.fin_fecha_membresia < timezone.now() or not company.envio_mensajes:
         return True
 
     url = "https://graph.facebook.com/v17.0/142793695585950/messages"

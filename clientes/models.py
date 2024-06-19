@@ -1,7 +1,8 @@
-# import locale
+from datetime import datetime, date
 from datetime import timedelta
 
 from django.db import models
+from transacciones.models import Transaccion
 
 
 class ClienteProfile(models.Model):
@@ -39,6 +40,32 @@ class ClienteProfile(models.Model):
             return "{}".format(deuda_formateada)
 
         return '0'
+
+    @property
+    def dias_mora(self):
+        fecha_actual = date.today()
+        deuda = self.deuda
+        transacciones = Transaccion.objects.filter(cliente=self)
+        deuda_clean = ''.join(c for c in deuda if c.isdigit())
+
+        if int(deuda_clean) > 0 and transacciones:
+            tr = Transaccion.objects.filter(cliente=self).order_by('-fecha_transaccion').first()
+            ultimo_pago = tr.fecha_transaccion
+
+            if isinstance(ultimo_pago, datetime):
+                ultimo_pago = ultimo_pago.date()
+
+            diferencia = fecha_actual - ultimo_pago
+
+            dias_pasados = diferencia.days
+
+        else:
+            dias_pasados = 0
+
+        if dias_pasados > 0:
+            return dias_pasados
+
+        return ''
 
 
 class MembresiaEmpresas(models.Model):

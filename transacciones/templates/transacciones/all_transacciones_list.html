@@ -469,12 +469,12 @@ crossorigin="anonymous"></script>
         let totalCredito = 0;
         let totalContado = 0;
         let totalPagos = 0;
-
-        table.rows().every(function(rowIdx, tableLoop, rowLoop) {
+    
+        table.rows({ search: 'applied' }).every(function(rowIdx, tableLoop, rowLoop) {
             var data = this.data();
             var monto = parseFloat(data.total_transaccion.replace('$', '').replace(',', ''));
             var fiado = data.es_fiado;
-
+    
             if (!fiado) {
                 total += monto;
             }
@@ -482,19 +482,20 @@ crossorigin="anonymous"></script>
             if (data.tipo_transaccion == 'pago'){
                 totalPagos += monto;
             }
-
+    
             if (fiado) {
                 totalCredito += monto;
             } else if (data.tipo_transaccion != 'pago'){
                 totalContado += monto;
             }
         });
-
+    
         $('#ventas-totales').text('$' + formatearNumeroConPuntos(total.toFixed(0)));
         $('#ventas-credito').text('$' + formatearNumeroConPuntos(totalCredito.toFixed(0)));
         $('#ventas-contado').text('$' + formatearNumeroConPuntos(totalContado.toFixed(0)));
         $('#pagos-fiados').text('$' + formatearNumeroConPuntos(totalPagos.toFixed(0)));
     }
+    
 
     function formatearNumeroConPuntos(numero) {
         return numero.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ".");

@@ -120,7 +120,7 @@
             var fechaActualMembresia = obtenerFechaActual();
             var membresiaRecordada = localStorage.getItem("membresia");
             var membresiaCaducada = localStorage.getItem("membresia-caducada");
-
+            
             if (diasRestantes<1 && membresiaCaducada != fechaActualFormateada) {
                 swal({
                     title: '¡Membresía Caducada!',
@@ -228,24 +228,49 @@
             return año + "-" + mes + "-" + dia;
         }
 
-        function parsearFecha(fechaString) {
-            var partesFecha = fechaString.split(" ");
-            var dia = parseInt(partesFecha[0]);
-            var mes = partesFecha[2];
-            var año = parseInt(partesFecha[4]);
-    
-            var horaMinuto = partesFecha[7].split(":");
-            var hora = parseInt(horaMinuto[0]);
-            var minuto = parseInt(horaMinuto[1]);
-        
-            var meses = {
-                "Enero": 0, "Febrero": 1, "Marzo": 2, "Abril": 3, "Mayo": 4, "Junio": 5,
-                "Julio": 6, "Agosto": 7, "Septiembre": 8, "Octubre": 9, "Noviembre": 10, "Diciembre": 11
+        function parsearFecha(dateString) {
+            const months = {
+                'January': 0, 'February': 1, 'March': 2, 'April': 3, 'May': 4, 'June': 5,
+                'July': 6, 'August': 7, 'September': 8, 'October': 9, 'November': 10, 'December': 11
             };
-            var mesNumero = meses[mes];
-            var final_date = new Date(año, mesNumero, dia, hora, minuto);
         
-            return new Date(año, mesNumero, dia, hora, minuto);
+            let mainParts = dateString.split(', ');
+            if (mainParts.length < 3) {
+                throw new Error('Invalid date format');
+            }
+        
+            let datePart = mainParts.slice(0, 2).join(', ');
+            let timePart = mainParts[2];
+        
+            console.log(`datePart: ${datePart}, timePart: ${timePart}`);
+        
+            let [monthDay, year] = datePart.split(', ');
+            let [month, day] = monthDay.split(' ');
+            day = parseInt(day, 10);
+            year = parseInt(year, 10);
+        
+            console.log(`month: ${month}, day: ${day}, year: ${year}`);
+            if (!month || !day || isNaN(year)) {
+                throw new Error('Invalid date format');
+            }
+        
+            let [time, period] = timePart.split(' ');
+            let [hours, minutes] = time.split(':').map(Number);
+            if (isNaN(hours) || isNaN(minutes) || !period) {
+                throw new Error('Invalid time format');
+            }
+        
+            console.log(`time: ${time}, period: ${period}, hours: ${hours}, minutes: ${minutes}`);
+        
+            if (period.toLowerCase() === 'p.m.' && hours !== 12) {
+                hours += 12;
+            } else if (period.toLowerCase() === 'a.m.' && hours === 12) {
+                hours = 0;
+            }
+        
+                const date = new Date(year, months[month], day, hours, minutes);
+        
+            return date;
         }
 
         function showPlanes(){

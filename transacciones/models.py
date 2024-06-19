@@ -21,7 +21,7 @@ class Transaccion(models.Model):
     )
     cliente = models.ForeignKey(
         'clientes.ClienteProfile', on_delete=models.CASCADE,
-        blank=True, null=True
+        blank=True, null=True, related_name='transacciones_cliente'
     )
 
     def __str__(self):
