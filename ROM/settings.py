@@ -28,12 +28,8 @@ SECRET_KEY = 'django-insecure-c5(v+#q#f=91@@#s*n+6gz9!fs)&ia_w)m2olssigq6)z)r#2l
 DEBUG = True
 
 ALLOWED_HOSTS = ['*']
-CSRF_TRUSTED_ORIGINS = [
-    'https://credicol.com.co',
-    'http://credicol.com.co',
-    'https://www.credicol.com.co',
-    'http://www.credicol.com.co',
-]
+CSRF_TRUSTED_ORIGINS = ['https://credicol.com.co', 'http://credicol.com.co', 'credicol.com.co', 'www.credicol.com.co']
+
 # Configuración para asegurar que las cookies de sesión solo se envíen a través de conexiones seguras
 SESSION_COOKIE_SECURE = True
 
@@ -106,14 +102,7 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'credicol',
-        'USER': 'postgres',
-        'PASSWORD': '25335286525Andr',
-        'HOST': 'localhost',
-        'PORT': '5432'
-    }
+    'default': ENV.db(),
 }
 
 
