@@ -24,9 +24,9 @@
         }
     ],
     "start_url": "http://localhost:8000",
-    "background_color": "#6C29BC",
+    "background_color": "#3481FF",
     "display": "standalone",
     "scope": "/",
-    "theme_color": "#6C29BC",
+    "theme_color": "#3481FF",
     "description": "Weather forecast information"
 }
