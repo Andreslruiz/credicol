@@ -29,11 +29,16 @@
 
         .card-full-width {
             margin-left: -4%;
-            margin-right: -5%;
+            margin-right: -9%;
         }
 
-        .ventas-container {
-            max-width: 800px;
+        .filtro-fecha{
+            margin-left: 0%;
+            margin-right: 5%;
+        }
+
+        .card-header-actions, .card-header{
+            border: none;
         }
 
     }
@@ -66,7 +71,7 @@
 {% include "components/alert_messages.html" %}
 <title>Transacciones | {{ request.user.company_profile.name }}</title>
 <div class="container-fluid border">
-    <div class="card card-header-actions mb-6 card-full-width">
+    <div class="card card-header-actions mb-6">
         <div class="card-header d-flex justify-content-between ">
             <div>
                 <div style="display: flex; align-items: center;">
@@ -103,8 +108,8 @@
                 <span id="ventas-totales" class="ventas-totales">$0.00</span>
             </div>
         </div>
-        <div class="card-body" id="tableResponsive">
-            <div class="row">
+        <div class="card-body card-full-width" id="tableResponsive">
+            <div class="row filtro-fecha">
                 <div class="form-group col-md-3">
                     <label for="litepickerRangePlugin">Fecha a visualizar</label>
                     <div class="input-group input-group-joined border-2">

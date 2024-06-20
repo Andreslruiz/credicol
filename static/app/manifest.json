@@ -23,7 +23,7 @@
             "type": "image/png"
         }
     ],
-    "start_url": "https://credicol.com.co",
+    "start_url": "https://credicol.com.co/",
     "background_color": "#3481FF",
     "display": "standalone",
     "scope": "/",

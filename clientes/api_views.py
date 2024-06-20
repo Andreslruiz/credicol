@@ -34,7 +34,7 @@ class ListarClientesAPIView(generics.ListAPIView):
     search_fields = ['nombre', 'apellido']
 
     def get_queryset(self):
-        queryset = ClienteProfile.objects.all()
+        queryset = ClienteProfile.objects.all().order_by('credit_balance')
         id = self.kwargs.get('company_id')
         if id:
             queryset = queryset.filter(company=id)
