@@ -43,26 +43,4 @@ class ClientesListSerializer(serializers.ModelSerializer):
         return deuda
 
     def get_dias_mora(self, obj):
-        fecha_actual = date.today()
-        deuda = obj.deuda
-        transacciones = Transaccion.objects.filter(cliente=obj)
-        deuda_clean = ''.join(c for c in deuda if c.isdigit())
-
-        if int(deuda_clean) > 0 and transacciones:
-            tr = Transaccion.objects.filter(cliente=obj).order_by('-fecha_transaccion').first()
-            ultimo_pago = tr.fecha_transaccion
-
-            if isinstance(ultimo_pago, datetime):
-                ultimo_pago = ultimo_pago.date()
-
-            diferencia = fecha_actual - ultimo_pago
-
-            dias_pasados = diferencia.days
-
-        else:
-            dias_pasados = 0
-
-        if dias_pasados > 0:
-            return dias_pasados
-
-        return ''
+        return obj.dias_mora
