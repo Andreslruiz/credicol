@@ -12,7 +12,7 @@ class ClienteProfile(models.Model):
     telefono = models.CharField(max_length=20, blank=True)
     fecha_registro = models.DateTimeField(auto_now_add=True)
     activo = models.BooleanField(default=True)
-    credit_balance = models.FloatField(max_length=100, blank=True, null=True)
+    credit_balance = models.FloatField(max_length=100, default=0)
     company = models.ForeignKey(
         'companies.CompanyProfile', on_delete=models.CASCADE,
         blank=True, null=True
