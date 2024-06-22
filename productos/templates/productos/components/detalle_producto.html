@@ -56,19 +56,19 @@
         {% csrf_token %}
         <div class="form-group">
             <label for="{{ form.nombre.id_for_label }}"><i class="fas fa-tag icon-label"></i> Nombre del Producto </label>
-            {{ form.nombre|as_crispy_field }}
+            <input type="text" class="form-control" name="nombre" id="id_nombre" value="{{ object.nombre|title }}" disabled/>
         </div>
         <div class="row">
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="{{ form.precio.id_for_label }}"><i class="fas fa-dollar-sign icon-label-money"></i> Precio Sin IVA</label>
-                    <input type="text" class="form-control" name="precio" id="id_precio" value="0" />
+                    <input type="text" class="form-control" name="precio" id="id_precio" value="{{ object.precio|title }}" disabled/>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="{{ form.iva.id_for_label }}"><i class="fas fa-percentage icon-label-money"></i> IVA</label>
-                    <input type="text" class="form-control" name="iva" id="id_iva" placeholder="0 %" />
+                    <input type="text" class="form-control" name="iva" id="id_iva" value="{{ object.iva }} %" disabled/>
                 </div>
             </div>
         </div>
@@ -76,42 +76,36 @@
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="{{ form.costo_flete.id_for_label }}"><i class="fas fa-truck icon-label-money"></i> Costo Flete</label>
-                    <input type="text" class="form-control" name="costo_flete" id="id_costo_flete" value="0" />
+                    <input type="text" class="form-control" name="costo_flete" id="id_costo_flete" value="{{ object.costo_flete }}" disabled/>
                 </div>
             </div>
             <div class="col-md-6">
                 <div class="form-group">
                     <label for="{{ form.porcentaje_ganancia.id_for_label }}"><i class="fas fa-percentage icon-label-money"></i> Ganancia</label>
-                    <input type="text" class="form-control" name="porcentaje_ganancia" id="id_porcentaje_ganancia" placeholder="0 %" />
+                    <input type="text" class="form-control" name="porcentaje_ganancia" id="id_porcentaje_ganancia" value="{{ object.porcentaje_ganancia }} %" disabled/>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="form-group col-md-6">
                 <label for="{{ form.stock.id_for_label }}"><i class="fas fa-cubes icon-label"></i> Cantidad Existente</label>
-                {{ form.stock|as_crispy_field }}
+                <input type="text" class="form-control" name="precio_venta" id="id_precio_venta" value="{{ object.stock }}" disabled/>
             </div>
             <div class="col-md-6">
                 <div class="form-group" style="background-color: #d4edda; padding: 0px; border-radius: 5px;">
                     <label class="text-green border" for="{{ form.precio_venta.id_for_label }}" style="color: #28a745;">
                         <i class="fas fa-dollar-sign icon-label" style="color: #28a745;"></i> Precio De Venta
                     </label>
-                    <input type="text" class="form-control" name="precio_venta" id="id_precio_venta" value="0" />
+                    <input type="text" class="form-control" name="precio_venta" id="id_precio_venta" value="{{ object.precio_venta }}" disabled/>
                 </div>
             </div>
         </div>           
         <div class="form-group">
             <label for="{{ form.descripcion.id_for_label }}"><i class="fas fa-comment icon-label"></i> Descripción</label>
-            {{ form.descripcion|as_crispy_field }}
+            <input type="text" class="form-control" name="precio_venta" id="id_precio_venta" value="{{ object.descripcion }}" disabled/>
         </div>
     </form>
 
 </body>
 </html>
 {% endblock content %}
-
-{% block js %}
-<script>
-    alert("ya")
-</script>
-{% endblock js %}

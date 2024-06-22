@@ -15,7 +15,7 @@ class ListarProductosAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         id = self.kwargs.get('producto_id')
-        queryset = Producto.objects.all()
+        queryset = Producto.objects.all().order_by('-fecha_creacion')
         if id:
             queryset = queryset.filter(compania=1)
 

@@ -45,7 +45,7 @@ class DirectSalesView(
         form.instance.observaciones = 'Venta Rapida'
         form.instance.fecha_transaccion = timezone.now()
         form.save()
-        print("acaaaaaaaaaaaaaaaaaaa")
+
         total = f'{form.instance.total_transaccion:,.0f}'
 
         return JsonResponse(

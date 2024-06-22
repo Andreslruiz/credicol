@@ -44,3 +44,9 @@ class AddNewProducto(forms.ModelForm):
             producto.save()
 
         return producto
+
+    def clean_nombre(self):
+        nombre = self.cleaned_data.get('nombre')
+        if m.Producto.objects.filter(nombre=nombre).exclude(id=self.instance.id).exists():
+            raise forms.ValidationError('Ya existe este nombre de producto')
+        return nombre
