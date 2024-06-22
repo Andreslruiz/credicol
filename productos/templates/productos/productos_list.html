@@ -1,6 +1,24 @@
 {% extends 'base.html' %}
 {% load crispy_forms_tags static %}
 
+{% block css %}
+    <style>
+
+        @media only screen and (max-width: 768px) {
+
+            .card-full-width {
+                margin-left: -4%;
+                margin-right: -5%;
+            }
+
+            .card-header-actions{
+                border: none;
+            }
+    
+        }
+    </style>
+{% endblock css %}
+
 {% block content %}
 {% include "components/alert_messages.html" %}
 <title>Productos | {{ request.user.company_profile.name }}</title>
@@ -9,20 +27,20 @@
         <div class="card-header d-flex justify-content-between">
             <div style="display: flex; align-items: center;">
                 <i class="fas fa-fw fa-cube" style="font-size: 24px; color: #2A72FB; margin-right: 10px;"></i>
-                <span style="font-size: 24px; color: #2A72FB;">Listado de Productos</span>
+                <span style="font-size: 24px; color: #2A72FB;">Productos</span>
             </div>
             <a class="btn btn-sm btn-primary" data-title="Crear Producto" data-action="Guardar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'productos:add_new_producto' %}">
                 <i class="fas fa-fw fa-cube"></i> Crear Producto
             </a>           
         </div>
 
-        <div class="card-body">
+        <div class="card-body card-full-width" id="tableResponsive">
+            <br id="brProductos" style="display:none;">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover" id="clientesTable" width="100%" cellspacing="0">
+                <table class="table table-striped table-bordered table-hover" id="productosTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>ID</th>
-                            <th>Nombre Producto</th>
+                            <th>Nombre</th>
                             <th>Precio</th>
                             <th>Stock</th>
                             <th>Descripción</th>
@@ -83,7 +101,7 @@
 </script>
 <script>
     $(document).ready(function (){
-        const table = $('#clientesTable').DataTable({
+        const table = $('#productosTable').DataTable({
             rowId: 'id',
             ordering: false,
             processing: true,
@@ -110,7 +128,6 @@
                 url : '{% url "productos:listar_productos_api" request.user.company_profile.id %}',
             },
             columns: [
-                { data: 'id' },
                 { data: 'nombre' },
                 { data: 'precio' },
                 {data: 'stock'},
@@ -133,7 +150,21 @@
             ],
         });
 
-        $('#clientesTable').on('click', '.detail', function(){
+        ocultarColumnasEnMovil(table)
+
+        function ocultarColumnasEnMovil(table) {
+            const divTable = document.getElementById('tableResponsive')
+
+            if (window.matchMedia("(max-width: 768px)").matches) {
+                document.getElementById('brProductos').style.display = 'block';
+                divTable.classList.add('p-0');
+                table.columns([3, 4]).visible(false);
+            }else{
+                table.columns([2]).visible(false);
+            }
+        }
+
+        $('#productosTable').on('click', '.detail', function(){
             const { url } = this.dataset;
             const row = table.row(this.closest('tr'));
 
@@ -177,6 +208,7 @@
                     JSON.parse(data);
                 } catch {
                     form.innerHTML = data;
+                    dinamicForm()
                 }
             })
             .catch(error => form.innerHTML = 'No puedes realizar esta operación');
@@ -256,6 +288,69 @@
                 window.location.reload();
             }
         });
+    }
+
+    function dinamicForm(){
+        var precioInput = document.getElementById('id_precio');
+        var precioVentaInput = document.getElementById('id_precio_venta');
+        var ivaInput = document.getElementById('id_iva');
+        var fleteInput = document.getElementById('id_costo_flete');
+        var gananciaInput = document.getElementById('id_porcentaje_ganancia');
+
+        precioInput.addEventListener('input', function() {
+            if(precioInput.value){
+                var finalValue = calculateFinalValue()
+                precioVentaInput.value = finalValue;
+            }else{
+                precioVentaInput.value = 0;
+            }
+        });
+
+        ivaInput.addEventListener('input', function() {
+            if(ivaInput.value){
+                var finalValue = calculateFinalValue()
+                precioVentaInput.value = finalValue;
+            }else{
+                precioVentaInput.value = 0;
+            }
+        });
+
+        fleteInput.addEventListener('input', function() {
+            if(ivaInput.value){
+                var finalValue = calculateFinalValue()
+                precioVentaInput.value = finalValue;
+            }else{
+                precioVentaInput.value = 0;
+            }
+        });
+
+        gananciaInput.addEventListener('input', function() {
+            if(ivaInput.value){
+                var finalValue = calculateFinalValue()
+                precioVentaInput.value = finalValue;
+            }else{
+                precioVentaInput.value = 0;
+            }
+        });
+
+    }
+
+    function calculateFinalValue() {
+
+        var precio = document.getElementById('id_precio').value;
+        var iva = document.getElementById('id_iva').value;
+        var flete = document.getElementById('id_costo_flete').value;
+        var ganancia = document.getElementById('id_porcentaje_ganancia').value;
+
+        precio = parseFloat(precio);
+        iva = parseFloat(iva);
+        flete = parseFloat(flete);
+        ganancia = parseFloat(ganancia);
+
+        var ivaAmount = precio * (iva / 100);
+        var gananciaAmount = precio * (ganancia / 100);
+        var valorFinal = precio + ivaAmount + flete + gananciaAmount;
+        return valorFinal
     }
 
 </script>

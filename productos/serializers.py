@@ -22,6 +22,5 @@ class ProductosListSerializer(serializers.ModelSerializer):
 
     def get_precio(self, obj):
         total = abs(obj.precio)
-        # locale.setlocale(locale.LC_ALL, 'es_CO.utf8')
-        # total = locale._format("%d", total, grouping=True)
-        return f'${total}'
+        formatted_price = "{:,.0f}".format(total)
+        return f"${formatted_price}"

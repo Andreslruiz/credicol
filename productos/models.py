@@ -21,6 +21,11 @@ class Producto(models.Model):
     nombre = models.CharField(max_length=100, unique=True)
     descripcion = models.TextField()
     precio = models.IntegerField(default=0)
+    iva = models.FloatField(default=0)
+    costo_flete = models.IntegerField(default=0)
+    porcentaje_ganancia = models.FloatField(default=0)
+    precio_venta = models.IntegerField(default=0)
+
     compania = models.ForeignKey(
         'companies.CompanyProfile', on_delete=models.CASCADE
     )

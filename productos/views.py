@@ -30,7 +30,7 @@ class AddProductoView(
         product = form.instance.nombre
         compania = self.request.user.company_profile
         form.instance.compania = compania
-        form.save()
+        form.save(self.request.user)
 
         return JsonResponse(
             {

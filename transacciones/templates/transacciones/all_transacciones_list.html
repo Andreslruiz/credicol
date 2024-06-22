@@ -29,7 +29,7 @@
 
         .card-full-width {
             margin-left: -4%;
-            margin-right: -9%;
+            margin-right: -6%;
         }
 
         .filtro-fecha{
@@ -489,7 +489,7 @@ crossorigin="anonymous"></script>
     
         table.rows({ search: 'applied' }).every(function(rowIdx, tableLoop, rowLoop) {
             var data = this.data();
-            var monto = parseFloat(data.total_transaccion.replace('$', '').replace(',', ''));
+            var monto = parseFloat(data.total_transaccion.replace('$', '').replace(',', '').replace(',', ''));
             var fiado = data.es_fiado;
     
             if (!fiado) {
