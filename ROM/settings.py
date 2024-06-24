@@ -107,7 +107,14 @@ DATA_UPLOAD_MAX_NUMBER_FIELDS = 20000
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
 DATABASES = {
-    'default': ENV.db(),
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'credicol',
+        'USER': 'postgres',
+        'PASSWORD': '25335286525Andr',
+        'HOST': 'localhost',
+        'PORT': '5432'
+    }
 }
 
 
@@ -145,6 +152,8 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR('../static')
 STATICFILES_DIRS = (BASE_DIR('static'),)
 
+MEDIA_URL = '/media/'
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
