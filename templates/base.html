@@ -108,6 +108,20 @@
         crossorigin="anonymous">
     </script>
     <script>
+
+        ocultarEnMovil()
+
+        function ocultarEnMovil() {
+
+            if (!window.matchMedia("(max-width: 768px)").matches) {
+                $("body").toggleClass("sidebar-toggled");
+                $(".sidebar").toggleClass("toggled");
+                if ($(".sidebar").hasClass("toggled")) {
+                    $('.sidebar .collapse').collapse('hide');
+                };
+            }
+        }
+
         verificarMembresia()
 
         function verificarMembresia() {

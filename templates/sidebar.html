@@ -3,10 +3,24 @@
 {% block css %}
     <style>
 
+        ::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #FFFFF;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: gray;
+            border-radius: 1px;
+        }
+
         @media only screen and (max-width: 768px) {
             .elemento-ocultable {
                 display: none;
             }
+
         }
 
         @media only screen and (min-width: 768px) {
@@ -34,7 +48,7 @@
 
     </style>
 {% endblock css %}
-<ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+<ul class="navbar-nav bg-gradient-primary sidebar toggled sidebar-dark accordion" id="accordionSidebar">
 
     <!-- Sidebar - Brand -->
     <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'initial_view' %}">
@@ -101,6 +115,7 @@
     <!-- Divider -->
     <hr class="sidebar-divider">
     {% endswitch %}
+    <br>
     <!-- Heading -->
     <div class="sidebar-heading">
         Acciones
