@@ -59,13 +59,13 @@
             {{ form.nombre|as_crispy_field }}
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col col-md-6">
                 <div class="form-group">
                     <label for="{{ form.precio.id_for_label }}"><i class="fas fa-dollar-sign icon-label-money"></i> Precio Sin IVA</label>
                     <input type="text" class="form-control" name="precio" id="id_precio" value="0" />
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col col-md-6">
                 <div class="form-group">
                     <label for="{{ form.iva.id_for_label }}"><i class="fas fa-percentage icon-label-money"></i> IVA</label>
                     <input type="text" class="form-control" name="iva" id="id_iva" placeholder="0 %" />
@@ -73,13 +73,13 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-6">
+            <div class="col col-md-6">
                 <div class="form-group">
                     <label for="{{ form.costo_flete.id_for_label }}"><i class="fas fa-truck icon-label-money"></i> Costo Flete</label>
                     <input type="text" class="form-control" name="costo_flete" id="id_costo_flete" value="0" />
                 </div>
             </div>
-            <div class="col-md-6">
+            <div class="col col-md-6">
                 <div class="form-group">
                     <label for="{{ form.porcentaje_ganancia.id_for_label }}"><i class="fas fa-percentage icon-label-money"></i> Ganancia</label>
                     <input type="text" class="form-control" name="porcentaje_ganancia" id="id_porcentaje_ganancia" placeholder="0 %" />
@@ -87,11 +87,11 @@
             </div>
         </div>
         <div class="row">
-            <div class="form-group col-md-6">
+            <div class="col col-md-6">
                 <label for="{{ form.stock.id_for_label }}"><i class="fas fa-cubes icon-label"></i> Cantidad Existente</label>
                 {{ form.stock|as_crispy_field }}
             </div>
-            <div class="col-md-6">
+            <div class="col  col-md-6">
                 <div class="form-group" style="background-color: #d4edda; padding: 0px; border-radius: 5px;">
                     <label class="text-green border" for="{{ form.precio_venta.id_for_label }}" style="color: #28a745;">
                         <i class="fas fa-dollar-sign icon-label" style="color: #28a745;"></i> Precio De Venta
