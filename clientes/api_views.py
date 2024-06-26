@@ -22,7 +22,7 @@ class ClientesFilter(filters.BaseFilterBackend):
             fecha_limite = datetime.now() - timedelta(days=15)
             query = query & Q(transacciones_cliente__fecha_transaccion__gte=fecha_limite) | Q(credit_balance=0) | Q(credit_balance__isnull=True)
 
-        return queryset.filter(query)
+        return queryset.filter(query).distinct()
 
 
 class ListarClientesAPIView(generics.ListAPIView):

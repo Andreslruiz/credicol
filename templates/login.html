@@ -5,6 +5,13 @@
 
     <style>
 
+        @media only screen and (max-width: 768px) {
+            .elemento-ocultable {
+                display: none;
+            }
+
+        }
+
         body {
             background: linear-gradient(to bottom, #6D60F1, #2B237E);
         }
@@ -71,8 +78,11 @@
                                 <!-- Contenido opcional dentro del div -->
                             </div>
                             <div class="col-lg-6">
-                                <div class="p-5">
-                                    <div class="text-center">
+                                <div class="col-12 d-lg-none border" style="background-image: url('{% static 'img/logo_2.jpg' %}'); background-position: center; background-size: cover; height:150px;">
+                                   
+                                </div>
+                                <div class="p-4">
+                                    <div class="text-center elemento-mostrable">
                                         <h1 class="h4 text-gray-900 mb-4"><strong>Inicia sesión</strong></h1>
                                     </div>
                                     <form method="post">
@@ -111,7 +121,7 @@
                                             <div class="text-center">
                                                 <a class="small" href="#">¿Olvidaste tu contraseña?</a>
                                                 <br>
-                                                <a class="small" href="{% static 'mw_manual_uso.pdf' %}" target="_blank" data-toggle="tooltip" data-placement="top" title="haz clic para ver el instructivo">Tengo problemas para acceder</a> 
+                                                <a class="small" href="{% static 'mw_manual_uso.pdf' %}" target="_blank" data-toggle="tooltip" data-placement="top" title="haz clic para ver el instructivo">Crear Cuenta</a> 
                                             </div>
                                         </div>
                                     </form>
@@ -124,7 +134,7 @@
         </div>
     </div>
     <br>
-    <div id="layoutAuthentication_footer" style="margin-top:19%;">
+    <div class="elemento-ocultable" id="layoutAuthentication_footer" style="margin-top:19%;">
         <footer class="footer mt-auto footer-dark">
             <div class="container-fluid">
                 <div class="row">
