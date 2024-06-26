@@ -10,6 +10,15 @@
                 display: none;
             }
 
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+
+            .container {
+                margin-top: calc(50vh - 90%)
+            }
+
         }
 
         body {
@@ -63,9 +72,9 @@
 <body>
 
     <div class="container">
-
         <!-- Outer Row -->
         <div class="row justify-content-center">
+            
 
             <div class="col-xl-10 col-lg-12 col-md-9">
 
@@ -103,8 +112,10 @@
                                                 <input type="password" name="password" autofocus="" autocapitalize="none" autocomplete="password" maxlength="150" class="textinput textInput form-control" required="" id="id_password">
                                             </div>
                                         </div>
+                                        <br>
                                         <div class="form-group text-center">
                                             <button type="submit" class="btn btn-primary btn-sm px-4" name="button">Acceder</button>
+                                            <button type="submit" class="btn btn-secondary btn-sm px-4" name="button">Registrate</button>
                                         </div>
                                         {% if form.errors %}
                                         {% for field in form %}
@@ -117,7 +128,7 @@
                                         {% endif %}
 
                                         {% include 'components/non_field_errors.html' with form=form %}
-                                        <div>
+                                        <div style="display:none;">
                                             <div class="text-center">
                                                 <a class="small" href="#">¿Olvidaste tu contraseña?</a>
                                                 <br>
