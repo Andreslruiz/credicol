@@ -3,6 +3,8 @@
 
 {% block css %}
     <style>
+
+
         .text-red {
             color: red;
         }
@@ -135,7 +137,8 @@
              },
             "language": {
                 "processing": "Buscando...",
-                "search": "Buscar:",
+                "search": "",
+                "searchPlaceholder": 'Buscar Cliente...',
                 "paginate": {
                     "first":      "Primera",
                     "last":       "Ultima",
@@ -144,6 +147,7 @@
                 },
                 "infoEmpty":      "Mostrando 0 to 0 of 0 resultados",
             },
+            "dom": '<"top"fl>rt<"bottom"ip>',
 
             ajax: {
                 url : '{% url "clientes:listar_clientes_api" request.user.company_profile.id %}',
