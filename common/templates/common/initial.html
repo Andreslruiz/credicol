@@ -10,7 +10,7 @@
         <div class="d-sm-flex align-items-center justify-content-between mb-4">
             <h1 class="h3 mb-0 text-gray-800" style="font-family: 'Arial', sans-serif; font-weight: bold; color: #4e73df; text-shadow: 2px 2px 2px rgba(0,0,0,0.2);">
                 <span style="color: #007bff;">{{ request.user.company_profile.name }}</span>
-                <div id="fecha-hora" style="margin-top: 5px; font-family: 'cursive', cursive; font-size: 15px; color: #666;"></div>
+                <div id="fecha-hora" style="margin-top: 5px; font-size: 15px; color: #666;"></div>
             </h1>
             
             <a href="{% url 'common:send_daily_report' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
@@ -21,13 +21,13 @@
         <div class="row">
 
             <!-- Pending Requests Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-3 col col-md-6 mb-4">
                 <div class="card border-left-success shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-s font-weight-bold text-success text-uppercase mb-1">
-                                    Promedio (Hoy)</div>
+                                    Hoy</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">${{ sales_today }}</div>
                             </div>
                             <div class="col-auto">
@@ -39,13 +39,13 @@
             </div>
 
             <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-3 col col-md-6 mb-4">
                 <div class="card border-left-primary shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-s font-weight-bold text-primary text-uppercase mb-1">
-                                    Promedio (Este Mes)</div>
+                                    Este Mes</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">${{ sales_last_month }}</div>
                             </div>
                             <div class="col-auto">
@@ -57,13 +57,13 @@
             </div>
 
             <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-3 col col-md-6 mb-4">
                 <div class="card border-left-warning shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
                                 <div class="text-s font-weight-bold text-warning text-uppercase mb-1">
-                                    Promedio (Este Año)</div>
+                                    Este Año</div>
                                 <div class="h5 mb-0 font-weight-bold text-gray-800">${{ sales_last_year }}</div>
                             </div>
                             <div class="col-auto">
@@ -75,7 +75,7 @@
             </div>
 
             <!-- Earnings (Monthly) Card Example -->
-            <div class="col-xl-3 col-md-6 mb-4">
+            <div class="col-xl-3 col col-md-6 mb-4">
                 <div class="card border-left-info shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
@@ -133,7 +133,7 @@
             </div>
             
             <!-- Pie Chart -->
-            <div class="col-xl-4 col-lg-5">
+            <div class="col-xl-4 col-lg-5" style="display:none;">
                 <div class="card shadow mb-4">
                     <!-- Card Header - Dropdown -->
                     <div
