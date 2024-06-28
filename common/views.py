@@ -69,6 +69,27 @@ class InitialView(
         return super().get_context_data(**kwargs)
 
 
+class DeOneView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
+):
+
+    template_name = 'common/deone.html'
+    permission_required = 'clientes.can_see_initial_view'
+
+    def get_context_data(self, **kwargs):
+        kwargs.update({
+            'user': self.request.user.company_profile,
+            'sales_last_month': get_sales_month(self.request.user),
+            'sales_last_year': get_sales_year(self.request.user),
+            'sales_today': get_sales_today(self.request.user),
+            'sales_all_year': get_all_year_sales(self.request.user),
+            'total_credit_amount': total_credit_amount(
+                self.request.user.company_profile
+            )
+        })
+        return super().get_context_data(**kwargs)
+
+
 def user_logout(request):
     logout(request)
     return redirect(reverse('login'))

@@ -1,0 +1,337 @@
+{% load static waffle_tags crispy_forms_tags %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <audio id="audioPlayer" src="{% static 'sound/success_sound.mp3' %}"></audio>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Espera tu Turno</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: linear-gradient(135deg, #759AFC 10%, #134EEC 100%);
+            font-family: 'Arial', sans-serif;
+            color: #fff;
+            margin: 0;
+        }
+        .container {
+            text-align: center;
+        }
+        .timer {
+            font-size: 4em;
+            margin-bottom: 20px;
+        }
+        .loading {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin-top: 20px;
+        }
+        .loading span {
+            display: block;
+            width: 15px;
+            height: 15px;
+            margin: 0 5px;
+            background: #fff;
+            border-radius: 50%;
+            animation: loading 0.8s infinite alternate;
+        }
+        .loading span:nth-child(2) {
+            animation-delay: 0.2s;
+        }
+        .loading span:nth-child(3) {
+            animation-delay: 0.4s;
+        }
+        @keyframes loading {
+            from {
+                transform: translateY(0);
+            }
+            to {
+                transform: translateY(-20px);
+            }
+        }
+        .extra-section {
+            margin-top: 30px;
+            text-align: center;
+        }
+        .extra-section button {
+            background-color: #fff;
+            color: #5151E5;
+            border: none;
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 5px;
+            border-radius: 5px;
+        }
+        .triki-game {
+            display: none;
+            margin-top: 20px;
+        }
+        .board {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+            max-width: 200px;
+            margin: 0 auto;
+        }
+        .cell {
+            width: 60px;
+            height: 60px;
+            background: #fff;
+            color: #5151E5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 2em;
+            cursor: pointer;
+            border-radius: 5px;
+        }
+        .highlight {
+            color: #ffff;
+            font-weight: bold;
+            font-size: 1.2em;
+        }
+
+        .highlightParent{
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            padding: 5px;
+        }
+
+        .company-wait {
+            font-size: 1.1em;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+
+        .checkmark-container {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            margin-bottom: 20px;
+            visibility: hidden;
+        }
+
+        .checkmark {
+            width: 100px;
+            height: 100px;
+            border-radius: 50%;
+            background-color: #fff;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transform: scale(0);
+            animation: pop-in 0.5s ease-out forwards;
+        }
+
+        .checkmark::before {
+            content: "";
+            width: 30px;
+            height: 15px;
+            border-left: 5px solid #4CAF50;
+            border-bottom: 5px solid #4CAF50;
+            transform: rotate(-45deg);
+            position: absolute;
+            opacity: 0;
+            animation: draw-check 0.5s ease-out 0.5s forwards;
+        }
+
+        @keyframes pop-in {
+            0% {
+                transform: scale(0);
+                opacity: 0;
+            }
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        @keyframes draw-check {
+            0% {
+                width: 0;
+                height: 0;
+                opacity: 0;
+            }
+            100% {
+                width: 45px;
+                height: 22px;
+                opacity: 1;
+            }
+        }
+  
+    </style>
+</head>
+<body>
+    <h1 class="highlightParent" id="highlightParent">Tu Pedido <span class="highlight">deOne!</span></h1>
+    <br>
+    <div class="checkmark-container" id="checkmarkContainer">
+        <div class="checkmark" id="checkmark"></div>
+    </div>
+    <div class="container">
+        <div class="timer" id="timer">00:00:00</div>
+        <div class="loading">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        <p class="company-wait" id="company-wait">Hamburguesas Delicias te llamara pronto!</p>
+        <div class="triki-game" id="triki-game">
+            <div class="board" id="board">
+                <div class="cell" onclick="makeMove(this, 0, 0)"></div>
+                <div class="cell" onclick="makeMove(this, 0, 1)"></div>
+                <div class="cell" onclick="makeMove(this, 0, 2)"></div>
+                <div class="cell" onclick="makeMove(this, 1, 0)"></div>
+                <div class="cell" onclick="makeMove(this, 1, 1)"></div>
+                <div class="cell" onclick="makeMove(this, 1, 2)"></div>
+                <div class="cell" onclick="makeMove(this, 2, 0)"></div>
+                <div class="cell" onclick="makeMove(this, 2, 1)"></div>
+                <div class="cell" onclick="makeMove(this, 2, 2)"></div>
+            </div>
+        </div>
+        <br><br><br><br><br><br><br><br>
+        <div class="extra-section" id="gamesSection">
+            <p>Juega Mientras Esperas!</p>
+            <button onclick="showTrikiGame()">Triki</button>
+            <button onclick="showTrikiGame()">Snake</button>
+            <button onclick="showTrikiGame()">Memoria</button>
+        </div>
+    </div>
+    <script>
+        let timerInterval;
+        function startTimer(duration, display) {
+            var timer = duration, hours, minutes, seconds;
+            timerInterval  = setInterval(function () {
+                hours = parseInt(timer / 3600, 10);
+                minutes = parseInt((timer % 3600) / 60, 10);
+                seconds = parseInt(timer % 60, 10);
+
+                hours = hours < 10 ? "0" + hours : hours;
+                minutes = minutes < 10 ? "0" + minutes : minutes;
+                seconds = seconds < 10 ? "0" + seconds : seconds;
+
+                display.textContent = hours + ":" + minutes + ":" + seconds;
+
+                if (++timer < 0) {
+                    timer = duration;
+                }
+            }, 1000);
+        }
+
+        window.onload = function () {
+            var duration = 0; // Empieza en 0 segundos
+            var display = document.querySelector('#timer');
+            startTimer(duration, display);
+        };
+
+        function showTrikiGame() {
+            document.getElementById('triki-game').style.display = 'block';
+        }
+
+        var board = [
+            ['', '', ''],
+            ['', '', ''],
+            ['', '', '']
+        ];
+        var currentPlayer = 'X';
+
+        function makeMove(cell, row, col) {
+            if (board[row][col] === '') {
+                board[row][col] = currentPlayer;
+                cell.textContent = currentPlayer;
+                currentPlayer = currentPlayer === 'X' ? 'O' : 'X';
+                checkWinner();
+            }
+        }
+
+        function checkWinner() {
+            // Lógica simple para verificar ganador (horizontal, vertical, diagonal)
+            for (var i = 0; i < 3; i++) {
+                if (board[i][0] === board[i][1] && board[i][1] === board[i][2] && board[i][0] !== '') {
+                    alert(board[i][0] + ' gana!');
+                    resetBoard();
+                }
+                if (board[0][i] === board[1][i] && board[1][i] === board[2][i] && board[0][i] !== '') {
+                    alert(board[0][i] + ' gana!');
+                    resetBoard();
+                }
+            }
+            if (board[0][0] === board[1][1] && board[1][1] === board[2][2] && board[0][0] !== '') {
+                alert(board[0][0] + ' gana!');
+                resetBoard();
+            }
+            if (board[0][2] === board[1][1] && board[1][1] === board[2][0] && board[0][2] !== '') {
+                alert(board[0][2] + ' gana!');
+                resetBoard();
+            }
+        }
+
+        function resetBoard() {
+            board = [
+                ['', '', ''],
+                ['', '', ''],
+                ['', '', '']
+            ];
+            var cells = document.querySelectorAll('.cell');
+            cells.forEach(function(cell) {
+                cell.textContent = '';
+            });
+            document.getElementById('triki-game').style.display = 'none';
+        }
+
+        function pedidoListo() {
+            const companyMsg = document.getElementById('company-wait');
+            const gamesSection = document.getElementById('gamesSection');
+
+            companyMsg.textContent = 'Corre y reclama tu pedido!';
+            gamesSection.style.display = 'none';
+
+            clearInterval(timerInterval);
+            document.body.style.background = 'linear-gradient(135deg, #4EEA5F 10%, #14FA2C 100%)';
+            showCheckmark()
+        }
+
+        function showCheckmark() {
+            playSound();
+            const gamesSection = document.getElementById('gamesSection');
+            const successMsg = document.getElementById('highlightParent');
+
+            gamesSection.style.display = 'none';
+            successMsg.textContent = 'Tu pedido esta listo!'
+            reloadCheckmark();
+            setInterval(reloadCheckmark, 3000);
+        }
+
+        function reloadCheckmark() {
+            const checkmark = document.getElementById('checkmark');
+            checkmark.style.visibility = 'hidden';
+            checkmark.offsetHeight;
+            checkmark.style.visibility = 'visible';
+            checkmark.style.display = 'flex';
+            checkmark.style.animation = 'none';
+            checkmark.offsetHeight;
+            checkmark.style.animation = 'pop-in 0.5s ease-out forwards';
+            checkmark.style.setProperty('--before-animation', 'none');
+            requestAnimationFrame(() => {
+                checkmark.style.setProperty('--before-animation', 'draw-check 0.5s ease-out 0.5s forwards');
+            });
+        }
+
+        function playSound() {
+            const audio = document.getElementById('audioPlayer');
+            audio.play();
+        }
+
+        setTimeout(pedidoListo,7000);
+    </script>
+</body>
+</html>
