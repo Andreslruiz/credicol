@@ -235,6 +235,7 @@
 
         function showTrikiGame() {
             document.getElementById('triki-game').style.display = 'block';
+            document.getElementById('gamesSection').style.display = 'none';
         }
 
         var board = [
@@ -286,6 +287,7 @@
                 cell.textContent = '';
             });
             document.getElementById('triki-game').style.display = 'none';
+            document.getElementById('gamesSection').style.display = 'block';
         }
 
         function pedidoListo() {
@@ -329,7 +331,13 @@
             const audio = document.getElementById('audioPlayer');
             audio.play();
             
-            if (navigator.vibrate) {
+            if (audio) {
+                audio.play().catch(error => console.log("Audio playback failed:", error));
+            } else {
+                console.log("Audio element not found.");
+            }
+        
+            if ("vibrate" in navigator) {
                 navigator.vibrate([300, 100, 300, 100, 500]);
             } else {
                 console.log("Vibration API is not supported on this device.");
@@ -343,7 +351,7 @@
             return message;
         });
 
-        setTimeout(pedidoListo,7000);
+        setTimeout(pedidoListo,12000);
     </script>
 </body>
 </html>
