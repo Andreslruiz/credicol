@@ -5,15 +5,15 @@
 <head>
     <audio id="audioPlayer" src="{% static 'sound/success_sound.mp3' %}"></audio>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Espera tu Turno</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Espera tu Turno!</title>
     <style>
         body {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 100vh;
+            height: 90vh;
             background: linear-gradient(135deg, #759AFC 10%, #134EEC 100%);
             font-family: 'Arial', sans-serif;
             color: #fff;
@@ -198,7 +198,7 @@
                 <div class="cell" onclick="makeMove(this, 2, 2)"></div>
             </div>
         </div>
-        <br><br><br><br><br><br><br><br>
+        <br><br>
         <div class="extra-section" id="gamesSection">
             <p>Juega Mientras Esperas!</p>
             <button onclick="showTrikiGame()">Triki</button>
@@ -291,7 +291,9 @@
         function pedidoListo() {
             const companyMsg = document.getElementById('company-wait');
             const gamesSection = document.getElementById('gamesSection');
-
+            const trikiGame = document.getElementById('triki-game');
+            
+            trikiGame.style.display = 'none';
             companyMsg.textContent = 'Corre y reclama tu pedido!';
             gamesSection.style.display = 'none';
 
@@ -302,10 +304,7 @@
 
         function showCheckmark() {
             playSound();
-            const gamesSection = document.getElementById('gamesSection');
             const successMsg = document.getElementById('highlightParent');
-
-            gamesSection.style.display = 'none';
             successMsg.textContent = 'Tu pedido esta listo!'
             reloadCheckmark();
             setInterval(reloadCheckmark, 3000);
@@ -329,7 +328,20 @@
         function playSound() {
             const audio = document.getElementById('audioPlayer');
             audio.play();
+            
+            if (navigator.vibrate) {
+                navigator.vibrate([300, 100, 300, 100, 500]);
+            } else {
+                console.log("Vibration API is not supported on this device.");
+            }
         }
+
+        window.addEventListener('beforeunload', function (e) {
+            const message = '¿Estás seguro de que quieres salir? Se perderán el seguimiento de tu turno.';
+            e.preventDefault();
+            e.returnValue = message;
+            return message;
+        });
 
         setTimeout(pedidoListo,7000);
     </script>
