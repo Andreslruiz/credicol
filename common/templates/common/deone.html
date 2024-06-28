@@ -6,14 +6,14 @@
     <audio id="audioPlayer" src="{% static 'sound/success_sound.mp3' %}"></audio>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Espera tu Turno!</title>
+    <title>Peparando tu pedido!</title>
     <style>
         body {
             display: flex;
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            height: 90vh;
+            height: 80vh;
             background: linear-gradient(135deg, #759AFC 10%, #134EEC 100%);
             font-family: 'Arial', sans-serif;
             color: #fff;
@@ -198,7 +198,7 @@
                 <div class="cell" onclick="makeMove(this, 2, 2)"></div>
             </div>
         </div>
-        <br><br>
+        <br><br><br><br>
         <div class="extra-section" id="gamesSection">
             <p>Juega Mientras Esperas!</p>
             <button onclick="showTrikiGame()">Triki</button>
@@ -342,6 +342,8 @@
             } else {
                 console.log("Vibration API is not supported on this device.");
             }
+
+            window.navigator.vibrate([300, 100, 300, 100, 500]);
         }
 
         window.addEventListener('beforeunload', function (e) {
