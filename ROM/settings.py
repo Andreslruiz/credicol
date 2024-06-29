@@ -44,6 +44,7 @@ CSRF_COOKIE_SECURE = True
 
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
 SITE_URL = ENV.str('SITE_URL', default='http://localhost:8000')
+WSSP_KEY = os.getenv('WSSP_API_KEY')
 
 
 # Application definition

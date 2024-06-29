@@ -223,3 +223,8 @@ class ListAllTransactionsView(
             # 'cliente': s.get_cliente(self.kwargs.get('cliente_id'))
         })
         return super().get_context_data(**kwargs)
+
+
+def recordar_deuda(request, cliente_id):
+    s.remember_payment(request.user, cliente_id)
+    return redirect('transacciones:transacciones_list', cliente_id=cliente_id)

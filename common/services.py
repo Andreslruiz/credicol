@@ -1,82 +1,109 @@
-# import datetime
+import urllib.parse
 import requests
-import json
-import base64
 
+from django.conf import settings
 from django.utils import timezone
-from transacciones import services as vnt_s
-from . import models as m
-
-
-def send_daily_report(user):
-    today_sales = vnt_s.get_sales_today(user)
-    credit_sales = vnt_s.get_credit_sales_today(user)
-
-    body = f"""
-¡Hola {user.company_profile}!
-
-Resumen ventas hoy:
-
-VENTAS: ${today_sales}
-FIADOS: ${credit_sales}
-
-Agropecuaria Donde Juancho
-    """
-    send_daily_report_wspp(
-        user.company_profile, today_sales, credit_sales
-    )
-    # send_mms('573213358263', body)
-
-
-
-def send_mms(to, body):
-    to = f'57{to}'
-    data = {
-        'to': [to],
-        'text': body,
-        'from': 'Agrop'
-    }
-
-    url = 'https://Smsmasivos.colombiared.com.co/Api/rest/message'
-
-    headers = {
-        'Accept': 'application/json',
-        'Authorization': (
-            'Basic ' + base64.b64encode(
-                f"{'Caloaizar2023'}:{'Rbkz2010'}".encode()
-            ).decode()
-        )
-    }
-
-    data = json.dumps(data)
-
-    try:
-        requests.post(url, data=data, headers=headers)
-    except Exception as e:
-        add_pending_msg(url, data, headers, e)
-
-
-def add_pending_msg(url, data, headers, error):
-    new_msg = m.PendingMsgView.objects.create(
-        url=url, data=data,
-        headers=headers, type=m.PendingMsgView.MSG,
-        error_code=error
-    )
-
-    new_msg.save()
-
-
-def add_pending_wspp_msg(url, data, headers, error):
-    new_msg = m.PendingMsgView.objects.create(
-        url=url, data=data,
-        headers=headers, type=m.PendingMsgView.WS,
-        error_code=error
-    )
-
-    new_msg.save()
 
 
 def send_payment_notify(user, to, username, balance):
+    company = user.company_profile
+    if company.fin_fecha_membresia < timezone.now() or not company.envio_mensajes:
+        return True
+
+    recipient = f"+57{to}"
+    apikey = settings.WSSP_KEY
+
+    name = username.title()
+    total = balance
+    company = company.name.title()
+
+    base_url = "https://api.textmebot.com/send.php"
+    message_template = (
+        "🚨 _*{company}*_\n\n"
+        "¡Hola {name}!\n"
+        "¡Pago Realizado! ✅ Queremos informarte amablemente que el valor restante de "
+        "tus compras fiadas es de:\n\n"
+        "*RESTANTE POR PAGAR:*\n"
+        "*${total}*\n\n"
+        "Un gusto atenderte.\n\n"
+        "Saludos cordiales, {company}\n\n"
+        "_CrediCol Colombia 2024_"
+    )
+
+    message = message_template.format(name=name, total=total, company=company)
+    encoded_message = urllib.parse.quote(message)
+
+    full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={encoded_message}"
+    responde = requests.get(full_url)
+    return responde
+
+
+def send_credit_notify(user, to, username, balance):
+    company = user.company_profile
+    if company.fin_fecha_membresia < timezone.now() or not company.envio_mensajes:
+        return True
+
+    recipient = f"+57{to}"
+    apikey = settings.WSSP_KEY
+    name = username.title()
+    total = balance
+    company = company.name.title()
+
+    base_url = "https://api.textmebot.com/send.php"
+    message_template = (
+        "🚨 _*{company}*_\n\n"
+        "¡Hola {name}!\n"
+        "¡Compra Realizada! 📌 Queremos informarte amablemente que el valor restante de "
+        "tus compras fiadas es de:\n\n"
+        "*RESTANTE POR PAGAR:*\n"
+        "*${total}*\n\n"
+        "Un gusto atenderte.\n\n"
+        "Saludos cordiales, {company}\n\n"
+        "_CrediCol Colombia 2024_"
+    )
+
+    message = message_template.format(name=name, total=total, company=company)
+    encoded_message = urllib.parse.quote(message)
+
+    full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={encoded_message}"
+    responde = requests.get(full_url)
+    return responde
+
+
+def remember_payment_notify(user, to, username, balance, days_overdue):
+    company = user.company_profile
+    if company.fin_fecha_membresia < timezone.now() or not company.envio_mensajes:
+        return True
+
+    recipient = f"+57{to}"
+    apikey = settings.WSSP_KEY
+
+    name = username.title()
+    total = balance
+    company_name = company.name.title()
+
+    base_url = "https://api.textmebot.com/send.php"
+    message_template = (
+        "🚨 _*{company_name}*_\n\n"
+        "¡Hola {name}!\n\n"
+        "🔔 *Recordatorio de Pago*\n\n"
+        "Queremos informarte que tienes un saldo pendiente de *${total}*.\n\n"
+        "🗓️ *Días en mora:* {days_overdue} días\n\n"
+        "Si tienes alguna duda o necesitas asistencia, no dudes en contactarnos. Estamos aquí para ayudarte.\n\n"
+        "Un cordial saludo,\n"
+        "{company_name}\n\n"
+        "_CrediCol Colombia 2024_\n"
+    )
+
+    message = message_template.format(name=name, total=total, days_overdue=days_overdue, company_name=company_name)
+    encoded_message = urllib.parse.quote(message)
+
+    full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={encoded_message}"
+    response = requests.get(full_url)
+    return response
+
+
+def send_payment_notify_old(user, to, username, balance):
     company = user.company_profile
     if company.fin_fecha_membresia < timezone.now() or not company.envio_mensajes:
         return True
@@ -122,10 +149,10 @@ def send_payment_notify(user, to, username, balance):
     try:
         requests.post(url, headers=headers, json=data)
     except Exception:
-        add_pending_wspp_msg(url, data, headers)
+        pass
 
 
-def send_credit_notify(user, to, username, balance):
+def send_credit_notify_old(user, to, username, balance):
     company = user.company_profile
     if company.fin_fecha_membresia < timezone.now() or not company.envio_mensajes:
         return True
@@ -172,59 +199,5 @@ def send_credit_notify(user, to, username, balance):
     try:
         requests.post(url, headers=headers, json=data)
     except Exception as e:
-        add_pending_wspp_msg(url, data, headers, e)
+        pass
 
-
-def send_daily_report_wspp(
-        company, today_sales, credit_sales
-    ):
-    url = "https://graph.facebook.com/v17.0/142793695585950/messages"
-
-    headers = {
-        "Authorization": "Bearer EAAJqf41ZCOq8BO6zSZBwJP624ZAJhKXTmry9ktawZA2VfFXreiuQ07OMQwZBcgR9ZCuY1zgfKpB4fdqOyfspJK0UXGvp3o3OCSJlZCwd4QMlrAb69hBN8S7evmr2Vont84jZAO91QfZBWr3B96RkTAcmEVWMVAtqIgCDDYUuSNUMUxKw6DE91vYP9JVuxyACRePaaqeP2oeP94rzbclHx",
-        "Content-Type": "application/json"
-    }
-
-    data = {
-        "messaging_product": "whatsapp",
-        "to": "+573213358263",
-        "type": "template",
-        "template": {
-            "name": "daily_report",
-            "language": {
-                "code": "en_US"
-            },
-            "components": [
-                {
-                    "type": "header",
-                    "parameters": [
-                        {
-                            "type": "text",
-                            "text": company.name.title()
-                        }
-                    ]
-                },
-                {
-                    "type": "body",
-                    "parameters": [
-                        {
-                            "type": "text",
-                            "text": today_sales
-                        }
-                    ],
-                    "type": "body",
-                    "parameters": [
-                        {
-                            "type": "text",
-                            "text": credit_sales
-                        }
-                    ]
-                }
-            ]
-        }
-    }
-
-    try:
-        requests.post(url, headers=headers, json=data)
-    except Exception as e:
-        add_pending_wspp_msg(url, data, headers, e)

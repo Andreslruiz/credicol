@@ -50,5 +50,10 @@ urlpatterns = [
         'api/transacciones/',
         api_views.ListarAllTransaccionesAPIView.as_view(),
         name='listar_all_transacciones_api'
+    ),
+    path(
+        'remember-payment/<int:cliente_id>',
+        views.recordar_deuda,
+        name='remember_payment'
     )
 ]

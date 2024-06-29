@@ -6,7 +6,7 @@ from django.db.models import Sum
 
 from . import models as m
 from clientes.models import ClienteProfile
-from common.services import send_mms, send_payment_notify, send_credit_notify
+from common.services import send_payment_notify, send_credit_notify, remember_payment_notify
 
 
 def get_sales_month(user):
@@ -145,7 +145,6 @@ def add_new_payment(form, cliente, user):
     form.save()
 
     update_credit_balance(cliente, form.instance.total_transaccion)
-    notify_payment_sms(cliente, cliente.deuda)
     send_payment_notify(
         user,
         cliente.telefono,
@@ -163,7 +162,6 @@ def add_new_credit(form, cliente, user):
     form.save()
 
     update_credit_balance(cliente, form.instance.total_transaccion)
-    # notify_credit_sms(cliente, cliente.deuda)
     send_credit_notify(
         user,
         cliente.telefono,
@@ -178,42 +176,6 @@ def update_credit_balance(cliente, total):
     ) if cliente.credit_balance else 0
     cliente.credit_balance = last_balance + float(total)
     cliente.save()
-
-
-def notify_payment_sms(cliente, deuda):
-    tel = ''.join(filter(str.isdigit, cliente.telefono))
-    name = str(cliente).title().replace('App', '')
-
-    body = f"""
-¡Hola {name}!
-
-¡Pago Realizado!
-
-RESTANTE POR PAGAR:
-${deuda}
-
-Agropecuaria Donde Juancho
-    """
-
-    send_mms(tel, body)
-
-
-def notify_credit_sms(cliente, deuda):
-    tel = ''.join(filter(str.isdigit, cliente.telefono))
-    name = str(cliente).title().replace('App', '')
-
-    body = f"""
-¡Hola {name}!
-
-¡Credito Registrado!
-
-DEUDA TOTAL:
-${deuda}
-
-Agropecuaria Donde Juancho
-    """
-
-    send_mms(tel, body)
 
 
 def update_last_credit(cliente_profile, new_total, form):
@@ -273,3 +235,15 @@ def total_credit_amount(company):
         return formatted_total
 
     return 0
+
+
+def remember_payment(user, cliente_id):
+    cliente = ClienteProfile.objects.get(id=cliente_id)
+
+    remember_payment_notify(
+        user,
+        cliente.telefono,
+        f'{cliente.nombre} {cliente.apellido}',
+        cliente.deuda,
+        cliente.dias_mora
+    )
