@@ -86,7 +86,7 @@
                     <i class="fas fa-edit"></i>
                     Editar Usuario                        
                 </a>
-                {% if cliente.dias_mora  %}
+                {% if cliente.dias_mora > 14 %}
                 <a class="btn btn-sm btn-dark elemento-ocultable" data-title="Editar Usuario" data-action="Actualizar" href="#" onclick="showrememberConfirmation()">
                     <i class="fas fa-lightbulb"></i>
                     Recordar Deuda
@@ -122,7 +122,7 @@
                     Editar Usuario
                 </a>
             </div>
-            {% if cliente.dias_mora %}
+            {% if cliente.dias_mora > 14 %}
             <div class="col-6 col-md-3 pl-0 pr-4 mb-2">
                 <a class="btn btn-sm btn-dark btn-block" href="#" onclick="showrememberConfirmation()">
                     <i class="fas fa-edit"></i>
