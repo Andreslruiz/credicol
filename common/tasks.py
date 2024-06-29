@@ -1,4 +1,5 @@
 import random
+import time
 
 from .services import send_cluster_test
 
@@ -41,3 +42,6 @@ def send_cluster_test_message(numbers):
     for num in numbers:
         message = random.choice(mensajes_motivacionales)
         send_cluster_test(f'+57{num}', message)
+        time.sleep(10)
+
+    return True

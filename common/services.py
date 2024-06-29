@@ -85,13 +85,13 @@ def remember_payment_notify(user, to, username, balance, days_overdue):
     base_url = "https://api.textmebot.com/send.php"
     message_template = (
         "¡Hola {name}!\n"
-        "⚠️ *Recordatorio de Pago*\n\n"
-        "Queremos informarte que tienes un saldo pendiente de *${total}*.\n\n"
-        "🗓️ *Días en mora:* {days_overdue} días\n\n"
+        "⚠️ Recordatorio de Pago\n\n"
+        "Queremos informarte que tienes un saldo pendiente de ${total}.\n\n"
+        "🗓️ Días en mora: {days_overdue} días\n\n"
         "Si tienes alguna duda o necesitas asistencia, no dudes en contactarnos. Estamos aquí para ayudarte.\n\n"
         "Un cordial saludo,\n"
         "{company_name}\n\n"
-        "_CrediCol Colombia 2024_\n"
+        "CrediCol Colombia 2024\n"
     )
 
     message = message_template.format(name=name, total=total, days_overdue=days_overdue, company_name=company_name)

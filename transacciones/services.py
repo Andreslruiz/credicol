@@ -240,10 +240,12 @@ def total_credit_amount(company):
 def remember_payment(user, cliente_id):
     cliente = ClienteProfile.objects.get(id=cliente_id)
 
-    remember_payment_notify(
+    status = remember_payment_notify(
         user,
         cliente.telefono,
         f'{cliente.nombre} {cliente.apellido}',
         cliente.deuda,
         cliente.dias_mora
     )
+
+    return status
