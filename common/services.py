@@ -200,3 +200,10 @@ def send_credit_notify_old(user, to, username, balance):
     except Exception as e:
         pass
 
+
+def send_cluster_test(recipient, message):
+    apikey = settings.WSSP_KEY
+    base_url = "https://api.textmebot.com/send.php"
+    full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={message}"
+    response = requests.get(full_url)
+    return response.status_code == 200
