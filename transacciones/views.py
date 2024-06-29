@@ -226,5 +226,5 @@ class ListAllTransactionsView(
 
 
 def recordar_deuda(request, cliente_id):
-    s.remember_payment(request.user, cliente_id)
-    return redirect('transacciones:transacciones_list', cliente_id=cliente_id)
+    sended = s.remember_payment(request.user, cliente_id)
+    return JsonResponse({'ok': sended})

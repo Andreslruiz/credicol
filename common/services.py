@@ -34,8 +34,8 @@ def send_payment_notify(user, to, username, balance):
     encoded_message = urllib.parse.quote(message)
 
     full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={encoded_message}"
-    responde = requests.get(full_url)
-    return responde
+    response = requests.get(full_url)
+    return response.status_code == 200
 
 
 def send_credit_notify(user, to, username, balance):
@@ -66,8 +66,8 @@ def send_credit_notify(user, to, username, balance):
     encoded_message = urllib.parse.quote(message)
 
     full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={encoded_message}"
-    responde = requests.get(full_url)
-    return responde
+    response = requests.get(full_url)
+    return response.status_code == 200
 
 
 def remember_payment_notify(user, to, username, balance, days_overdue):
@@ -84,9 +84,8 @@ def remember_payment_notify(user, to, username, balance, days_overdue):
 
     base_url = "https://api.textmebot.com/send.php"
     message_template = (
-        "🚨 _*{company_name}*_\n\n"
-        "¡Hola {name}!\n\n"
-        "🔔 *Recordatorio de Pago*\n\n"
+        "¡Hola {name}!\n"
+        "⚠️ *Recordatorio de Pago*\n\n"
         "Queremos informarte que tienes un saldo pendiente de *${total}*.\n\n"
         "🗓️ *Días en mora:* {days_overdue} días\n\n"
         "Si tienes alguna duda o necesitas asistencia, no dudes en contactarnos. Estamos aquí para ayudarte.\n\n"
@@ -100,7 +99,7 @@ def remember_payment_notify(user, to, username, balance, days_overdue):
 
     full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={encoded_message}"
     response = requests.get(full_url)
-    return response
+    return response.status_code == 200
 
 
 def send_payment_notify_old(user, to, username, balance):

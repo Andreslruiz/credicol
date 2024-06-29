@@ -513,8 +513,32 @@
         }).then((result) => {
 
             if (result.dismiss !== 'cancel') {
-                var url = "{% url 'transacciones:remember_payment' cliente.id %}";
-                window.location.href = url;
+                const url = "{% url 'transacciones:remember_payment' cliente.id %}";
+                fetch(url)
+                .then(response => response.json())
+                .then(data => {
+                    if (data.ok === true) {
+                        Swal.fire({
+                            title: 'Usuario Notificado',
+                            icon: 'success',
+                            text: 'El usuario ha sido notificado correctamente.'
+                        });
+                    } else {
+                        Swal.fire({
+                            title: 'Error',
+                            icon: 'error',
+                            text: 'El usuario no fue notificado.'
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    Swal.fire({
+                        title: 'Error',
+                        icon: 'error',
+                        text: 'Ocurrió un error al intentar notificar al usuario.'
+                    });
+                });
             }
         });
     }

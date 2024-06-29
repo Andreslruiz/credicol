@@ -1,11 +1,11 @@
 from datetime import date, timedelta
-from rest_framework import permissions, generics
 from common.api_views import DataTablePagination, DataTableSearchFilter
-from django.db.models import Q
+from django.db.models import OuterRef, Subquery, Q
 from rest_framework import permissions, generics, filters
 
 from . import serializers as se
 from .models import ClienteProfile
+from transacciones.models import Transaccion
 
 
 class ClientesFilter(filters.BaseFilterBackend):
@@ -15,8 +15,19 @@ class ClientesFilter(filters.BaseFilterBackend):
         estado = request.query_params.get('estado', None)
 
         if estado == 'en_mora':
+
             fecha_limite = date.today() - timedelta(days=15)
-            query &= Q(transacciones_cliente__fecha_transaccion__lt=fecha_limite)
+
+            ultima_transaccion_subquery = Transaccion.objects.filter(
+                cliente=OuterRef('pk')
+            ).order_by('-fecha_transaccion').values('fecha_transaccion')[:1]
+
+            clientes_en_mora = ClienteProfile.objects.annotate(
+                ultima_transaccion=Subquery(ultima_transaccion_subquery)
+            ).filter(ultima_transaccion__lt=fecha_limite)
+
+            fecha_limite = date.today() - timedelta(days=15)
+            query &= Q(id__in=clientes_en_mora)
 
         if estado == 'al_dia':
             fecha_limite = date.today() - timedelta(days=15)

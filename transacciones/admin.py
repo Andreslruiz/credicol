@@ -6,7 +6,7 @@ from .resources import TransaccionesResource
 
 
 @admin.register(Transaccion)
-class CompanyProfileAdmin(
+class TransaccionAdmin(
     ImportExportMixin, ExportActionModelAdmin, admin.ModelAdmin
 ):
     resource_class = TransaccionesResource
