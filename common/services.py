@@ -71,6 +71,7 @@ def send_credit_notify(user, to, username, balance):
 
 
 def remember_payment_notify(user, to, username, balance, days_overdue):
+    image_url = urllib.parse.quote('https://static.fundacion-affinity.org/cdn/farfuture/PVbbIC-0M9y4fPbbCsdvAD8bcjjtbFc0NSP3lRwlWcE/mtime:1643275542/sites/default/files/los-10-sonidos-principales-del-perro.jpg')
     company = user.company_profile
     if company.fin_fecha_membresia < timezone.now() or not company.envio_mensajes:
         return True
@@ -97,7 +98,7 @@ def remember_payment_notify(user, to, username, balance, days_overdue):
     message = message_template.format(name=name, total=total, days_overdue=days_overdue, company_name=company_name)
     encoded_message = urllib.parse.quote(message)
 
-    full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={encoded_message}"
+    full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={encoded_message}&image={image_url}"
     response = requests.get(full_url)
     return response.status_code == 200
 

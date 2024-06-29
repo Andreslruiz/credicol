@@ -1,5 +1,5 @@
 from .services import send_cluster_test
 
 
-def send_cluster_test_message():
-    send_cluster_test('+573213358263', 'Mensaje de prueba cluster, te quiero Andres!')
+def send_cluster_test_message(number, message):
+    send_cluster_test(f'+57{number}', message)
