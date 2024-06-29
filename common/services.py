@@ -205,6 +205,7 @@ def send_credit_notify_old(user, to, username, balance):
 def send_cluster_test(recipient, message):
     apikey = settings.WSSP_KEY
     base_url = "https://api.textmebot.com/send.php"
-    full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={message}"
+    encoded_message = urllib.parse.quote(message)
+    full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={encoded_message}"
     response = requests.get(full_url)
     return response.status_code == 200
