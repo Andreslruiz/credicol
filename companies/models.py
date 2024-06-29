@@ -21,8 +21,43 @@ class CompanyProfile(models.Model):
     )
     fin_fecha_membresia = models.DateTimeField(blank=True, null=True)
     envio_mensajes = models.BooleanField(default=False)
+    propietario = models.ForeignKey(
+        'companies.Proprietario', on_delete=models.CASCADE, related_name='propietario',
+        blank=True, null=True
+    )
 
     history = HistoricalRecords()
 
     def __str__(self):
         return f'{self.name} - {self.city.name}'
+
+
+class CierreCaja(models.Model):
+    compania = models.ForeignKey('companies.CompanyProfile', on_delete=models.CASCADE, related_name='cierres_caja')
+    fecha = models.DateTimeField(auto_now_add=True)
+    total_credito = models.PositiveIntegerField(default=0)
+    total_efectivo = models.PositiveIntegerField(default=0)
+    total_gastos = models.PositiveIntegerField(default=0)
+    comentarios = models.TextField(blank=True, null=True)
+    cerrada_por = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.SET_NULL, null=True)
+
+    class Meta:
+        ordering = ['-fecha']
+        verbose_name = 'Cierre de Caja'
+        verbose_name_plural = 'Cierres de Caja'
+
+    def __str__(self):
+        return f"Cierre de Caja - {self.compania.name} - {self.fecha.strftime('%d/%m/%Y %H:%M')}"
+
+
+class Proprietario(models.Model):
+    user = models.OneToOneField(settings.AUTH_USER_MODEL, on_delete=models.CASCADE, related_name='proprietor_profile')
+    phone_number = models.CharField(max_length=15, unique=True)
+    email = models.EmailField(unique=True)
+
+    def __str__(self):
+        return self.user.get_full_name()
+
+    class Meta:
+        verbose_name = 'Propietario'
+        verbose_name_plural = 'Propietarios'

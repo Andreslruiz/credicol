@@ -1,0 +1,87 @@
+{% include "components/alert_messages.html" %}
+{% csrf_token %}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cierre de Día</title>
+    <!-- Font Awesome para íconos -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.1/css/all.min.css" rel="stylesheet">
+    <style>
+        bodyclose {
+            background-color: #f8f9fa;
+            font-size: 20px;
+        }
+        .container-close {
+            max-width: 600px;
+            margin: 2rem auto;
+            padding: 2px;
+            background-color: white;
+            border-radius: 15px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+        .list-group-item {
+            border: none;
+            padding: 1.2rem 1.5rem;
+            font-size: 1.2rem;
+        }
+        .icon-bg {
+            background-color: #e9ecef;
+            padding: 15px;
+            border-radius: 50%;
+            margin-right: 20px;
+            font-size: 1.5rem;
+        }
+        .badge {
+            font-size: 1.1rem;
+            padding: 0.5em 0.8em;
+        }
+        .card-footer {
+            border-top: 1px solid #dee2e6;
+            padding: 1rem;
+            font-size: 1.3rem;
+        }
+        .form-control {
+            font-size: 1.1rem;
+        }
+    </style>
+</head>
+<bodyclose>
+    <div class="container-close">
+        <ul class="list-group list-group-flush">
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="icon-bg"><i class="fas fa-hand-holding-usd text-primary"></i></span>
+                    Total Fiados
+                </div>
+                <span class="badge bg-primary rounded-pill" style="color:#ffff">${{ credits_today }}</span>
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="icon-bg"><i class="fas fa-money-bill-wave text-success"></i></span>
+                    Total Efectivo
+                </div>
+                <input type="number" name="efectivo" class="form-control" style="max-width: 150px;" placeholder="0" value="0">
+            </li>
+            <li class="list-group-item d-flex justify-content-between align-items-center">
+                <div>
+                    <span class="icon-bg"><i class="fas fa-file-invoice-dollar text-danger"></i></span>
+                    Gastos
+                </div>
+                <input type="number" name="gastos" class="form-control" style="max-width: 150px;" placeholder="0" value="0">
+            </li>
+        </ul>
+
+        <div class="mt-4">
+            <label for="comentarios" class="form-label">Comentarios:</label>
+            <textarea class="form-control" name="comentarios" id="comentarios" rows="3"></textarea>
+        </div>
+
+        <div class="card-footer text-center bg-light mt-4">
+           <strong> <span class="text-muted"><span>{{ today_date }}</span></span></strong>
+        </div>
+    </div>
+</bodyclose>
+</html>

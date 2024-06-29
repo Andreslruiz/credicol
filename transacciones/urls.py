@@ -7,6 +7,7 @@ app_name = 'transacciones'
 
 urlpatterns = [
     path('direct-sales/', views.DirectSalesView.as_view(), name='direct_sales'),
+    path('close-day', views.CloseDayView.as_view(), name='close_day'),
     path(
         'add-payment/<int:cliente_id>', views.AddPaymentView.as_view(),
         name='add_payment'

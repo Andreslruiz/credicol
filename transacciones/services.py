@@ -6,7 +6,8 @@ from django.db.models import Sum
 
 from . import models as m
 from clientes.models import ClienteProfile
-from common.services import send_payment_notify, send_credit_notify, remember_payment_notify
+from common.services import send_payment_notify, send_credit_notify, remember_payment_notify, send_daily_summary
+from companies.models import CierreCaja
 
 
 def get_sales_month(user):
@@ -249,3 +250,26 @@ def remember_payment(user, cliente_id):
     )
 
     return status
+
+
+def close_day(efectivo, gastos, comentarios, user):
+
+    def limpiar_numero(valor):
+        if isinstance(valor, str):
+            return float(valor.replace(',', ''))
+        return valor
+
+    credits_today = get_credit_sales_today(user)
+
+    cierre = CierreCaja.objects.create(
+        compania=user.company_profile,
+        total_credito=limpiar_numero(credits_today),
+        total_efectivo=efectivo,
+        total_gastos=gastos,
+        comentarios=comentarios,
+        cerrada_por=user
+    )
+
+    cierre.save()
+
+    send_daily_summary(user, efectivo, gastos, comentarios, credits_today)

@@ -12,6 +12,7 @@ from transacciones.services import (
     get_all_year_sales, total_credit_amount
 )
 from . import services as s
+from . import selectors as sel
 
 User = get_user_model()
 
@@ -64,7 +65,8 @@ class InitialView(
             'sales_all_year': get_all_year_sales(self.request.user),
             'total_credit_amount': total_credit_amount(
                 self.request.user.company_profile
-            )
+            ),
+            'day_closed': sel.get_today_close(self.request.user.company_profile)
         })
         return super().get_context_data(**kwargs)
 

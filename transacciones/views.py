@@ -1,5 +1,5 @@
 import locale
-from datetime import datetime
+from datetime import datetime, date
 from django.utils import timezone
 
 from django.template import loader
@@ -16,6 +16,41 @@ from django.contrib.auth.mixins import (
 from . import models as m
 from . import form as f
 from . import services as s
+
+
+class CloseDayView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
+):
+    model = m.Transaccion
+    template_name = 'transacciones/components/close_day.html'
+    permission_required = 'transmision.can_admin_direccionamiento'
+
+    def get_context_data(self, **kwargs):
+        locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
+        today = date.today()
+        formatted_date = today.strftime('%d de %B de %Y')
+
+        kwargs.update({
+            'credits_today': s.get_credit_sales_today(self.request.user),
+            'today_date': formatted_date
+        })
+        return super().get_context_data(**kwargs)
+
+    def post(self, request):
+        efectivo = request.POST.get('efectivo') or 0
+        gastos = request.POST.get('gastos') or 0
+        comentarios = request.POST.get('comentarios')
+
+        s.close_day(
+            efectivo=efectivo,
+            gastos=gastos,
+            comentarios=comentarios,
+            user=request.user
+        )
+
+        return JsonResponse(
+            {'ok': True, 'close_day': True}
+        )
 
 
 class DirectSalesView(

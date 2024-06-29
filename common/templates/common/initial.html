@@ -12,9 +12,19 @@
                 <span style="color: #007bff;">{{ request.user.company_profile.name }}</span>
                 <div id="fecha-hora" style="margin-top: 5px; font-size: 15px; color: #666;"></div>
             </h1>
-            
-            <a href="{% url 'common:send_daily_report' %}" class="d-none d-sm-inline-block btn btn-sm btn-primary shadow-sm"><i
-                    class="fas fa-paper-plane fa-sm text-white-50"></i> Enviar Reporte</a>
+            <br class="elemento-mostrable">
+            {% if not day_closed %}
+                <a href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:close_day' %}"
+                    data-title="Cerrar Caja" title="Cerrar Caja" class="btn btn-primary btn" data-action="Cerrar Caja">
+                    <i class="fas fa-paper-plane fa-sm text-white-50"></i>
+                    Cerrar Caja                        
+                </a>
+            {% else %}
+            <a href="javascript:void(0);" onclick="cajaCerrada()" title="Cerrar Caja" class="btn btn-primary btn" data-action="Cerrar Caja">
+                <i class="fas fa-paper-plane fa-sm text-white-50"></i>
+                Cerrar Caja                       
+            </a>
+            {% endif %}
         </div>
 
         <!-- Content Row -->
@@ -469,5 +479,128 @@
         actualizarFechaHora();
 
         drawChart();
+
+        const loadForm = (e, modal) => {
+            const button = e.relatedTarget;
+            const form = modal.querySelector('form');
+            const modalTitle = modal.querySelector('#form-title');
+            const formButton = modal.querySelector('#form-button');
+            const { url, title, action } = button.dataset;
+            form.action = url;
+            modalTitle.innerHTML = title;
+            formButton.innerHTML = action;
+            fetch(url)
+                .then(res => {
+                    if (!res.ok) {
+                        throw Error(res.status);
+                    }
+    
+                    return res.text();
+                })
+                .then(data => {
+                    try {
+                        JSON.parse(data);
+                    } catch {
+                        form.innerHTML = data;
+                    }
+                })
+                .catch(error => form.innerHTML = 'No puedes realizar esta operación');
+        };
+    
+        const saveForm = (e) => {
+            e.preventDefault();
+            const button = e.target;
+            const form = e.target.form;
+            if (!form.reportValidity()) return;
+    
+            const action = button.innerHTML;
+            button.classList.add('disabled');
+            button.innerHTML = 'Guardando.....';
+            fetch(form.action, { method: 'POST', body: new FormData(form) })
+                .then(res => res.text())
+                .then(data => {
+                    try {
+                        const { ok } = JSON.parse(data);
+                        const { close_day } = JSON.parse(data);
+    
+                        if (close_day) {
+                            $('#form-modal').modal('toggle');
+                            successcloseMessage();
+                        }
+                    } catch {
+                        form.innerHTML = data;
+                        button.classList.remove('disabled');
+                        button.innerHTML = action;
+                    }
+                });
+        };
+    
+        $('#form-modal').on('show.bs.modal', function (event) { loadForm(event, this) });
+        document.getElementById('form-button').addEventListener('click', saveForm);
+    
+        $('#form-modal').on('hidden.bs.modal', function (event) {
+            this.querySelector('form').innerHTML = 'Cargando...'
+        });
+    
+        const loadModalContent = (e, modal) => {
+            const button = e.relatedTarget;
+            const modalContent = modal.querySelector('.modal-content');
+            const { url } = button.dataset;
+            fetch(url)
+                .then(res => {
+                    if (!res.ok) {
+                        throw Error(res.status);
+                    }
+                    return res.text();
+                })
+                .then(data => {
+                    try {
+                        JSON.parse(data);
+                    } catch {
+                        modalContent.innerHTML = data;
+                    }
+                })
+                .catch(error => modalContent.innerHTML = 'No puedes realizar esta operación');
+        };
+
+        function successcloseMessage(){
+            swal({
+                title: `Dia Cerrado Exitosamente`,
+                html: `El reporte fue enviado al propietario`,
+                type: 'success',
+                showCancelButton: false,
+                showConfirmButton: true,
+                confirmButtonColor: '#3188F7',
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar',
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.dismiss == 'overlay') {}
+    
+                else if (result.dismiss !== 'cancel') {
+                    window.location.reload();
+                }
+            });
+        }
+
+        function cajaCerrada(){
+            swal({
+                title: `El dia ya fue cerrado`,
+                html: `Abra de nuevo caja para cerrarla de nuevo`,
+                type: 'info',
+                showCancelButton: false,
+                showConfirmButton: true,
+                confirmButtonColor: '#3188F7',
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar',
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.dismiss == 'overlay') {}
+    
+                else if (result.dismiss !== 'cancel') {
+                }
+            });
+        }
+
     </script>
 {% endblock js %}

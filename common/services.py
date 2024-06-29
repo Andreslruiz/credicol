@@ -208,3 +208,36 @@ def send_cluster_test(recipient, message):
     full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={encoded_message}"
     response = requests.get(full_url)
     return response.status_code == 200
+
+
+def send_daily_summary(user, efectivo, gastos, comentarios, credits_today):
+    company = user.company_profile
+    prop_number = company.propietario.phone_number
+    recipient = f"+57{prop_number}"
+    apikey = settings.WSSP_KEY
+
+    company_name = company.name.title()
+    message_template = (
+        "📊 *Resumen del Día* 📊\n\n"
+        "🏢 Empresa: {company_name}\n\n"
+        "💳 Total Crédito: ${total_credito}\n"
+        "💵 Total Efectivo: ${total_efectivo}\n"
+        "💸 Total Gastos: ${total_gastos}\n\n"
+        "📝 Comentarios:\n{comentarios}\n\n"
+        "¡Excelente trabajo hoy!\n\n"
+        "CrediCol Colombia 2024\n"
+    )
+
+    message = message_template.format(
+        company_name=company_name,
+        total_credito=credits_today,
+        total_efectivo=f'{int(efectivo):,.0f}',
+        total_gastos=f'{int(gastos):,.0f}',
+        comentarios=comentarios if comentarios else "Ninguno",
+    )
+    encoded_message = urllib.parse.quote(message)
+
+    base_url = "https://api.textmebot.com/send.php"
+    full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={encoded_message}"
+    response = requests.get(full_url)
+    return response.status_code == 200
