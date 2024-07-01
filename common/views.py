@@ -97,6 +97,15 @@ def user_logout(request):
     return redirect(reverse('login'))
 
 
-def send_daily_report(request):
-    s.send_daily_report(request.user)
-    return redirect(reverse('initial_view'))
+class DashBoardSalesView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
+):
+
+    template_name = 'common/dashboard_sales.html'
+    permission_required = 'clientes.can_see_initial_view'
+
+    def get_context_data(self, **kwargs):
+        kwargs.update({
+            'products': sel.get_company_products(self.request.user),
+        })
+        return super().get_context_data(**kwargs)

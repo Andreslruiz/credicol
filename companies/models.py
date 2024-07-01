@@ -56,7 +56,7 @@ class Proprietario(models.Model):
     email = models.EmailField(unique=True)
 
     def __str__(self):
-        return self.user.get_full_name()
+        return self.user
 
     class Meta:
         verbose_name = 'Propietario'
