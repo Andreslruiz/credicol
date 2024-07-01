@@ -15,8 +15,9 @@ class CompanyProfile(models.Model):
     code = models.IntegerField(blank=True, default=0)
     login_attemps = models.IntegerField(blank=True, default=0)
     date_password_updated = models.DateTimeField(default=timezone.now)
-    users = models.ManyToManyField(
-        settings.AUTH_USER_MODEL, related_name='company_profiles'
+    user = models.OneToOneField(
+        settings.AUTH_USER_MODEL, related_name='company_profile',
+        on_delete=models.SET_NULL, blank=True, null=True
     )
     fin_fecha_membresia = models.DateTimeField(blank=True, null=True)
     envio_mensajes = models.BooleanField(default=False)
@@ -28,10 +29,7 @@ class CompanyProfile(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return self.name
-
-    def get_users(self):
-        return ", ".join(user.username for user in self.users.all())
+        return f'{self.name} - {self.city.name}'
 
 
 class CierreCaja(models.Model):

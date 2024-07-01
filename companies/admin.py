@@ -4,7 +4,7 @@ from .models import CompanyProfile, CierreCaja, Proprietario
 
 @admin.register(CompanyProfile)
 class CompanyProfileAdmin(admin.ModelAdmin):
-    list_display = ['name', 'city']
+    list_display = ['name', 'user', 'city']
 
 
 @admin.register(CierreCaja)
