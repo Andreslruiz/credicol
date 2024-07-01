@@ -15,9 +15,8 @@ class CompanyProfile(models.Model):
     code = models.IntegerField(blank=True, default=0)
     login_attemps = models.IntegerField(blank=True, default=0)
     date_password_updated = models.DateTimeField(default=timezone.now)
-    user = models.OneToOneField(
-        settings.AUTH_USER_MODEL, related_name='company_profile',
-        on_delete=models.CASCADE
+    users = models.ManyToManyField(
+        settings.AUTH_USER_MODEL, related_name='company_profiles'
     )
     fin_fecha_membresia = models.DateTimeField(blank=True, null=True)
     envio_mensajes = models.BooleanField(default=False)
