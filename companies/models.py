@@ -56,7 +56,10 @@ class Proprietario(models.Model):
     email = models.EmailField(unique=True)
 
     def __str__(self):
-        return self.user
+        try:
+            return f'{self.user.username}'
+        except Exception as e:
+            return f'Error: {e}'
 
     class Meta:
         verbose_name = 'Propietario'

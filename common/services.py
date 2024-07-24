@@ -81,6 +81,7 @@ def remember_payment_notify(user, to, username, balance, days_overdue):
     name = username.title()
     total = balance
     company_name = company.name.title()
+    contact = company.contact
 
     base_url = "https://api.textmebot.com/send.php"
     message_template = (
@@ -88,13 +89,13 @@ def remember_payment_notify(user, to, username, balance, days_overdue):
         "⚠️ Recordatorio de Pago\n\n"
         "Queremos informarte que tienes un saldo pendiente de ${total}.\n\n"
         "🗓️ Días en mora: {days_overdue} días\n\n"
-        "Si tienes alguna duda o necesitas asistencia, no dudes en contactarnos. Estamos aquí para ayudarte.\n\n"
+        "Si tienes alguna duda contacta a la empresa al {contact}. Estamos aquí para ayudarte.\n\n"
         "Un cordial saludo,\n"
         "{company_name}\n\n"
-        "CrediCol Colombia 2024\n"
+        "_CrediCol Colombia 2024_\n"
     )
 
-    message = message_template.format(name=name, total=total, days_overdue=days_overdue, company_name=company_name)
+    message = message_template.format(name=name, total=total, contact=contact, days_overdue=days_overdue, company_name=company_name)
     encoded_message = urllib.parse.quote(message)
 
     full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={encoded_message}"
@@ -220,7 +221,7 @@ def send_daily_summary(user, efectivo, gastos, comentarios, credits_today):
     message_template = (
         "📊 *Resumen del Día* 📊\n\n"
         "🏢 Empresa: {company_name}\n\n"
-        "💳 Total Crédito: ${total_credito}\n"
+        "💳 Total Créditos: ${total_credito}\n"
         "💵 Total Efectivo: ${total_efectivo}\n"
         "💸 Total Gastos: ${total_gastos}\n\n"
         "📝 Comentarios:\n{comentarios}\n\n"
