@@ -6,6 +6,7 @@ from django.conf import settings
 
 class CompanyProfile(models.Model):
     profile_photo = models.FileField(upload_to='companies/', blank=True, null=True)
+    company_image_url = models.CharField(max_length=500, blank=True, null=True)
     name = models.CharField(max_length=200)
     nit = models.CharField(max_length=200)
     slogan = models.CharField(max_length=300)

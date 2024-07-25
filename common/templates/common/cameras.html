@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cámara IP en Vivo</title>
+    <style>
+        #video-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #f0f0f0;
+        }
+        img {
+            width: 100%;
+            max-width: 800px;
+            border: 2px solid #333;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div id="video-container">
+        <img id="video" src="" />
+    </div>
+    <script>
+        const cameraUrl = "http://172.20.10.5:4747/video";
+        const imgElement = document.getElementById('video');
+
+        imgElement.src = cameraUrl;
+
+        imgElement.addEventListener('error', function(event) {
+            console.error('Error al cargar la imagen.');
+            alert('No se pudo cargar la imagen. Verifica la URL y la conexión.');
+        });
+    </script>
+</body>
+</html>

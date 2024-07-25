@@ -30,7 +30,7 @@
                 <i class="fas fa-fw fa-cube" style="font-size: 24px; color: #2A72FB; margin-right: 10px;"></i>
                 <span style="font-size: 24px; color: #2A72FB;">Productos</span>
             </div>
-            <a class="btn btn-sm btn-primary" data-title="Crear Producto" data-action="Guardar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'productos:add_new_producto' %}">
+            <a id="crearProducto" class="btn btn-sm btn-primary" data-title="Crear Producto" data-action="Guardar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'productos:add_new_producto' %}">
                 <i class="fas fa-plus-circle"></i> Crear Producto
             </a>           
         </div>
@@ -102,8 +102,9 @@
     crossorigin="anonymous">
 </script>
 <script>
+    let table
     $(document).ready(function (){
-        const table = $('#productosTable').DataTable({
+            table = $('#productosTable').DataTable({
             rowId: 'id',
             ordering: false,
             processing: true,
@@ -285,17 +286,23 @@
             title: `Producto ${label} exitosamente`,
             html: `Se ha ${label} el producto:<strong> ${product}</strong>.`,
             type: 'success',
-            showCancelButton: false,
+            showCancelButton: true,
             showConfirmButton: true,
             confirmButtonColor: '#69DE6F',
+            cancelButtonColor: '#47A0FF',
             confirmButtonText: 'Aceptar',
-            cancelButtonText: 'Cancelar',
+            cancelButtonText: '+ Añadir Otro',
             allowOutsideClick: false,
         }).then((result) => {
             if (result.dismiss == 'overlay') {}
 
             else if (result.dismiss !== 'cancel') {
                 window.location.reload();
+            }
+
+            if (result.dismiss == 'cancel') {
+                table.draw();
+                document.getElementById('crearProducto').click();
             }
         });
     }

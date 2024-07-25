@@ -40,7 +40,7 @@
                 <i class="fas fa-user" style="font-size: 23px; color: #2A72FB; margin-right: 10px;"></i>
                 <span style="font-size: 24px; color: #2A72FB;">Clientes</span>
             </div>
-            <a class="btn btn-sm btn-primary" data-title="Crear Cliente" data-action="Guardar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'clientes:add_new_cliente' %}">
+            <a id="crearCliente" class="btn btn-sm btn-primary" data-title="Crear Cliente" data-action="Guardar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'clientes:add_new_cliente' %}">
                 <i class="fas fa-plus-circle"></i> Crear Cliente
             </a>           
         </div>
@@ -124,8 +124,9 @@
     crossorigin="anonymous">
 </script>
 <script>
+    let table;
     $(document).ready(function (){
-        const table = $('#clientesTable').DataTable({
+            table = $('#clientesTable').DataTable({
             rowId: 'id',
             ordering: false,
             processing: true,
@@ -372,20 +373,26 @@
     
     function successUserMessage(user, succesurl){
         swal({
-            title: `Usuario registrado exitosamente`,
+            title: `Usuario Registrado!`,
             html: `Se ha registrado en el sistema el usuario:<strong> ${user}</strong>.`,
             type: 'success',
-            showCancelButton: false,
+            showCancelButton: true,
             showConfirmButton: true,
             confirmButtonColor: '#69DE6F',
+            cancelButtonColor: '#47A0FF',
             confirmButtonText: 'Aceptar',
-            cancelButtonText: 'Cancelar',
+            cancelButtonText: '+ Añadir Otro',
             allowOutsideClick: false,
         }).then((result) => {
             if (result.dismiss == 'overlay') {}
 
             else if (result.dismiss !== 'cancel') {
-                window.location.href = succesurl;
+                table.draw();
+            }
+
+            if (result.dismiss == 'cancel') {
+                table.draw();
+                document.getElementById('crearCliente').click();
             }
         });
     }

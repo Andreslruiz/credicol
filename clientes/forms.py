@@ -11,7 +11,8 @@ class AddNewCliente(forms.ModelForm):
             'nombre',
             'apellido',
             'email',
-            'telefono'
+            'telefono',
+            'credit_balance'
         ]
 
     def __init__(self, *args, **kwargs):
@@ -20,6 +21,8 @@ class AddNewCliente(forms.ModelForm):
         self.fields['apellido'].label = ''
         self.fields['email'].label = ''
         self.fields['telefono'].label = ''
+        self.fields['credit_balance'].label = ''
 
-        for field_name, field in self.fields.items():
-            field.required = True
+        self.fields['nombre'].required = True
+        self.fields['apellido'].required = True
+        self.fields['telefono'].required = True
