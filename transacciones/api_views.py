@@ -19,8 +19,7 @@ class ListarTransaccionesAPIView(generics.ListAPIView):
         id = self.kwargs.get('cliente_id')
         company = self.request.user.company_profile
         queryset = Transaccion.objects.filter(creada_por__company_profile=company)
-        if id:
-            queryset = queryset.filter(cliente=id).order_by('-id')
+        queryset = queryset.filter(cliente=id).order_by('-id')
 
         return queryset
 
@@ -59,5 +58,6 @@ class ListarAllTransaccionesAPIView(generics.ListAPIView):
     search_fields = ['id']
 
     def get_queryset(self):
-        queryset = Transaccion.objects.all().order_by('-id')
+        company = self.request.user.company_profile
+        queryset = Transaccion.objects.filter(creada_por__company_profile=company)
         return queryset
