@@ -21,6 +21,7 @@ class CompanyProfile(models.Model):
         on_delete=models.SET_NULL, blank=True, null=True
     )
     fin_fecha_membresia = models.DateTimeField(blank=True, null=True)
+    total_membresia = models.IntegerField(blank=True, default=0)
     envio_mensajes = models.BooleanField(default=False)
     propietario = models.ForeignKey(
         'companies.Proprietario', on_delete=models.CASCADE, related_name='propietario',

@@ -221,12 +221,13 @@
         .calculator-buttons .operator-done {
             background-color: #007BFF;
             color: white;
-            grid-column: span 2;
+            grid-column: span 3;
         }
 
         .operator {
             background: #007BFF;
             color: #fff;
+            grid-row: span 3;
         }
         .operator:hover {
             background: #0056b3;
@@ -476,27 +477,74 @@
                     <button onclick="appendToDisplay('4')">4</button>
                     <button onclick="appendToDisplay('5')">5</button>
                     <button onclick="appendToDisplay('6')">6</button>
-                    <button onclick="appendToDisplay('-')" class="operator">
+                    {% comment %} <button onclick="appendToDisplay('-')" class="operator">
                         <i class="fas fa-minus"></i>
-                    </button>
+                    </button> {% endcomment %}
                     <button onclick="appendToDisplay('1')">1</button>
                     <button onclick="appendToDisplay('2')">2</button>
                     <button onclick="appendToDisplay('3')">3</button>
-                    <button onclick="appendToDisplay('+')" class="operator">
+                    {% comment %} <button onclick="appendToDisplay('+')" class="operator">
                         <i class="fas fa-plus"></i>
-                    </button>
+                    </button> {% endcomment %}
                     <button onclick="appendToDisplay('0')">0</button>
-                    <button onclick="addCalculatorResultToCart()" class="operator-done">Agregar al carrito</button>
-                    <button onclick="calculateResult()" class="equals">
+                    <button onclick="addCalculatorResultToCart()" class="operator-done"><i class="fas fa-plus-circle" style="margin-rigth:5px;"></i> Agregar al carrito</button>
+                    {% comment %} <button onclick="calculateResult()" class="equals">
                         <i class="fas fa-equals"></i>
-                    </button>
+                    </button> {% endcomment %}
                 </div>
-                <div class="cart-summary">
-                    <h3>Carrito de Compras</h3>
-                    <div class="cart-items" id="cartItems"></div>
-                    <button class="checkout-button" onclick="checkout()">Cobrar</button>
-                    <button class="clear-cart-button" onclick="clearCart()">Limpiar Carrito</button>
+                <br>
+                <div class="cart-summary" style="
+                    width: 100%;
+                    padding: 10px;
+                    border-radius: 10px;
+                    background: linear-gradient(135deg, #f5f7fa, #c3cfe2);
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+                    font-family: 'Arial', sans-serif;
+                    color: #333;
+                    text-align: center;
+                    margin: 20px auto;
+                ">
+                    <h3 style="
+                        font-size: 1.5em;
+                        margin-bottom: 20px;
+                        color: #2c3e50;
+                        font-weight: bold;
+                    ">
+                    <i class="fas fa-shopping-cart"></i>
+
+                    Carrito de Compras</h3>
+                    <div class="cart-items" id="cartItems" style="
+                        background: #fff;
+                        border: 1px solid #ddd;
+                        border-radius: 8px;
+                        padding: 10px;
+                        min-height: 100px;
+                        margin-bottom: 20px;
+                        overflow-y: auto;
+                    "></div>
+                    <button class="checkout-button" onclick="checkout()" style="
+                        background: #27ae60;
+                        color: #fff;
+                        border: none;
+                        border-radius: 5px;
+                        padding: 10px 20px;
+                        font-size: 1em;
+                        cursor: pointer;
+                        margin-bottom: 10px;
+                        transition: background 0.3s ease;
+                    ">Cobrar</button>
+                    <button class="clear-cart-button" onclick="clearCart()" style="
+                        background: #e74c3c;
+                        color: #fff;
+                        border: none;
+                        border-radius: 5px;
+                        padding: 10px 20px;
+                        font-size: 1em;
+                        cursor: pointer;
+                        transition: background 0.3s ease;
+                    ">Limpiar Carrito</button>
                 </div>
+
             </section>
         </div>
     </div>
@@ -507,11 +555,16 @@
 
 {% block js %}
 <script>
+
+    $(".sidebar").toggleClass("toggled");
+    if ($(".sidebar").hasClass("toggled")) {
+        $('.sidebar .collapse').collapse('hide');
+    };
+
     // Datos de productos (simulados)
     const products = JSON.parse('{{ products|escapejs }}');
-
     let cart = [];
-    const itemsPerPage = 8;
+    const itemsPerPage = 10;
     let currentPage = 1;
 
     // Función para renderizar productos con paginación
@@ -521,6 +574,12 @@
         const startIndex = (currentPage - 1) * itemsPerPage;
         const endIndex = startIndex + itemsPerPage;
         const paginatedProducts = productsToRender.slice(startIndex, endIndex);
+        const searchTerm = document.getElementById('searchInput').value;
+        const isOnlyNumbers = /^[0-9]+$/.test(searchTerm);
+
+        if (paginatedProducts.length==1 && isOnlyNumbers){
+            console.log("Uno no mas")
+        }
     
         paginatedProducts.forEach(product => {
             const { model, pk, fields } = product;
@@ -533,10 +592,13 @@
                 <h3>${nombre}</h3>
                 <p>$${precio.toLocaleString('de-DE')}</p>
                 <p>Costo de Flete: $${costo_flete}</p>
-                <button onclick="addToCart(${pk})">Agregar al carrito</button>
-                <button class="product-detail" title="Ver Producto" onclick="showDetails('${descripcion}')">
-                    <i class="fas fa-eye"></i>
-                </button>`;
+                <div class="row">
+                    <button onclick="addToCart(${pk})">Agregar al carrito</button>
+                    <button class="product-detail" style="margin-left:3px;" title="Ver Producto" onclick="showDetails('${descripcion}')">
+                        <i class="fas fa-eye"></i>
+                    </button>
+                </div>` 
+                ;
             
             // Usar animación para añadir suavemente cada producto
             productCard.style.opacity = '0';
@@ -550,6 +612,12 @@
         updatePagination(productsToRender.length);
     }
 
+    function changePage(page) {
+        currentPage = page;
+        updatePagination(totalItems);
+        // Load page content here
+    }
+
     // Función para actualizar la paginación
     function updatePagination(totalItems) {
         const paginationElement = document.getElementById('pagination');
@@ -560,21 +628,50 @@
             const prevButton = document.createElement('button');
             prevButton.textContent = 'Anterior';
             prevButton.onclick = () => changePage(currentPage - 1);
-            prevButton.disabled = currentPage === 1;
+            prevButton.className = currentPage === 1 ? 'disabled' : '';
             paginationElement.appendChild(prevButton);
 
-            for (let i = 1; i <= totalPages; i++) {
+            const startPage = Math.max(1, currentPage - 2);
+            const endPage = Math.min(totalPages, currentPage + 2);
+
+            if (startPage > 1) {
+                const firstPageButton = document.createElement('button');
+                firstPageButton.textContent = '1';
+                firstPageButton.onclick = () => changePage(1);
+                paginationElement.appendChild(firstPageButton);
+                if (startPage > 2) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.textContent = '...';
+                    ellipsis.className = 'ellipsis';
+                    paginationElement.appendChild(ellipsis);
+                }
+            }
+
+            for (let i = startPage; i <= endPage; i++) {
                 const pageButton = document.createElement('button');
                 pageButton.textContent = i;
                 pageButton.onclick = () => changePage(i);
-                pageButton.disabled = currentPage === i;
+                pageButton.className = currentPage === i ? 'disabled' : '';
                 paginationElement.appendChild(pageButton);
+            }
+
+            if (endPage < totalPages) {
+                if (endPage < totalPages - 1) {
+                    const ellipsis = document.createElement('span');
+                    ellipsis.textContent = '...';
+                    ellipsis.className = 'ellipsis';
+                    paginationElement.appendChild(ellipsis);
+                }
+                const lastPageButton = document.createElement('button');
+                lastPageButton.textContent = totalPages;
+                lastPageButton.onclick = () => changePage(totalPages);
+                paginationElement.appendChild(lastPageButton);
             }
 
             const nextButton = document.createElement('button');
             nextButton.textContent = 'Siguiente';
             nextButton.onclick = () => changePage(currentPage + 1);
-            nextButton.disabled = currentPage === totalPages;
+            nextButton.className = currentPage === totalPages ? 'disabled' : '';
             paginationElement.appendChild(nextButton);
         }
     }
@@ -683,7 +780,8 @@
 
     function deleteLastCharacter(){
         const calculatorDisplay = document.getElementById('calculatorDisplay').value
-        document.getElementById('calculatorDisplay').value = calculatorDisplay.slice(0, -1);
+        document.getElementById('calculatorDisplay').value = ''
+        {% comment %} document.getElementById('calculatorDisplay').value = calculatorDisplay.slice(0, -1); {% endcomment %}
     }
 
     // Funciones de la calculadora
@@ -762,11 +860,6 @@
     document.addEventListener('keydown', handleKeyPress);
 
     function handleKeyPress(event) {
-
-        if (document.activeElement.id === 'searchInput') {
-            return;
-        }
-
         const key = event.key;
         
         switch(key) {
@@ -782,18 +875,8 @@
             case '9':
                 appendToDisplay(key);
                 break;
-            case '+':
-            case '-':
-                appendToDisplay(key);
-                break;
-            case '*':
-                appendToDisplay('×');
-                break;
-            case '/':
-                appendToDisplay('÷');
-                break;
             case 'Enter':
-                calculateResult();
+                addCalculatorResultToCart();
                 break;
             case 'Backspace':
                 deleteLastCharacter();
@@ -829,6 +912,24 @@
         currentPage = 1;
         renderProducts(filteredProducts);
     }
+
+    let lastKeyTime = Date.now();
+    const debounceTime = 50;
+
+    function isBarCode(){
+        const currentTime = Date.now();
+        const timeDiff = currentTime - lastKeyTime;
+        lastKeyTime = currentTime;
+        if (timeDiff < debounceTime && event.key === 'Enter') {
+            alert("Codigo de barras.")
+            return true
+        }
+        return false
+    }
+
+    document.addEventListener('keydown', function(event) {
+        isBarCode();
+    });
 
 </script>
 {% endblock js %}

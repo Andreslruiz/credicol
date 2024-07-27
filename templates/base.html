@@ -138,21 +138,21 @@
             var fechaActualMembresia = obtenerFechaActual();
             var membresiaRecordada = localStorage.getItem("membresia");
             var membresiaCaducada = localStorage.getItem("membresia-caducada");
-            
+
             if (diasRestantes<1 && membresiaCaducada != fechaActualFormateada) {
+                const envioMensajes = "{{ request.user.company_profile.envio_mensajes }}"
+
+                const total_membresia = "{{ request.user.company_profile.total_membresia }}"
+                const formattedTotalMembresia = parseInt(total_membresia, 10).toLocaleString();
                 swal({
                     title: '¡Membresía Caducada!',
                     html: `
                     <p>Tu membresia de CrediCol a caducado, comunicate con un administrador.</p>
                     <div>
                         <br> 
-                        <h5>Opciones de Pago:</h5>
+                        <h3><strong>Total a pagar $${formattedTotalMembresia}</strong></h3>
                         <hr>
                         <table>
-                            <tr>
-                                <td>Recarga Nequi al numero 3213358263</td>
-                                <td><img style="width:150px;" src="{% static 'img/nequi.jpg' %}" alt="Nequi"></td>
-                            </tr>
                             <tr>
                                 <td>Consignación o transferencia Bancolombia a la cuenta de ahorros 446-000-16382</td>
                                 <td><img style="width:150px;" src="{% static 'img/bancolombia.png' %}" alt="Bancolombia"></td>
@@ -169,7 +169,7 @@
                 `,
                     type: 'warning',
                     showCancelButton: false,
-                    showConfirmButton: true,
+                    showConfirmButton: false,
                     confirmButtonColor: '#4B3FD1',
                     cancelButtonColor: '#7466FF',
                     confirmButtonText: 'Continuar Asi',
@@ -189,20 +189,17 @@
             }
             
             if (diasRestantes <= 3 && diasRestantes >= 0 && fechaActualMembresia !== membresiaRecordada) {
+                const total_membresia = "{{ request.user.company_profile.total_membresia }}"
+                const formattedTotalMembresia = parseInt(total_membresia, 10).toLocaleString();
                 swal({
                     title: '¡Membresía a punto de caducar!',
                     html: `
-                    <p>Quedan ${diasRestantes} días para que su membresía caduque con CrediCol.</p>
+                    <p>Quedan <strong>${diasRestantes} días</strong> para que su membresía caduque con CrediCol.</p>
                     <div>
                         <br> 
-                        <h5><strong>Total a pagar 22.000</strong></h5>
-                        <h5>Opciones de Pago:</h5>
+                        <h3><strong>Total a pagar $${formattedTotalMembresia}</strong></h3>
                         <hr>
                         <table>
-                            <tr>
-                                <td>Recarga Nequi al numero 3213358263</td>
-                                <td><img style="width:150px;" src="{% static 'img/nequi.jpg' %}" alt="Nequi"></td>
-                            </tr>
                             <tr>
                                 <td>Consignación o transferencia Bancolombia a la cuenta de ahorros 446-000-16382</td>
                                 <td><img style="width:150px;" src="{% static 'img/bancolombia.png' %}" alt="Bancolombia"></td>

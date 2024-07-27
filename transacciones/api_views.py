@@ -17,7 +17,8 @@ class ListarTransaccionesAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         id = self.kwargs.get('cliente_id')
-        queryset = Transaccion.objects.all()
+        company = self.request.user.company_profile
+        queryset = Transaccion.objects.filter(creada_por__company_profile=company)
         if id:
             queryset = queryset.filter(cliente=id).order_by('-id')
 
