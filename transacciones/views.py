@@ -23,7 +23,7 @@ class CloseDayView(
 ):
     model = m.Transaccion
     template_name = 'transacciones/components/close_day.html'
-    permission_required = 'transmision.can_admin_direccionamiento'
+    permission_required = 'transacciones.can_see_cliente_transacciones'
 
     def get_context_data(self, **kwargs):
         locale.setlocale(locale.LC_TIME, 'es_ES.UTF-8')
@@ -58,7 +58,7 @@ class DirectSalesView(
     model = m.Transaccion
     form_class = f.CrearVentaForm
     template_name = 'transacciones/components/direct_sales.html'
-    permission_required = 'transmision.can_admin_direccionamiento'
+    permission_required = 'transacciones.can_see_cliente_transacciones'
 
     def get_context_data(self, **kwargs):
         kwargs.update({
@@ -250,7 +250,7 @@ class ListAllTransactionsView(
 ):
 
     template_name = 'transacciones/all_transacciones_list.html'
-    permission_required = 'organizaciones.pertenece_mesa_ayuda'
+    permission_required = 'transacciones.can_see_cliente_transacciones'
 
     def get_context_data(self, **kwargs):
         kwargs.update({

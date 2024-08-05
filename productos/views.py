@@ -15,7 +15,7 @@ class ListProductosView(
 ):
 
     template_name = 'productos/productos_list.html'
-    permission_required = 'organizaciones.pertenece_mesa_ayuda'
+    permission_required = 'transacciones.can_see_cliente_transacciones'
 
 
 class AddProductoView(
@@ -24,7 +24,7 @@ class AddProductoView(
     model = m.Producto
     form_class = f.AddNewProducto
     template_name = 'productos/components/form_add_producto.html'
-    permission_required = 'integraciones.can_send_commands_mae'
+    permission_required = 'transacciones.can_see_cliente_transacciones'
 
     def post(self, request, *args, **kwargs):
         modified_post_data = request.POST.copy()
@@ -60,7 +60,7 @@ class EditarProductoView(
     model = m.Producto
     form_class = f.AddNewProducto
     template_name = 'productos/components/form_add_producto.html'
-    permission_required = 'integraciones.can_send_commands_mae'
+    permission_required = 'transacciones.can_see_cliente_transacciones'
 
     def post(self, request, *args, **kwargs):
         self.object = self.get_object()
@@ -97,4 +97,4 @@ class DetailProductoView(
 ):
     model = m.Producto
     template_name = 'productos/components/detalle_producto.html'
-    permission_required = 'integraciones.can_send_commands_mae'
+    permission_required = 'transacciones.can_see_cliente_transacciones'
