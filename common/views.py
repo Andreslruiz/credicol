@@ -1,18 +1,19 @@
-from django.contrib.auth import logout
-from django.shortcuts import redirect
-from django.urls import reverse
+from django.contrib.auth import logout, login
+from django.shortcuts import redirect, render
+from django.urls import reverse, reverse_lazy
+from django.views.generic.edit import FormView
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.mixins import LoginRequiredMixin, PermissionRequiredMixin
 from django.views import generic
 from django.contrib.auth import get_user_model
 
-
 from transacciones.services import (
     get_sales_month, get_sales_year, get_sales_today,
     get_all_year_sales, total_credit_amount
 )
-from . import services as s
+from .forms import RegisterForm
 from . import selectors as sel
+from . import services as s
 
 User = get_user_model()
 
@@ -109,3 +110,29 @@ class DashBoardSalesView(
             'products': sel.get_company_products(self.request.user),
         })
         return super().get_context_data(**kwargs)
+
+
+class RegisterView(FormView):
+    template_name = 'registration/register.html'
+    form_class = RegisterForm
+    success_url = '/dashboard/'
+
+    def form_valid(self, form):
+        user = form.save()
+        country_code = self.request.POST.get('country')
+        phone_number = self.request.POST.get('phone_number')
+        company_name = self.request.POST.get('company_name')
+        company_logo = self.request.FILES.get('company_logo')
+
+        try:
+            s.create_company_profile(company_name, user, country_code, phone_number, company_logo)
+            login(self.request, user)
+        except Exception as e:
+            user.delete()
+            form.add_error('username', e)
+            return self.form_invalid(form)
+
+        return super().form_valid(form)
+
+    def get_success_url(self):
+        return self.success_url

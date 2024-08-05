@@ -63,6 +63,7 @@ INSTALLED_APPS = [
     'companies',
     'clientes',
     'productos',
+    'gastos',
     'simple_history',
     'transacciones',
     'django_q',
@@ -79,6 +80,7 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
     'common.middleware.TimezoneMiddleware',
+    'django.middleware.locale.LocaleMiddleware'
 ]
 
 ROOT_URLCONF = 'ROM.urls'
@@ -164,3 +166,11 @@ Q_CLUSTER = {
     'recycle': 100,
     'retry': 3000,
 }
+
+LANGUAGE_CODE = 'es'
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.getenv('EMAIL_HOST_USER')
+EMAIL_HOST_PASSWORD = os.getenv('EMAIL_HOST_PASSWORD')

@@ -1,0 +1,62 @@
+{% load crispy_forms_tags %}
+
+{% include 'components/non_field_errors.html' with form=form %}
+<form method="post" class="form-modern">
+  {% csrf_token %}
+  <div class="form-group">
+    <i class="fas fa-dollar-sign icon-color"></i>
+    <label for="{{ form.total_gasto.id_for_label }}">Total Gasto</label>
+    {{ form.total_gasto|as_crispy_field }}
+  </div>
+  <div class="form-group">
+    <i class="fas fa-comment-alt icon-color"></i>
+    <label for="{{ form.observaciones.id_for_label }}">Observaciones</label>
+    {{ form.observaciones|as_crispy_field }}
+  </div>
+  <div class="form-group hidden">
+    <i class="fas fa-comment-alt icon-color"></i>
+    <label for="{{ form.company.id_for_label }}">Company</label>
+    {{ form.company|as_crispy_field }}
+  </div>
+</form>
+
+<style>
+  .form-modern {
+    max-width: 600px;
+    margin: 0 auto;
+    padding: 1rem;
+    background-color: #f9f9f9;
+    border-radius: 8px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .form-group i.icon-color {
+    color: #007bff;
+    font-size: 1.2rem;
+    margin-right: 0.5rem;
+  }
+  
+  .form-group label {
+    font-weight: bold;
+    color: #333;
+  }
+  
+  .form-group .form-control {
+    border-radius: 4px;
+    border: 1px solid #ddd;
+    padding: 0.5rem;
+  }
+  
+  .btn-primary {
+    background-color: #007bff;
+    border: none;
+    color: #fff;
+    padding: 0.75rem 1.5rem;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+  
+  .btn-primary:hover {
+    background-color: #0056b3;
+  }
+</style>

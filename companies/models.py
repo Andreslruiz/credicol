@@ -10,7 +10,7 @@ class CompanyProfile(models.Model):
     name = models.CharField(max_length=200)
     nit = models.CharField(max_length=200)
     slogan = models.CharField(max_length=300)
-    city = models.ForeignKey('common.ColombiaCities', on_delete=models.CASCADE)
+    city = models.ForeignKey('common.ColombiaCities', on_delete=models.CASCADE, null=True)
     email = models.EmailField()
     contact = models.CharField(max_length=200)
     code = models.IntegerField(blank=True, default=0)
@@ -31,7 +31,7 @@ class CompanyProfile(models.Model):
     history = HistoricalRecords()
 
     def __str__(self):
-        return f'{self.name} - {self.city.name}'
+        return f'{self.name}'
 
 
 class CierreCaja(models.Model):

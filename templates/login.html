@@ -115,7 +115,7 @@
                                         <br>
                                         <div class="form-group text-center">
                                             <button type="submit" class="btn btn-primary btn-sm px-4" name="button">Acceder</button>
-                                            <button type="submit" class="btn btn-secondary btn-sm px-4" name="button">Registrate</button>
+                                            <a class="btn btn-secondary btn-sm px-4" name="button" href="{% url 'register' %}">Registrate</a>
                                         </div>
                                         {% if form.errors %}
                                         {% for field in form %}

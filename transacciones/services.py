@@ -8,6 +8,7 @@ from . import models as m
 from clientes.models import ClienteProfile
 from common.services import send_payment_notify, send_credit_notify, remember_payment_notify, send_daily_summary
 from companies.models import CierreCaja
+from gastos.models import Gasto
 
 
 def get_sales_month(user):
@@ -252,7 +253,7 @@ def remember_payment(user, cliente_id):
     return status
 
 
-def close_day(efectivo, gastos, comentarios, user):
+def close_day(efectivo, comentarios, user):
 
     def limpiar_numero(valor):
         if isinstance(valor, str):
@@ -260,16 +261,34 @@ def close_day(efectivo, gastos, comentarios, user):
         return valor
 
     credits_today = get_credit_sales_today(user)
+    gastos_today = get_gastos_today(user)
 
     cierre = CierreCaja.objects.create(
         compania=user.company_profile,
         total_credito=limpiar_numero(credits_today),
         total_efectivo=efectivo,
-        total_gastos=gastos,
+        total_gastos=limpiar_numero(gastos_today),
         comentarios=comentarios,
         cerrada_por=user
     )
 
     cierre.save()
 
-    send_daily_summary(user, efectivo, gastos, comentarios, credits_today)
+    send_daily_summary(user, efectivo, gastos_today, comentarios, credits_today)
+
+
+def get_gastos_today(user):
+    hoy = date.today()
+
+    gastos_today = Gasto.objects.filter(
+        company=user.company_profile,
+        fecha_gasto__date=hoy
+    )
+
+    if gastos_today:
+        total_today = gastos_today.aggregate(total=Sum('total_gasto'))
+        total = total_today['total']
+        formatted_total = f'{total:,.0f}'
+        return formatted_total
+
+    return 0

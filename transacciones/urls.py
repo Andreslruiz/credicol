@@ -56,5 +56,15 @@ urlpatterns = [
         'remember-payment/<int:cliente_id>',
         views.recordar_deuda,
         name='remember_payment'
-    )
+    ),
+    path(
+        'cierres',
+        views.ListAllCierresView.as_view(),
+        name='full_cierres_list'
+    ),
+    path(
+        'api/cierres/',
+        api_views.ListarAllCierresAPIView.as_view(),
+        name='listar_all_cierres_api'
+    ),
 ]

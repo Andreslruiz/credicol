@@ -20,9 +20,10 @@ from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
 
-from common.views import InitialView, user_logout
+from common.views import InitialView, user_logout, RegisterView
 
 urlpatterns = [
+    path('credicol-register/', RegisterView.as_view(), name='register'),
     path('admin/', admin.site.urls),
     path('dashboard/', InitialView.as_view(), name='initial_view'),
     path('', RedirectView.as_view(url='/login/')),
@@ -32,6 +33,7 @@ urlpatterns = [
     path('common/', include('common.urls')),
     path('clientes/', include('clientes.urls')),
     path('productos/', include('productos.urls')),
+    path('gastos/', include('gastos.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

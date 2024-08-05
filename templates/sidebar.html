@@ -166,6 +166,21 @@
     </li>
 
     <li class="nav-item">
+        <a class="nav-link" href="{% url 'gastos:full_gastos_list' %}">
+            <i class="fas fa-money-bill-wave"></i>
+            <span>Gastos</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'transacciones:full_cierres_list' %}">
+            <i class="fas fa-cash-register"></i>
+            <span>Cierres de Caja</span>
+        </a>
+    </li>
+    
+
+    <li class="nav-item">
         <a class="nav-link" href="{% url 'transacciones:full_transacciones_list' %}">
             <i class="fas fa-exchange-alt"></i>
             <span>Transacciones</span></a>

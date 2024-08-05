@@ -32,18 +32,17 @@ class CloseDayView(
 
         kwargs.update({
             'credits_today': s.get_credit_sales_today(self.request.user),
-            'today_date': formatted_date
+            'today_date': formatted_date,
+            'today_gastos': s.get_gastos_today(self.request.user)
         })
         return super().get_context_data(**kwargs)
 
     def post(self, request):
         efectivo = request.POST.get('efectivo') or 0
-        gastos = request.POST.get('gastos') or 0
         comentarios = request.POST.get('comentarios')
 
         s.close_day(
             efectivo=efectivo,
-            gastos=gastos,
             comentarios=comentarios,
             user=request.user
         )
@@ -263,3 +262,11 @@ class ListAllTransactionsView(
 def recordar_deuda(request, cliente_id):
     sended = s.remember_payment(request.user, cliente_id)
     return JsonResponse({'ok': sended})
+
+
+class ListAllCierresView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
+):
+
+    template_name = 'transacciones/all_cierres_list.html'
+    permission_required = 'transacciones.can_add_transaccion'

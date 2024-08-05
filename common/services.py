@@ -1,8 +1,11 @@
 import urllib.parse
 import requests
 
+from django.contrib.auth.models import Group, User
+from dateutil.relativedelta import relativedelta
 from django.conf import settings
 from django.utils import timezone
+from companies.models import CompanyProfile, Proprietario
 
 
 def send_payment_notify(user, to, username, balance):
@@ -225,7 +228,7 @@ def send_daily_summary(user, efectivo, gastos, comentarios, credits_today):
         "💵 Total Efectivo: ${total_efectivo}\n"
         "💸 Total Gastos: ${total_gastos}\n\n"
         "📝 Comentarios:\n{comentarios}\n\n"
-        "¡Excelente trabajo hoy!\n\n"
+        "¡Excelente trabajo hoy!\n"
         "CrediCol Colombia 2024\n"
     )
 
@@ -233,7 +236,7 @@ def send_daily_summary(user, efectivo, gastos, comentarios, credits_today):
         company_name=company_name,
         total_credito=credits_today,
         total_efectivo=f'{int(efectivo):,.0f}',
-        total_gastos=f'{int(gastos):,.0f}',
+        total_gastos=gastos,
         comentarios=comentarios if comentarios else "Ninguno",
     )
     encoded_message = urllib.parse.quote(message)
@@ -242,3 +245,39 @@ def send_daily_summary(user, efectivo, gastos, comentarios, credits_today):
     full_url = f"{base_url}?recipient={urllib.parse.quote(recipient)}&apikey={apikey}&text={encoded_message}"
     response = requests.get(full_url)
     return response.status_code == 200
+
+
+def create_company_profile(company_name, user, country_code, phone_number, company_logo):
+    today = timezone.now()
+    fin_fecha_membresia = today + relativedelta(months=1)
+    group = Group.objects.get(name='credicol-standard-user')
+    user.groups.add(group)
+    user.save()
+
+    propietario = Proprietario.objects.create(
+        user=user,
+        phone_number=phone_number,
+        email=user.email
+    )
+    propietario.save()
+
+    company_profile = CompanyProfile.objects.create(
+        profile_photo=company_logo,
+        company_image_url='',
+        name=company_name,
+        nit='',
+        slogan='',
+        city=None,
+        email=user.email,
+        contact=phone_number,
+        code=0,
+        login_attemps=0,
+        date_password_updated=timezone.now(),
+        user=user,
+        fin_fecha_membresia=fin_fecha_membresia,
+        total_membresia=0,
+        envio_mensajes=True,
+        propietario=propietario
+    )
+
+    return company_profile
