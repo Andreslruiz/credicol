@@ -46,7 +46,7 @@ class AddClienteView(LoginRequiredMixin, PermissionRequiredMixin, generic.FormVi
         form.save()
         cliente_id = form.instance.id
 
-        if not form.instance.telefono or len(form.instance.telefono) != 10:
+        if self.request.user.company_profile.envio_mensajes and (not form.instance.telefono or len(form.instance.telefono) != 10):
             form.add_error(
                 None, 'Numero de telefono invalido.'
             )

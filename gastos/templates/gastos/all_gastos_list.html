@@ -109,6 +109,7 @@
                             <th>Fecha Gasto</th>
                             <th>Observaciones</th>
                             <th>Registrado Por</th>
+                            <th>Acciones</th>
                         </tr>
                     </thead>
                     <tbody data-toggle="tooltip" data-selector=".has-tooltip"></tbody>
@@ -210,7 +211,18 @@ crossorigin="anonymous"></script>
                 {data: 'total_gasto' },
                 {data: 'fecha_gasto' },
                 {data: 'observaciones'},
-                {data: 'creada_por'},                        
+                {data: 'creada_por'},
+                { 
+                    data: 'id',
+                    render: function(data, type, row, meta) {
+                        const editGasto = "{% url 'gastos:edit_gasto' 0 %}".replace('0', data);
+                        return`
+                            <button type="button" title="Editar Gasto" class="btn btn-sm btn-info" data-url="${editGasto}" data-title="Editar Gasto" data-action="Aceptar" data-toggle="modal" data-target="#form-modal">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                        `;
+                    }
+                },                 
             ]
         });
 

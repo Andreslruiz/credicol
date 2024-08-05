@@ -17,4 +17,8 @@ urlpatterns = [
         name='listar_all_gastos_api'
     ),
     path('add-gasto/', views.AddGastoView.as_view(), name='add_gasto'),
+    path(
+        'edit-gasto/<int:pk>/', views.EditGastoView.as_view(),
+        name='edit_gasto'
+    ),
 ]

@@ -50,3 +50,35 @@ class AddGastoView(
         return JsonResponse(
             {'ok': True, 'transaction': 'Gasto Registrado', 'value': total}
         )
+
+
+class EditGastoView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView
+):
+    model = m.Gasto
+    form_class = f.CrearGastoForm
+    template_name = 'gastos/components/add_gasto.html'
+    permission_required = 'gastos.can_add_gasto'
+
+    def get_context_data(self, **kwargs):
+        kwargs.update({
+            'actual_gasto': self.object.id
+        })
+        return super().get_context_data(**kwargs)
+
+    def form_valid(self, form):
+
+        if form.instance.total_gasto <= 0:
+            form.add_error(
+                None, 'El total debe de ser un numero entero y positivo.'
+            )
+            return self.form_invalid(form)
+
+        form.instance.creada_por = self.request.user
+        form.save()
+
+        total = f'{form.instance.total_gasto:,.0f}'
+
+        return JsonResponse(
+            {'ok': True, 'transaction': 'Gasto Actualizado', 'value': total}
+        )

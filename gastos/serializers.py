@@ -16,6 +16,7 @@ class GastosListSerializer(serializers.ModelSerializer):
     class Meta:
         model = Gasto
         fields = (
+            'id',
             'observaciones',
             'total_gasto',
             'fecha_gasto',

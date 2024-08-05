@@ -16,7 +16,9 @@ class AddNewCliente(forms.ModelForm):
         ]
 
     def __init__(self, *args, **kwargs):
+        request = kwargs.pop('request', None)
         super().__init__(*args, **kwargs)
+
         self.fields['nombre'].label = ''
         self.fields['apellido'].label = ''
         self.fields['email'].label = ''
@@ -25,4 +27,6 @@ class AddNewCliente(forms.ModelForm):
 
         self.fields['nombre'].required = True
         self.fields['apellido'].required = True
-        self.fields['telefono'].required = True
+
+        if request and request.user.company_profile.envio_mensajes:
+            self.fields['telefono'].required = True
