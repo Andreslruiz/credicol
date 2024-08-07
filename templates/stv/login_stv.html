@@ -1,0 +1,183 @@
+{% load static%}
+
+
+{% block css %}
+
+    <style>
+
+        @media only screen and (max-width: 768px) {
+            .elemento-ocultable {
+                display: none;
+            }
+
+            html, body {
+                height: 100%;
+                margin: 0;
+            }
+
+            .container {
+                margin-top: calc(50vh - 950%)
+            }
+
+        }
+
+        body {
+            background: linear-gradient(to bottom, #000000, #000000);
+        }
+
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            border-radius: inherit;
+            box-shadow: 0 0 30px 22px rgba(0, 0, 0, 0.5);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+    
+        .card:hover::before {
+            opacity: 1;
+        }   
+
+        .borde-amarillo {
+            border: 0.5px solid white;
+        }
+
+    </style>
+
+{% endblock css %}
+
+
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <link rel="icon" type="image/x-icon" href="{% static 'img/stv/logo.png' %}" />
+
+    <title>STV | Iniciar Sesion</title>
+
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <!-- Custom styles for this template-->
+    <link href="{% static 'css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+</head>
+
+<body>
+
+    <div class="container">
+        <!-- Outer Row -->
+        <div class="row justify-content-center">
+            
+
+            <div class="col-xl-10 col-lg-12 col-md-9">
+
+                <div class="card shadow-lg border-0 rounded-lg mt-5">
+                    <div class="card-body p-0"  style="z-index:999;">
+                        <!-- Nested Row within Card Body -->
+                        <div class="row">
+                            {% comment %} <div class="col-lg-6 d-none d-lg-block bg-login-image-2"></div> <!--Aca va la vieja imagen dog--> {% endcomment %}
+                            <div class="col-lg-6 d-none d-lg-block bg-login-image-2 fade-in borde-amarillo" style="border-right: 2px solid #ccc; background-image: url('{% static 'img/stv/login_image.jpg' %}'); background-position: center; background-size: cover;">
+                                <!-- Contenido opcional dentro del div -->
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="col-12 d-lg-none border " style="background-image: url('{% static 'img/stv/logo.png' %}'); background-position: center; background-size: cover; height:150px;">
+
+                                </div>
+                                <div class="p-4">
+                                    <div class="text-center elemento-mostrable">
+                                        <h1 class="h4 text-gray-900 mb-4"><strong>Inicia sesión</strong></h1>
+                                    </div>
+                                    <form method="post">
+                                        {% csrf_token %}
+                                        <div id="div_id_username" class="form-group">
+                                            <label for="id_username" class=" requiredField">
+                                                Nombre de usuario<span class="asteriskField">*</span>
+                                            </label>
+                                            <div class="">
+                                                <input type="text" name="username" autofocus="" autocapitalize="none" autocomplete="username" maxlength="150" class="textinput textInput form-control" required="" id="id_username">
+                                            </div>
+                                        </div>
+                                        <div id="div_id_password" class="form-group">
+                                            <label for="id_password" class=" requiredField">
+                                                Contraseña<span class="asteriskField">*</span>
+                                            </label>
+                                            <div class="">
+                                                <input type="password" name="password" autofocus="" autocapitalize="none" autocomplete="password" maxlength="150" class="textinput textInput form-control" required="" id="id_password">
+                                            </div>
+                                        </div>
+                                        <br>
+                                        <div class="form-group text-center">
+                                            <button type="submit" class="btn btn-dark btn-sm px-4" name="button" style="color: #FFFFF; background-color: black;">
+                                                Acceder
+                                            </button>                                                                                    </div>
+                                        {% if form.errors %}
+                                        {% for field in form %}
+                                            {% for error in field.errors %}
+                                                <div class="alert alert-danger">
+                                                    {{ error|escape }}
+                                                </div>
+                                            {% endfor %}
+                                        {% endfor %}
+                                        {% endif %}
+
+                                        {% include 'components/non_field_errors.html' with form=form %}
+                                        <div style="display:none;">
+                                            <div class="text-center">
+                                                <a class="small" href="#">¿Olvidaste tu contraseña?</a>
+                                                <br>
+                                                <a class="small" href="{% static 'mw_manual_uso.pdf' %}" target="_blank" data-toggle="tooltip" data-placement="top" title="haz clic para ver el instructivo">Crear Cuenta</a> 
+                                            </div>
+                                        </div>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <div class="elemento-ocultable" id="layoutAuthentication_footer" style="margin-top:19%;">
+        <footer class="footer mt-auto footer-dark">
+            <div class="container-fluid">
+                <div class="row">
+                    <div class="col-md-6 small" style="color:white;">Copyright &copy; STV 2024</div>
+                    <div class="col-md-6 text-md-right small">
+                        <a href="#!" style="color:white;">Privacy Policy</a>
+                        &middot;
+                        <a href="#!" style="color:white;">Terms &amp; Conditions</a>
+                    </div>
+                </div>
+            </div>
+        </footer>
+    </div>
+
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js" integrity="sha384-ZvpUoO/+PpLXR1lu4jmpXWu80pZlYUAfxl5NsBMWOEPSjUn/6Z/hRTt8+pR6L4N2" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.bundle.min.js" integrity="sha384-6khuMg9gaYr5AxOqhkVIODVIvm9ynTT5J4V1cfthmT+emCG6yVmEZsRHdxlotUnm" crossorigin="anonymous"></script>
+        
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'js/sb-admin-2.min.js' %}"></script>
+
+</body>
+
+</html>

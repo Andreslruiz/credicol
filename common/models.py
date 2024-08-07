@@ -10,9 +10,6 @@ class ColombiaDepartments(models.Model):
 
 class ColombiaCities(models.Model):
     name = models.CharField(max_length=100)
-    department = models.ForeignKey(
-        'ColombiaDepartments', on_delete=models.CASCADE
-    )
 
     def __str__(self):
         return self.name

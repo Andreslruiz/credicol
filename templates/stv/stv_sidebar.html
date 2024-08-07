@@ -1,0 +1,188 @@
+{% load static waffle_tags crispy_forms_tags %}
+
+{% block css %}
+    <style>
+        ::-webkit-scrollbar {
+            width: 7px;
+        }
+
+        ::-webkit-scrollbar-track {
+            background-color: #FFFFF;
+        }
+
+        ::-webkit-scrollbar-thumb {
+            background-color: gray;
+            border-radius: 1px;
+        }
+
+        @media only screen and (max-width: 768px) {
+            .elemento-ocultable {
+                display: none;
+            }
+        }
+
+        @media only screen and (min-width: 768px) {
+            .elemento-mostrable {
+                display: block;
+            }
+        }
+
+        .ancho-personalizado {
+            width: 600px;
+        }
+
+        .nav-link.active {
+            background-color: #FFC107; /* Amarillo STV */
+            color: black !important;
+            border-radius: 10px;
+            opacity: 90%;
+            margin-left: 5px;
+            margin-right: 15px;
+        }
+
+        .nav-link.active * {
+            color: black;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            background: #000000; /* Negro STV */
+            color: #FFC107; /* Amarillo STV */
+        }
+
+        .sidebar .nav-link {
+            color: #FFC107; /* Amarillo STV */
+        }
+
+        .sidebar .nav-link:hover {
+            background-color: #FFC107;
+            color: #000000;
+        }
+
+        .sidebar .sidebar-brand {
+            color: #FFC107; /* Amarillo STV */
+        }
+
+        .sidebar .sidebar-brand-icon {
+            color: #FFC107; /* Amarillo STV */
+        }
+
+        .sidebar .sidebar-brand-text {
+            color: #FFC107; /* Amarillo STV */
+        }
+
+        .sidebar .nav-item .nav-link.active {
+            background-color: #FFC107; /* Amarillo STV */
+            color: #000000; /* Negro STV */
+        }
+
+        .sidebar .nav-item .nav-link.active i {
+            color: #000000; /* Negro STV */
+        }
+
+        .sidebar-card {
+            background-color: #000000; /* Negro STV */
+            color: #FFC107; /* Amarillo STV */
+        }
+
+        .sidebar-card .btn {
+            background-color: #FFC107; /* Amarillo STV */
+            color: #000000; /* Negro STV */
+        }
+
+        .sidebar-card .btn:hover {
+            background-color: #e0a800; /* Amarillo oscuro */
+            color: #000000; /* Negro STV */
+        }
+
+        /* Modal Styles */
+        .modal-content {
+            border-radius: 8px;
+            {% comment %} background-color: #000000; /* Negro STV */ {% endcomment %}
+            color: #FFC107; /* Amarillo STV */
+        }
+
+        .modal-header {
+            border-bottom: 1px solid #FFC107; /* Amarillo STV */
+        }
+
+        .modal-header .close {
+            color: #FFC107; /* Amarillo STV */
+        }
+
+        .modal-footer .btn-primary {
+            background-color: #FFC107; /* Amarillo STV */
+            border-color: #FFC107; /* Amarillo STV */
+        }
+
+        .modal-footer .btn-primary:hover {
+            background-color: #e0a800; /* Amarillo oscuro */
+        }
+    </style>
+{% endblock css %}
+
+<ul class="navbar-nav bg-gradient-dark sidebar toggled sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'initial_view' %}">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-map-marker-alt fa-1x"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">{{ request.user.company_profile.name }}</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider my-0">
+
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'initial_view' %}">
+            <i class="fas fa-fw fa-tachometer-alt"></i>
+            <span>Inicio</span>
+        </a>
+    </li>
+
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'stv:report_list' %}">
+            <i class="fas fa-fw fa-file-alt"></i>
+            <span>Reportes</span>
+        </a>
+    </li>
+
+    <br>
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+    {% comment %} <div class="sidebar-card d-none d-lg-flex">
+        <img class="sidebar-card-illustration mb-2" src="{% static 'img/undraw_rocket.svg' %}" alt="...">
+        <p class="text-center mb-2"><strong>SB Admin Pro</strong> is packed with premium features, components, and more!</p>
+        <a class="btn btn-success btn-sm" href="{% static 'https://startbootstrap.com/theme/sb-admin-pro' %}">Upgrade to Pro!</a>
+    </div> {% endcomment %}
+
+    <form id="delete-form" method="POST">
+        {% csrf_token %}
+    </form>
+    <div id="form-modal" class="modal fade" tabindex="-1" role="dialog" aria-labelledby="form-title"
+        aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="form-title"></h5>
+                    <button class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <form id="form" method="POST">
+                        Cargando...
+                    </form>
+                </div>
+                <div class="modal-footer">
+                    <button id="form-button" class="btn btn-primary" type="submit" form="form"></button>
+                </div>
+            </div>
+        </div>
+    </div>
+</ul>

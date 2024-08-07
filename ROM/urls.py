@@ -28,12 +28,13 @@ urlpatterns = [
     path('dashboard/', InitialView.as_view(), name='initial_view'),
     path('', RedirectView.as_view(url='/login/')),
     path('login/', LoginUsuario.as_view(), name='login'),
-    path('logout/', user_logout, name='user_logout'),
+    path('logout/<str:origin>', user_logout, name='user_logout'),
     path('transacciones/', include('transacciones.urls')),
     path('common/', include('common.urls')),
     path('clientes/', include('clientes.urls')),
     path('productos/', include('productos.urls')),
     path('gastos/', include('gastos.urls')),
+    path('stv/', include('stv.urls')),
 ] + static(settings.STATIC_URL, document_root=settings.STATIC_ROOT)
 
 urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

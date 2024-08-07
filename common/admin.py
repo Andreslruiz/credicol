@@ -1,5 +1,6 @@
 from django.contrib import admin
 from .models import ColombiaDepartments, ColombiaCities, PendingMsgView
+from import_export.admin import ImportExportMixin, ExportActionModelAdmin
 
 
 @admin.register(ColombiaDepartments)
@@ -8,8 +9,8 @@ class ColombiaDepartmentsAdmin(admin.ModelAdmin):
 
 
 @admin.register(ColombiaCities)
-class ColombiaCitiesAdmin(admin.ModelAdmin):
-    list_display = ['name', 'department']
+class ColombiaCitiesAdmin(ImportExportMixin, ExportActionModelAdmin, admin.ModelAdmin):
+    list_display = ['name',]
 
 
 @admin.register(PendingMsgView)

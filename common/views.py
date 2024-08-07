@@ -93,8 +93,12 @@ class DeOneView(
         return super().get_context_data(**kwargs)
 
 
-def user_logout(request):
+def user_logout(request, origin):
     logout(request)
+
+    if origin == 'stv':
+        return redirect('stv:stv_login')
+
     return redirect(reverse('login'))
 
 
