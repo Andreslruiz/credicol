@@ -24,9 +24,9 @@
         }
     ],
     "start_url": "https://credicol.com.co/stv/reports",
-    "background_color": "#3481FF",
+    "background_color": "#f5df00",
     "display": "standalone",
     "scope": "/",
-    "theme_color": "#3481FF",
+    "theme_color": "#f5df00",
     "description": "Weather forecast information"
 }
