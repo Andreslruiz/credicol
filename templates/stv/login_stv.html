@@ -16,15 +16,14 @@
             }
 
             .container {
-                margin-top: calc(50vh - 950%)
+                margin-top: calc(50vh - 90%)
             }
 
         }
 
         body {
-            background: linear-gradient(to bottom, #000000, #000000);
+            background: linear-gradient(to bottom, #eae700, #eae700);
         }
-
 
         .card::before {
             content: '';
@@ -42,10 +41,6 @@
         .card:hover::before {
             opacity: 1;
         }   
-
-        .borde-amarillo {
-            border: 0.5px solid white;
-        }
 
     </style>
 
@@ -88,11 +83,11 @@
                         <!-- Nested Row within Card Body -->
                         <div class="row">
                             {% comment %} <div class="col-lg-6 d-none d-lg-block bg-login-image-2"></div> <!--Aca va la vieja imagen dog--> {% endcomment %}
-                            <div class="col-lg-6 d-none d-lg-block bg-login-image-2 fade-in borde-amarillo" style="border-right: 2px solid #ccc; background-image: url('{% static 'img/stv/login_image.jpg' %}'); background-position: center; background-size: cover;">
+                            <div class="elemento-ocultable col-lg-6 d-none d-lg-block bg-login-image-2 fade-in borde-amarillo" style="border-right: 2px solid #ccc; background-image: url('{% static 'img/stv/login_image.jpg' %}'); background-position: center; background-size: cover;">
                                 <!-- Contenido opcional dentro del div -->
                             </div>
                             <div class="col-lg-6">
-                                <div class="col-12 d-lg-none border " style="background-image: url('{% static 'img/stv/logo.png' %}'); background-position: center; background-size: cover; height:150px;">
+                                <div class="col-12 d-lg-none border elemento-ocultable" style="background-image: url('{% static 'img/stv/logo.png' %}'); background-position: center; background-size: cover; height:150px;">
 
                                 </div>
                                 <div class="p-4">
@@ -154,11 +149,11 @@
         <footer class="footer mt-auto footer-dark">
             <div class="container-fluid">
                 <div class="row">
-                    <div class="col-md-6 small" style="color:white;">Copyright &copy; STV 2024</div>
+                    <div class="col-md-6 small" style="color:black;">Copyright &copy; STV 2024</div>
                     <div class="col-md-6 text-md-right small">
-                        <a href="#!" style="color:white;">Privacy Policy</a>
+                        <a href="#!" style="color:black;">Privacy Policy</a>
                         &middot;
-                        <a href="#!" style="color:white;">Terms &amp; Conditions</a>
+                        <a href="#!" style="color:black;">Terms &amp; Conditions</a>
                     </div>
                 </div>
             </div>
