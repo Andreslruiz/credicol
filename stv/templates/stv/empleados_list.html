@@ -22,30 +22,30 @@
 
 {% block content %}
 {% include "components/alert_messages.html" %}
-<title>Reportes | {{ request.user.company_profile.name }}</title>
+<title>Empleados | {{ request.user.company_profile.name }}</title>
 <div class="container-fluid">
     <div class="card card-header-actions mb-6">
         <div class="card-header d-flex justify-content-between">
             <div style="display: flex; align-items: center;">
-                <i class="fas fa-file-signature" style="font-size: 24px; color: ##000000; margin-right: 10px;"></i>
-                <span style="font-size: 24px; color: ##000000;">Reportes</span>
+                <i class="fas fa-fw fa-user" style="font-size: 24px; color: ##000000; margin-right: 10px;"></i>
+                <span style="font-size: 24px; color: ##000000;">Empleados</span>
             </div>
-            <a id="crearProducto" class="btn btn-sm btn-dark" data-title="Crear Reporte" data-action="Guardar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'stv:add_new_report' %}">
-                <i class="fas fa-plus-circle"></i> Crear Reportes
+            <a id="crearProducto" class="btn btn-sm btn-dark" data-title="Nuevo Empleado" data-action="Guardar" href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'stv:add_new_empleado' %}">
+                <i class="fas fa-plus-circle"></i> Nuevo Empleado
             </a>           
         </div>
         <br>
         <div class="card-body card-full-width" id="tableResponsive">
             <br id="brReportes" style="display:none;">
             <div class="table-responsive">
-                <table class="table table-striped table-bordered table-hover" id="reportesTable" width="100%" cellspacing="0">
+                <table class="table table-striped table-bordered table-hover" id="empleadosTable" width="100%" cellspacing="0">
                     <thead>
                         <tr>
-                            <th>Ciudad</th>
-                            <th>Cliente</th>
-                            <th>Tipo Reporte</th>
+                            <th>Nombre</th>
+                            <th>Username</th>
+                            <th>Telefono</th>
+                            <th>Cargo</th>
                             <th>Fecha Creación</th>
-                            <th>Tecnico Asignado</th>
                             <th style="width: 80px;">Acciones</th>
                         </tr>
                     </thead>
@@ -114,7 +114,7 @@
                 maxResults: 5
             });
 
-            table = $('#reportesTable').DataTable({
+            table = $('#empleadosTable').DataTable({
             rowId: 'id',
             ordering: false,
             processing: true,
@@ -128,7 +128,7 @@
             "language": {
                 "processing": "Buscando...",
                 "search": "",
-                "searchPlaceholder": 'Buscar Reporte...',
+                "searchPlaceholder": 'Buscar Empleado...',
                 "paginate": {
                     "first":      "Primera",
                     "last":       "Ultima",
@@ -139,27 +139,23 @@
             },
 
             ajax: {
-                url : '{% url "stv:listar_reportes_api" %}',
+                url : '{% url "stv:listar_empleados_api" %}',
             },
             columns: [
-                {data: 'ciudad' },
-                {data: 'cliente' },
-                {data: 'tipo_reporte'},
+                {data: 'nombre' },
+                {data: 'username' },
+                {data: 'telefono' },
+                {data: 'puesto'},
                 {data: 'fecha_creacion'},
-                {data: 'tecnico'},
                 { 
                     data: 'id',
                     render: function(data, type, row, meta) {
-                        const detailUrl = "{% url 'productos:detalle_producto' 0 %}".replace('0', data);
-                        const downloadUrl = "{% url 'stv:download_report' 0 %}".replace('0', data);
+                        const detailUrl = "{% url 'stv:edit_empleado' 0 %}".replace('0', data);
         
                         return`
-                            <button type="button" title="Ver Reporte" class="btn btn-sm btn-info" data-url="${detailUrl}" data-title="Detalle Reporte" data-action="Aceptar" data-toggle="modal" data-target="#form-modal">
-                                <i class="fas fa-eye"></i>
+                            <button type="button" title="Modificar Empleado" class="btn btn-sm btn-dark" data-url="${detailUrl}" data-title="Modificar Empleado" data-action="Guardar" data-toggle="modal" data-target="#form-modal">
+                                <i class="fas fa-edit"></i>
                             </button>
-                            <a type="button" title="Descargar Reporte" class="btn btn-sm btn-dark" href="${downloadUrl}">
-                                <i class="fas fa-download"></i>
-                            </a>
                         `
                     }
                 }
@@ -178,7 +174,7 @@
             }
         }
 
-        $('#reportesTable').on('click', '.detail', function(){
+        $('#empleadosTable').on('click', '.detail', function(){
             const { url } = this.dataset;
             const row = table.row(this.closest('tr'));
 
@@ -223,25 +219,6 @@
                     JSON.parse(data);
                 } catch {
                     form.innerHTML = data;
-                    $('.basicAutoSelect').autoComplete({
-                        resolverSettings: {
-                            queryKey: 'search[value]',
-                        },
-                        maxResults: 5
-                    });
-                    const laborEjecutar = document.getElementById('id_tipo_reporte')
-
-                    laborEjecutar.addEventListener('change', function() {
-                        if(this.value=='otros'){
-                            document.getElementById('otrosDiv').style.display = 'block';
-                        }else{
-                            document.getElementById('otrosDiv').style.display = 'none';
-                        }
-                    });
-
-                    var today = new Date().toISOString().split('T')[0];
-                    document.getElementById('id_fecha_mantenimiento').value = today;
-                    
                 }
             })
             .catch(error => form.innerHTML = 'No puedes realizar esta operación');
@@ -306,8 +283,8 @@
     
     function successProductMessage(product, label){
         swal({
-            title: `Reporte ${label} exitosamente`,
-            html: `Se ha ${label} el reporte para: <strong> ${product}</strong>.`,
+            title: `Empleado ${label} exitosamente`,
+            html: `Se ha ${label} el empleado para: <strong> ${product}</strong>.`,
             type: 'success',
             showCancelButton: false,
             showConfirmButton: true,

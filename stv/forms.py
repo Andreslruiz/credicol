@@ -31,3 +31,50 @@ class AddNewReport(forms.ModelForm):
             producto.save()
 
         return producto
+
+
+class AddNewEmpleado(forms.ModelForm):
+
+    class Meta:
+        model = m.Empleado
+        fields = [
+            'nombre',
+            'apellido',
+            'telefono',
+            'puesto'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.required = True
+            field.label = ''
+
+    def save(self, user, commit=True):
+        empleado = super().save(commit=False)
+        empleado.user = user
+
+        if commit:
+            empleado.save()
+
+        return empleado
+
+
+class EditEmpleado(forms.ModelForm):
+
+    class Meta:
+        model = m.Empleado
+        fields = [
+            'nombre',
+            'apellido',
+            'telefono',
+            'puesto'
+        ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        for field_name, field in self.fields.items():
+            field.required = True
+            field.label = ''

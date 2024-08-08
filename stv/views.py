@@ -12,7 +12,7 @@ from django.http import FileResponse, Http404
 from django.shortcuts import resolve_url
 from django.contrib.auth.views import LoginView
 from django.contrib.auth import get_user_model
-from .models import Reporte
+from .models import Reporte, Empleado
 from . import forms as f
 from . import services as s
 
@@ -71,9 +71,9 @@ class AddReportView(
     permission_required = 'stv.can_upload_reports'
 
     def form_valid(self, form):
-        form.save(self.request.user)
         cliente = form.instance.cliente.title()
         s.create_new_report(form.instance, self.request)
+        form.save(self.request.user)
         return JsonResponse(
             {
                 'ok': True, 'product': cliente, 'label': 'creado'
@@ -96,3 +96,50 @@ def download_report(request, id):
 
         except Reporte.DoesNotExist:
             raise Http404("Reporte no encontrado.")
+
+
+class ListEmpleadosView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.TemplateView
+):
+
+    template_name = 'stv/empleados_list.html'
+    permission_required = 'stv.can_see_empleados'
+
+
+class AddEmpleadoView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.CreateView
+):
+    model = Empleado
+    form_class = f.AddNewEmpleado
+    template_name = 'stv/components/form_add_empleado.html'
+    permission_required = 'stv.can_see_empleados'
+
+    def form_valid(self, form):
+        nombre = form.instance.nombre.title()
+        apellido = form.instance.apellido.title()
+        user = s.create_new_empleado_user(nombre, apellido)
+        form.save(user)
+        return JsonResponse(
+            {
+                'ok': True, 'product': nombre, 'label': 'creado'
+            }
+        )
+
+
+class EditEmpleadoView(
+    LoginRequiredMixin, PermissionRequiredMixin, generic.UpdateView
+):
+    model = Empleado
+    form_class = f.EditEmpleado
+    template_name = 'stv/components/form_add_empleado.html'
+    permission_required = 'stv.can_see_empleados'
+
+    def form_valid(self, form):
+        nombre = form.instance.nombre.title()
+        form.save()
+
+        return JsonResponse(
+            {
+                'ok': True, 'product': nombre, 'label': 'actualizado'
+            }
+        )

@@ -1,6 +1,7 @@
+from django.contrib.auth.models import User
 from rest_framework import serializers
 
-from .models import Reporte
+from .models import Reporte, Empleado
 
 
 class ReportesListSerializer(serializers.ModelSerializer):
@@ -31,3 +32,30 @@ class ReportesListSerializer(serializers.ModelSerializer):
 
     def get_fecha_creacion(self, obj):
         return obj.fecha_creacion.strftime('%d/%m/%Y %H:%M:%S')
+
+
+class EmpleadosListSerializer(serializers.ModelSerializer):
+    nombre = serializers.SerializerMethodField()
+    username = serializers.SerializerMethodField()
+    puesto = serializers.SerializerMethodField()
+
+    class Meta:
+        model = Empleado
+        fields = (
+            'id',
+            'username',
+            'nombre',
+            'apellido',
+            'telefono',
+            'puesto',
+            'fecha_creacion'
+        )
+
+    def get_nombre(self, obj):
+        return f'{obj.nombre.title()} {obj.apellido.title()}'
+
+    def get_puesto(self, obj):
+        return obj.puesto.title()
+
+    def get_username(self, obj):
+        return obj.user.username

@@ -73,6 +73,15 @@
             </div>
         </div>
 
+        <div class="row" id="otrosDiv" style="display:none;">
+            <div class="col col-md-12">
+                <div class="form-group">
+                    <label for="id_otros"><i class="fas fa-edit icon-label"></i> Otros</label>
+                    <input type="text" class="form-control" name="otros" id="id_otros" required/>
+                </div>
+            </div>
+        </div>
+
         <div class="row">
             <div class="col col-md-6">
                 <div class="form-group">
@@ -88,8 +97,39 @@
             </div>
         </div>
 
+        <div class="row">
+            <div class="col col-md-6">
+                <div class="form-group">
+                    <label for="id_certificado_norma"><i class="fas fa-file-alt icon-label"></i> Certificado Norma</label>
+                    <select class="form-control" name="certificado_norma" id="id_certificado_norma" required>
+                        <option value="">------------</option>
+                        <option value="Si">Sí</option>
+                        <option value="No">No</option>
+                    </select>
+                </div>
+            </div>            
+            <div class="col col-md-6">
+                <div class="form-group">
+                    <label for="id_contrato"><i class="fas fa-file-signature icon-label"></i> N° Contrato</label>
+                    <input type="text" class="form-control" name="contrato" id="id_contrato" required/>
+                </div>
+            </div>
+        </div>
 
-
+        <div class="row">
+            <div class="col col-md-6">
+                <div class="form-group">
+                    <label for="id_equipo"><i class="fas fa-id-card icon-label"></i> ID Equipo</label>
+                    <input type="text" class="form-control" name="equipo" id="id_equipo" required/>
+                </div>
+            </div>
+            <div class="col col-md-6">
+                <div class="form-group">
+                    <label for="id_fecha_mantenimiento"><i class="fas fa-calendar-alt icon-label"></i> Fecha Mantenimiento</label>
+                    <input type="date" class="form-control" name="fecha_mantenimiento" id="id_fecha_mantenimiento" required/>
+                </div>
+            </div>
+        </div>
 
         <br><br><br>
         {% comment %} <div class="form-group">

@@ -15,4 +15,12 @@ urlpatterns = [
     ),
     path('add-new-report', views.AddReportView.as_view(), name='add_new_report'),
     path('download-report/<int:id>', views.download_report, name='download_report'),
+    path('empleados', views.ListEmpleadosView.as_view(), name='empleados_list'),
+    path(
+        'api/stv-empleados/',
+        api_views.ListarEmpleadosAPIView.as_view(),
+        name='listar_empleados_api'
+    ),
+    path('add-new-empleado', views.AddEmpleadoView.as_view(), name='add_new_empleado'),
+    path('edit-empleado/<int:pk>', views.EditEmpleadoView.as_view(), name='edit_empleado'),
 ]
