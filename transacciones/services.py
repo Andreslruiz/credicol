@@ -32,7 +32,7 @@ def get_sales_month(user):
         formatted_total = f'{total:,.0f}'
         return formatted_total
 
-    return 0
+    return '0'
 
 
 def get_sales_year(user):
@@ -55,7 +55,7 @@ def get_sales_year(user):
 
         return formatted_total
 
-    return 0
+    return '0'
 
 
 def get_all_year_sales(user):
@@ -103,7 +103,7 @@ def get_sales_today(user):
         formatted_total = f'{total:,.0f}'
         return formatted_total
 
-    return 0
+    return '0'
 
 
 def get_credit_sales_today(user):
@@ -121,7 +121,7 @@ def get_credit_sales_today(user):
         formatted_total = f'{total:,.0f}'
         return formatted_total
 
-    return 0
+    return '0'
 
 
 def get_today_payments(user):
@@ -139,7 +139,7 @@ def get_today_payments(user):
         formatted_total = f'{total:,.0f}'
         return formatted_total.replace('-', '')
 
-    return 0
+    return '0'
 
 
 def get_today_gastos(user):
@@ -156,7 +156,7 @@ def get_today_gastos(user):
         formatted_total = f'{total:,.0f}'
         return formatted_total.replace('-', '')
 
-    return 0
+    return '0'
 
 
 def get_current_user_deuda(cliente_profile):
@@ -272,7 +272,7 @@ def total_credit_amount(company):
         formatted_total = f'{total:,.0f}'
         return formatted_total
 
-    return 0
+    return '0'
 
 
 def remember_payment(user, cliente_id):
@@ -327,4 +327,4 @@ def get_gastos_today(user):
         formatted_total = f'{total:,.0f}'
         return formatted_total
 
-    return 0
+    return '0'
