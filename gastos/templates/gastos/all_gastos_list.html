@@ -256,7 +256,7 @@ crossorigin="anonymous"></script>
         });
 
         document.body.addEventListener("click", function (evt) {
-            actual_date = document.getElementById('litepickerRangePlugin')
+            actual_date = document.getElementById('litepickerRangePlugin').value;
             if(fecha_actual != actual_date.value){
                 table.draw();
             }

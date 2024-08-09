@@ -1,0 +1,117 @@
+{% load crispy_forms_tags %}
+
+{% block css %}
+<style>
+    body {
+        background-color: #f8f9fa;
+    }
+    .container {
+        background-color: #ffffff;
+        padding: 30px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        margin-top: 50px;
+    }
+    .form-group label {
+        font-weight: bold;
+        color: #495057;
+    }
+    .form-group input, .form-group textarea, .form-group select {
+        border-radius: 4px;
+        border: 1px solid #ced4da;
+    }
+    .btn-primary {
+        background-color: #007bff;
+        border-color: #007bff;
+        transition: background-color 0.3s, border-color 0.3s;
+    }
+    .btn-primary:hover {
+        background-color: #0056b3;
+        border-color: #0056b3;
+    }
+    .icon-label {
+        margin-right: 5px;
+        color: #007bff;
+    }
+
+    .icon-label-money {
+        margin-right: 5px;
+        color: #2EC44B;
+    }
+
+    .custom-bg {
+        background-color: #d4edda;
+        border-radius: 5px;
+    }
+</style>
+{% endblock css %}
+
+{% block content %}
+<html lang="en">
+<head>
+    <title>Crear Producto</title>
+</head>
+<body>
+    <form method="post" >
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="{{ form.nombre.id_for_label }}"><i class="fas fa-tag icon-label"></i> Nombre del Producto </label>
+            {{ form.nombre|as_crispy_field }}
+        </div>
+        <div class="row">
+            <div class="col col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.precio.id_for_label }}"><i class="fas fa-dollar-sign icon-label-money"></i> Precio Sin IVA</label>
+                    <input type="text" class="form-control" name="precio" id="id_precio" value="{{ form.precio.value }}" />
+                </div>
+            </div>
+            <div class="col col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.iva.id_for_label }}"><i class="fas fa-percentage icon-label-money"></i> IVA</label>
+                    <input type="text" class="form-control" name="iva" id="id_iva" placeholder="{{ form.iva.value }}" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.costo_flete.id_for_label }}"><i class="fas fa-truck icon-label-money"></i> Costo Flete</label>
+                    <input type="text" class="form-control" name="costo_flete" id="id_costo_flete" value="{{ form.costo_flete.value }}" />
+                </div>
+            </div>
+            <div class="col col-md-6">
+                <div class="form-group">
+                    <label for="{{ form.porcentaje_ganancia.id_for_label }}"><i class="fas fa-percentage icon-label-money"></i> Ganancia</label>
+                    <input type="text" class="form-control" name="porcentaje_ganancia" id="id_porcentaje_ganancia" placeholder="{{ form.porcentaje_ganancia.value }}" />
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col col-md-6">
+                <label for="{{ form.stock.id_for_label }}"><i class="fas fa-cubes icon-label"></i> Cantidad</label>
+                {{ form.stock|as_crispy_field }}
+            </div>
+            <div class="col  col-md-6">
+                <div class="form-group" style="background-color: #d4edda; padding: 0px; border-radius: 5px;">
+                    <label class="text-green border" for="{{ form.precio_venta.id_for_label }}" style="color: #28a745;">
+                        <i class="fas fa-dollar-sign icon-label" style="color: #28a745;"></i> Precio De Venta
+                    </label>
+                    <input type="text" class="form-control" name="precio_venta" id="id_precio_venta" value="{{ form.precio_venta.value }}" />
+                </div>
+            </div>
+        </div>           
+        <div class="form-group">
+            <label for="{{ form.descripcion.id_for_label }}"><i class="fas fa-comment icon-label"></i> Descripción</label>
+            {{ form.descripcion|as_crispy_field }}
+        </div>
+    </form>
+
+</body>
+</html>
+{% endblock content %}
+
+{% block js %}
+<script>
+    alert("ya")
+</script>
+{% endblock js %}

@@ -59,7 +59,7 @@ class EditarProductoView(
 ):
     model = m.Producto
     form_class = f.AddNewProducto
-    template_name = 'productos/components/form_add_producto.html'
+    template_name = 'productos/components/form_editar_producto.html'
     permission_required = 'transacciones.can_see_cliente_transacciones'
 
     def post(self, request, *args, **kwargs):

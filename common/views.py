@@ -9,7 +9,8 @@ from django.contrib.auth import get_user_model
 
 from transacciones.services import (
     get_sales_month, get_sales_year, get_sales_today,
-    get_all_year_sales, total_credit_amount
+    get_all_year_sales, total_credit_amount, get_credit_sales_today,
+    get_today_payments, get_today_gastos
 )
 from .forms import RegisterForm
 from . import selectors as sel
@@ -58,11 +59,21 @@ class InitialView(
     permission_required = 'clientes.can_see_initial_view'
 
     def get_context_data(self, **kwargs):
+        today_sales = get_sales_today(self.request.user)
+        today_credit_sales = get_credit_sales_today(self.request.user)
+        today_add_payment = get_today_payments(self.request.user)
+        today_gastos = get_today_gastos(self.request.user)
+        total_today = int(today_sales.replace(",", "")) + int(today_add_payment.replace(",", "")) - int(today_gastos.replace(",", ""))
+
         kwargs.update({
             'user': self.request.user.company_profile,
             'sales_last_month': get_sales_month(self.request.user),
             'sales_last_year': get_sales_year(self.request.user),
-            'sales_today': get_sales_today(self.request.user),
+            'sales_today': today_sales,
+            'sales_credit_today': today_credit_sales,
+            'today_payments': today_add_payment,
+            'today_gastos': today_gastos,
+            'total_today': f'{total_today:,.0f}',
             'sales_all_year': get_all_year_sales(self.request.user),
             'total_credit_amount': total_credit_amount(
                 self.request.user.company_profile

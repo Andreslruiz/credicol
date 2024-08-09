@@ -23,12 +23,6 @@ class AllGastosFilter(filters.BaseFilterBackend):
 
             query = query & Q(fecha_gasto__range=[start_date, end_date])
 
-        else:
-            now = datetime.now()
-            start_of_today = datetime(now.year, now.month, now.day)
-            end_of_today = start_of_today + timedelta(days=1) - timedelta(seconds=1)
-            query = query & Q(fecha_gasto__range=[start_of_today, end_of_today])
-
         return queryset.filter(query)
 
 
@@ -42,5 +36,5 @@ class ListarAllGastosAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         company = self.request.user.company_profile
-        queryset = Gasto.objects.filter(company=company)
+        queryset = Gasto.objects.filter(company=company).order_by('-fecha_gasto')
         return queryset

@@ -2,6 +2,50 @@
 {% load static waffle_tags crispy_forms_tags %}
 
 {% block title %}Infraestructura{% endblock title %}
+{% block css %}
+    <style>
+
+        .ventas-container {
+            margin-top: 7px;
+            background-color: #ffffff;
+            @media only screen and (max-width: 768px) {
+                margin-left: 0px;
+                margin-bottom: 20px;
+                max-width: 100%;
+            }
+        }
+
+        .ventas-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 10px;
+            line-height: 1;
+            margin-bottom: 4px;
+        }
+        .ventas-item span {
+            font-size: 15px;
+            font-weight: bold;
+        }
+        .ventas-totales {
+            color: #007bff;
+        }
+        .ventas-credito {
+            color: #FF9334;
+        }
+        .ventas-contado {
+            color: #28a745;
+        }
+        .id-gastos {
+            color: #f54700;
+        }
+
+        @media only screen and (min-width: 768px) {
+            .elemento-mostrable {
+                display: none;
+            }
+        }
+    </style>
+{% endblock css %}
 
 {% block content %}
 <title>{{ request.user.company_profile.name }} | Facturación</title>
@@ -12,36 +56,99 @@
                 <span style="color: #007bff;">{{ request.user.company_profile.name }}</span>
                 <div id="fecha-hora" style="margin-top: 5px; font-size: 15px; color: #666;"></div>
             </h1>
-            <br class="elemento-mostrable">
-            {% if not day_closed %}
-                <a href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:close_day' %}"
-                    data-title="Cerrar Caja" title="Cerrar Caja" class="btn btn-primary btn" data-action="Cerrar Caja">
-                    <i class="fas fa-paper-plane fa-sm text-white-50"></i>
-                    Cerrar Caja                        
+            <div class="row p-3">
+                <div style="margin-right:7px;">
+                    <a href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:direct_sales' %}"
+                    data-title="Venta Rapida" title="Venta Rapida" class="btn btn-primary btn-sm" data-action="Guardar">
+                        <i class="fas fa-shopping-cart"></i>
+                        Venta Rapida                        
+                    </a>
+                </div>
+                {% if not day_closed %}
+                    <a href="javascript:void(0);" data-toggle="modal" data-target="#form-modal" data-url="{% url 'transacciones:close_day' %}"
+                        data-title="Cerrar Caja" title="Cerrar Caja" class="btn btn-success btn-sm" data-action="Cerrar Caja">
+                        <i class="fas fa-paper-plane"></i>
+                        Cerrar Caja                        
+                    </a>
+                {% else %}
+                <a href="javascript:void(0);" onclick="cajaCerrada()" title="Cerrar Caja" class="btn btn-primary btn" data-action="Cerrar Caja">
+                    <i class="fas fa-paper-plane"></i>
+                    Cerrar Caja                       
                 </a>
-            {% else %}
-            <a href="javascript:void(0);" onclick="cajaCerrada()" title="Cerrar Caja" class="btn btn-primary btn" data-action="Cerrar Caja">
-                <i class="fas fa-paper-plane fa-sm text-white-50"></i>
-                Cerrar Caja                       
-            </a>
-            {% endif %}
+                {% endif %}
+            </div>
         </div>
-
         <!-- Content Row -->
-        <div class="row">
 
+        <div class="elemento-mostrable card border-left-success shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <div style="margin-bottom:2px;" class="text-s font-weight-bold text-success text-uppercase mb-1">
+                            Hoy
+                        </div>
+                        <div class="ventas-container">
+                            <div class="ventas-item">
+                                <span>Ventas a Crédito:</span>
+                                <span id="ventas-credito" class="ventas-credito">{{ sales_credit_today }}</span>
+                            </div>
+                            <div class="ventas-item">
+                                <span>Ventas Contado:</span>
+                                <span id="ventas-contado" class="ventas-contado">{{ sales_today }}</span>
+                            </div>
+                            <div class="ventas-item">
+                                <span>Abonos Deudas:</span>
+                                <span id="pagos-fiados" class="pagos-fiados">{{ today_payments }}</span>
+                            </div>
+                            <div class="ventas-item">
+                                <span>Total Gastos:</span>
+                                <span id="id-gastos" class="id-gastos">- {{ today_gastos }}</span>
+                            </div>
+                            <hr>
+                            <div class="ventas-item">
+                                <span>Total Caja:</span>
+                                <span id="ventas-totales" class="ventas-totales">$ {{ total_today }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br class="elemento-mostrable">
+        <div class="row">
+            
             <!-- Pending Requests Card Example -->
-            <div class="col-xl-3 col col-md-6 mb-4">
+            <div class="col-xl-3 col col-md-6 mb-4 elemento-ocultable">
                 <div class="card border-left-success shadow h-100 py-2">
                     <div class="card-body">
                         <div class="row no-gutters align-items-center">
                             <div class="col mr-2">
-                                <div class="text-s font-weight-bold text-success text-uppercase mb-1">
-                                    Hoy</div>
-                                <div class="h5 mb-0 font-weight-bold text-gray-800">${{ sales_today }}</div>
-                            </div>
-                            <div class="col-auto">
-                                <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
+                                <div style="margin-bottom:2px;" class="text-s font-weight-bold text-success text-uppercase mb-1">
+                                    Hoy
+                                </div>
+                                <div class="ventas-container">
+                                    <div class="ventas-item">
+                                        <span>Ventas a Crédito:</span>
+                                        <span id="ventas-credito" class="ventas-credito">{{ sales_credit_today }}</span>
+                                    </div>
+                                    <div class="ventas-item">
+                                        <span>Ventas Contado:</span>
+                                        <span id="ventas-contado" class="ventas-contado">{{ sales_today }}</span>
+                                    </div>
+                                    <div class="ventas-item">
+                                        <span>Abonos Deudas:</span>
+                                        <span id="pagos-fiados" class="pagos-fiados">{{ today_payments }}</span>
+                                    </div>
+                                    <div class="ventas-item">
+                                        <span>Total Gastos:</span>
+                                        <span id="id-gastos" class="id-gastos">- {{ today_gastos }}</span>
+                                    </div>
+                                    <hr>
+                                    <div class="ventas-item">
+                                        <span>Total Caja:</span>
+                                        <span id="ventas-totales" class="ventas-totales">$ {{ total_today }}</span>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -522,10 +629,17 @@
                     try {
                         const { ok } = JSON.parse(data);
                         const { close_day } = JSON.parse(data);
+                        const { transaction } = JSON.parse(data);
+                        const { value } = JSON.parse(data);
     
                         if (close_day) {
                             $('#form-modal').modal('toggle');
                             successcloseMessage();
+                        }
+
+                        if (transaction) {
+                            $('#form-modal').modal('toggle');
+                            successMessage(transaction, value);
                         }
                     } catch {
                         form.innerHTML = data;
@@ -598,6 +712,26 @@
                 if (result.dismiss == 'overlay') {}
     
                 else if (result.dismiss !== 'cancel') {
+                }
+            });
+        }
+
+        function successMessage(message, value){
+            swal({
+                title: `${message}`,
+                html: `Se ha registrado la venta por:<strong> ${value}</strong>.`,
+                type: 'success',
+                showCancelButton: false,
+                showConfirmButton: true,
+                confirmButtonColor: '#69DE6F',
+                confirmButtonText: 'Aceptar',
+                cancelButtonText: 'Cancelar',
+                allowOutsideClick: false,
+            }).then((result) => {
+                if (result.dismiss == 'overlay') {}
+    
+                else if (result.dismiss !== 'cancel') {
+                    window.location.reload();
                 }
             });
         }

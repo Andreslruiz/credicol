@@ -60,7 +60,7 @@ class ListarAllTransaccionesAPIView(generics.ListAPIView):
 
     def get_queryset(self):
         company = self.request.user.company_profile
-        queryset = Transaccion.objects.filter(creada_por__company_profile=company)
+        queryset = Transaccion.objects.filter(creada_por__company_profile=company).order_by('-fecha_transaccion')
         return queryset
 
 

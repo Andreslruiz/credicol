@@ -363,7 +363,7 @@
         ganancia = isNaN(parseFloat(ganancia)) ? 0 : parseFloat(ganancia);
 
         var ivaAmount = precio * (iva / 100);
-        var gananciaAmount = precio * (ganancia / 100);
+        var gananciaAmount = (ivaAmount + precio) * (ganancia / 100);
         var valorFinal = precio + ivaAmount + flete + gananciaAmount;
 
         document.getElementById('id_precio').value = precio.toLocaleString('de-DE');

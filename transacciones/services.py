@@ -93,7 +93,8 @@ def get_sales_today(user):
     sales_today = m.Transaccion.objects.filter(
         creada_por__company_profile=user.company_profile,
         fecha_transaccion__date=hoy,
-        tipo_transaccion=m.Transaccion.TIPO_CHOICES[0][0]
+        tipo_transaccion=m.Transaccion.TIPO_CHOICES[0][0],
+        es_fiado=False
     )
 
     if sales_today:
@@ -119,6 +120,41 @@ def get_credit_sales_today(user):
         total = total_today['total']
         formatted_total = f'{total:,.0f}'
         return formatted_total
+
+    return 0
+
+
+def get_today_payments(user):
+    hoy = date.today()
+
+    sales_today = m.Transaccion.objects.filter(
+        creada_por__company_profile=user.company_profile,
+        fecha_transaccion__date=hoy, es_fiado=False,
+        tipo_transaccion=m.Transaccion.TIPO_CHOICES[1][0]
+    )
+
+    if sales_today:
+        total_today = sales_today.aggregate(total=Sum('total_transaccion'))
+        total = total_today['total']
+        formatted_total = f'{total:,.0f}'
+        return formatted_total.replace('-', '')
+
+    return 0
+
+
+def get_today_gastos(user):
+    hoy = date.today()
+
+    gastos_today = Gasto.objects.filter(
+        creada_por__company_profile=user.company_profile,
+        fecha_gasto__date=hoy
+    )
+
+    if gastos_today:
+        total_today = gastos_today.aggregate(total=Sum('total_gasto'))
+        total = total_today['total']
+        formatted_total = f'{total:,.0f}'
+        return formatted_total.replace('-', '')
 
     return 0
 
